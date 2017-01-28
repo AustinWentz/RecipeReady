@@ -1,4 +1,4 @@
-# PantryWiz
+# RecipeReady
 The process of finding a delicious recipe only to find out that you don’t have over half the
 ingredients to make it can prove frustrating. With our webapp, individuals will be able to search
 for recipes based on ingredients they already have, allowing them to try new foods without have
