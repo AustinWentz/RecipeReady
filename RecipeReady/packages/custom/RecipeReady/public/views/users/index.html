@@ -1,0 +1,11 @@
+<md-content layout="row" flex layout-align="space-around center" layout-padding ng-controller="AuthCtrl" ng-class="($state.is('auth.register')) ? 'register-form' : ''">
+  <md-card ui-view flex=40></md-card>
+  <ul class="social">
+    <li ng-repeat="(key, val) in socialButtons" class="social_icon social_icon_{{key}}">
+      <a target="_self" ng-href="/api/auth/{{key}}" class="button">
+        <span class="text-capitalize">Log In With {{key}}</span>
+      </a>
+    </li>
+  </ul>
+  <img src="/meanStarter/assets/img/woman_ninja.png" alt="#">
+</md-content>

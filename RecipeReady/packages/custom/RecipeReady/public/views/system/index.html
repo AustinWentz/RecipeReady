@@ -1,0 +1,59 @@
+<div layout="column" flex data-ng-controller="IndexController">
+  <md-content layout="column" layout-padding flex>
+    <md-divider></md-divider>
+    <div layout="row" layout-align="space-around start" layout-padding flex>
+       
+      <div class="left" layout="column" layout-align="center center" flex="60">
+        <h1>Welcome to the MEAN stack</h2>
+        <p class="md-headline">Daphne (our ninja mascot) says...</p>
+        <div flex>
+        <img src="/meanStarter/assets/img/woman_ninja_forg_pass.png"/>
+        </div>
+      </div>
+      <div class="right" layout="column" flex>
+       <div layout="column" style="margin-top:14%" layout-align="end center"></div>
+            <h2 >Read the docs</h2>
+        <div class="next-steps">
+          <md-list>
+            <md-list-item class="secondary-button-padding" ng-repeat="doc in docs" ng-click="null">
+              <p>
+                {{doc.text}}
+              </p>
+              <md-button class="md-secondary" ng-href="{{doc.link}}" target="_blank">More Info</md-button>
+            </md-list-item>
+          </md-list>
+        </div>
+        <md-divider></md-divider>
+       </div> 
+    </div>
+  </md-content>
+
+   <md-fab-toolbar  md-open="false" count="0" md-direction="left">
+      <md-fab-trigger class="align-with-text">
+        <md-button  aria-label="menu" class="md-fab md-primary">
+          <md-tooltip>community</md-tooltip>
+          <md-icon class="group-icond">group</md-icon>
+        </md-button>
+      </md-fab-trigger>
+      <md-toolbar>
+        <md-fab-actions class="md-toolbar-tools">
+          <md-button aria-label="facebook" class="md-button" ng-href="https://facebook.com/groups/mean.io/" target="_blank">
+            <md-icon>face</md-icon>
+            Facebook
+          </md-button>
+          <md-button aria-label="github" class="md-button" ng-href="https://github.com/linnovate/mean/" target="_blank">
+            <md-icon>code</md-icon>
+            GitHub
+          </md-button>
+          <md-button aria-label="gitter" class="md-button" ng-href="https://gitter.im/linnovate/mean/" target="_blank">
+            <md-icon>textsms</md-icon>
+            Gitter
+          </md-button>
+          <md-button aria-label="hangout" class="md-button" ng-href="https://hangout.mean.io/" target="_blank">
+            <md-icon>voice_chat</md-icon>
+            Hangout
+          </md-button>
+        </md-fab-actions>
+      </md-toolbar>
+    </md-fab-toolbar>
+</div>
