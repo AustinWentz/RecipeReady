@@ -1,31 +1,74 @@
 //Implement server API cals below
 
-//TODO:
-getIngredients()
-{
+
+var server = angular.module('server', []);
+
+server.controller('serverCtrl', [], function($http) {
     
+}
+
+
+
+//TODO:
+$scope.getIngredients = function(prefix) {
+    $http.post("dummy-url/api/getIngredients")
 }
 
 //TODO
-getRecipes()
-{
-    
-}
+$scope.getRecipesByIngredient = function(ingredients) {
+    $http.post("dummy-url/api/getRecipesByIngredient", ).then(
+        function (resp) 
+        {    
+            console.log("success", resp);
+        }, 
+        function(resp)
+        {
+            console.log("failure", resp);
+        }
+    );
+};
 
 //TODO: get the user's saved recipes
-getRecipes(user)
+$scope.getRecipesByUser = function(user)
 {
-    
-}
+    $http.post("dummy-url/api/getRecipesByUser", ).then(
+        function (resp) 
+        {    
+            console.log("success", resp);
+        }, 
+        function(resp)
+        {
+            console.log("failure", resp);
+        }
+    );
+};
 
 //TODO get the ingredients in the user's pantry
-getPantry(user)
+$scope.getPantry = function(user)
 {
-    
+    $http.post("dummy-url/api/getPantry", ).then(
+        function (resp) 
+        {    
+            console.log("success", resp);
+        }, 
+        function(resp)
+        {
+            console.log("failure", resp);
+        }
+    );
 }
 
 //TODO: get a list of the user's dietary restrictions
-getDietaryRestrictions(user)
+$scope.getDietaryRestrictions = function(user)
 {
-    
+    $http.post("dummy-url/api/getRecipesByUser", ).then(
+        function (resp) 
+        {    
+            console.log("success", resp);
+        }, 
+        function(resp)
+        {
+            console.log("failure", resp);
+        }
+    );
 }
