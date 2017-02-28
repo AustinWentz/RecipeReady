@@ -1,3 +1,64 @@
 .MEAN-Logo {
-  height: 80%
+  height: 20%
+}
+
+.container {
+    width: 100%;
+    height: 1000px;
+    position: relative;
+    overflow: hidden;
+}
+
+nav {
+    background - color: #333333;
+    height: 30px;
+}
+
+li {
+    list-style: none;
+    display: inline-block;
+}
+
+li a {
+    text-decoration: none;
+    font-family: arial;
+    color: # ABABAB;
+    float: left;
+    padding: 5px;
+    font - size: 13px;
+    font - weight: 600;
+    margin - top: 2px;
+    margin - right: 13px;
+}
+
+img {
+    width: 180px;
+    margin: 80px auto auto auto;
+    display: block;
+
+}
+
+input {
+    width: 550px;
+    height: 25px;
+    border: 1px solid #3492F7;
+    margin: 20px auto;
+    display: block;
+}
+
+.round {
+    width: 100%;
+    border-radius: 15px;
+    border: 1px #000 solid;
+    padding: 5px 5px 5px 25px;
+    position: center;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+.search {
+    position: relative;
+    width: 400px;
+    height: 30px;
+    margin:auto;
 }
