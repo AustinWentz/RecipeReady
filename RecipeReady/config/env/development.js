@@ -51,12 +51,12 @@ module.exports = {
       enabled: false
     }
   },
-  emailFrom: 'SENDER EMAIL ADDRESS', // sender address like ABC <abc@example.com>
+  emailFrom: 'recipereadybot@gmail.com', // sender address like ABC <abc@example.com>
   mailer: {
-    service: 'SERVICE_PROVIDER', // Gmail, SMTP
+    service: 'Gmail', // Gmail, SMTP
     auth: {
-      user: 'EMAIL_ID',
-      pass: 'PASSWORD'
+      user: 'recipereadybot',
+      pass: 'pantrywiz'
     }
   },
   secret: 'SOME_TOKEN_SECRET'
