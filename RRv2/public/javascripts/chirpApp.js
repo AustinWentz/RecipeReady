@@ -60,11 +60,11 @@ app.controller('mainController', function(searchService, $scope, $rootScope){
 
 app.controller('pantryController', function($scope, $rootScope){
 	$scope.ingredientList = [{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
-	$scope.ingredientInput = '';
+	$scope.ingrdient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
 
 	$scope.addIngredient = function() {
-		$scope.ingredientList.push({selected: false, name: $scope.ingredientInput});
-		$scope.ingredientInput = '';
+		$scope.ingredientList.push({selected: false, name: $scope.ingredient});
+		$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
 	};
 
 	$scope.remove = function() {
