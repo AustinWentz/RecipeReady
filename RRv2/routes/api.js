@@ -150,10 +150,6 @@ router.route('/pantry/:id')
 			if (err)
 				res.send(err);
 			res.json("deleted :(");
-
-			else {
-				res.json( req.params.id + "deleted :(");
-			}
 		});
 	});
 
