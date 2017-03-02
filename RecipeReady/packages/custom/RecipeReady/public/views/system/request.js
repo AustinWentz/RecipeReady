@@ -1,18 +1,19 @@
+'use strict';
 //Front-end API calls for requesting data from the server
 
 
 var server = angular.module('server', []);
 
-var serverAddress = "localhost:3000/";
+var serverAddress = 'localhost:3000/';
 
-server.controller('serverCtrl', ['$scope', '$http', function($scope, $http) {
+server.controller('serverCtrl', '$scope', '$http', function($scope, $http) {
     //TODO: Get a list of ingredients matching the given expression
     $scope.getIngredients = function() {
         console.log("Get Ingredients");
         $http.get(serverAddress + "api/getIngredients", $scope.prefix).then(
             function (resp) 
             {    
-                console.log("success", resp);
+                console.log('success', resp);
                 
                 for each(var ingredient in resp)
                 {
@@ -23,7 +24,7 @@ server.controller('serverCtrl', ['$scope', '$http', function($scope, $http) {
             }, 
             function(resp)
             {
-                console.log("failure", resp);
+                console.log('failure', resp);
             }
         );
     };
@@ -111,4 +112,4 @@ server.controller('serverCtrl', ['$scope', '$http', function($scope, $http) {
             }
         );
     }
-}
+});
