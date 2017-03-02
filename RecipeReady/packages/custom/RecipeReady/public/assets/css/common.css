@@ -3,62 +3,61 @@
 }
 
 .container {
-    width: 100%;
     height: 1000px;
-    position: relative;
     overflow: hidden;
+    position: relative;
+    width: 100%;    
 }
 
 nav {
-    background - color: #333333;
+    background-color: #333333;
     height: 30px;
 }
 
 li {
-    list-style: none;
     display: inline-block;
+    list-style: none;
 }
 
 li a {
-    text-decoration: none;
-    font-family: arial;
-    color: # ABABAB;
+    color: #ABABAB;
     float: left;
+    font-family: arial;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 2px;
+    margin-right: 13px;
     padding: 5px;
-    font - size: 13px;
-    font - weight: 600;
-    margin - top: 2px;
-    margin - right: 13px;
+    text-decoration: none;
 }
 
 img {
-    width: 180px;
-    margin: 80px auto auto auto;
     display: block;
-
+    margin: 80px auto auto auto;
+    width: 180px;
 }
 
 input {
-    width: 550px;
-    height: 25px;
     border: 1px solid #3492F7;
-    margin: 20px auto;
     display: block;
+    height: 25px;
+    margin: 20px auto;
+    width: 550px;
 }
 
 .round {
-    width: 100%;
-    border-radius: 15px;
     border: 1px #000 solid;
+    border-radius: 15px;
+    left: 0;
     padding: 5px 5px 5px 25px;
     position: center;
     top: 0;
-    left: 0;
+    width: 100%;
     z-index: 5;
 }
 .search {
-    position: relative;
-    width: 400px;
     height: 30px;
     margin:auto;
+    position: relative;
+    width: 400px;
 }
