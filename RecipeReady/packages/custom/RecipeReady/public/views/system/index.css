@@ -1,0 +1,79 @@
+:root
+{
+    accent-color: #f78e6b;
+    font-family: arial;
+}
+
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+body
+{
+    marign: 0;
+    padding: 0;
+}
+
+button
+{
+    border-radius: 8px;
+}
+
+.centerContent
+{
+    color: var(--accent-color);
+    font-size: 30px;
+    text-align: center;
+}
+
+.searchBar
+{
+    border-radius: 8px;
+    height: 20px;
+    outline-width: 0;
+    padding: 2px;
+    width: 50%;
+}
+
+h1
+{
+    font-size: 90;
+}
+
+.topBar
+{    
+    align-items: center;
+    background-color: grey;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    padding-bottom: 8px;
+    padding-top: 8px;
+    width: 100%;
+}
+
+.topBar > *
+{
+    margin-left: 10px;
+}
+
+.topBarLeft
+{
+    text-align: left;
+}
+
+.topBarRight
+{
+    text-align: right;
+}
+
+.standardButton
+{
+    background-color: var(--accent-color);
+    border: none;
+    border-radius: 18px;
+    color: white;
+    padding: 9px;
+}
