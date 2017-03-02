@@ -1,4 +1,4 @@
-//Implement server API cals below
+//Front-end API calls for requesting data from the server
 
 
 var server = angular.module('server', []);
@@ -18,6 +18,8 @@ server.controller('serverCtrl', ['$scope', '$http', function($scope, $http) {
                 {
                     console.log(ingredient);
                 }
+                
+                $scope.ingredients = resp;
             }, 
             function(resp)
             {
@@ -37,6 +39,8 @@ server.controller('serverCtrl', ['$scope', '$http', function($scope, $http) {
                 {
                     console.log(recipe.name);
                 }
+                
+                $scope.recipes = resp;
             }, 
             function(resp)
             {
@@ -57,6 +61,8 @@ server.controller('serverCtrl', ['$scope', '$http', function($scope, $http) {
                 {
                     console.log(recipe.name);
                 }
+                
+                $scope.recipes = resp;
             }, 
             function(resp)
             {
@@ -77,6 +83,8 @@ server.controller('serverCtrl', ['$scope', '$http', function($scope, $http) {
                 {
                     console.log(ingredient.name);
                 }
+                
+                $scope.ingredients = resp;
             }, 
             function(resp)
             {
