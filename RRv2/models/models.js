@@ -29,6 +29,7 @@ var Recipe = new Schema({
 var userSchema = new Schema({
 	username: String,
 	password: String, //hash created from password
+  email: String //stores email as a plain text string
 	created_at: {type: Date, default: Date.now},
 
 	pantry: [User_Ingredient],
