@@ -1,6 +1,5 @@
 //Front-end API calls for requesting data from the server
 
-
 var server = angular.module('server', []);
 
 server.controller('serverCtrl', ['$scope', '$http', function($scope, $http) {
