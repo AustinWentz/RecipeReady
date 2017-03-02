@@ -1,19 +1,19 @@
 :root
 {
-    --accent-color: #f78e6b;
+    accent-color: #f78e6b;
     font-family: arial;
 }
 
 *
 {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 body
 {
-    padding: 0px;
-    marign: 0px;
+    marign: 0;
+    padding: 0;
 }
 
 button
@@ -23,19 +23,18 @@ button
 
 .centerContent
 {
+    color: var(--accent-color);
     font-size: 30px;
     text-align: center;
-    color: var(--accent-color);
 }
 
 .searchBar
 {
-    width: 50%;
-    height: 20px;
     border-radius: 8px;
-    outline-width: 0px;
+    height: 20px;
+    outline-width: 0;
     padding: 2px;
-    
+    width: 50%;
 }
 
 h1
@@ -44,17 +43,15 @@ h1
 }
 
 .topBar
-{
-    width: 100%;
-    margin: 0px;
+{    
+    align-items: center;
     background-color: grey;
-    
     display: flex;
     flex-direction: row;
-    align-items: center;
-    
-    padding-top: 8px;
+    margin: 0;
     padding-bottom: 8px;
+    padding-top: 8px;
+    width: 100%;
 }
 
 .topBar > *
@@ -74,9 +71,9 @@ h1
 
 .standardButton
 {
-    color: white;
     background-color: var(--accent-color);
     border: none;
     border-radius: 18px;
+    color: white;
     padding: 9px;
 }

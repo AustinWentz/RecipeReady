@@ -8,7 +8,8 @@ angular.module('mean.system').controller('HeaderController', ['$scope', '$rootSc
     vm.hdrvars = {
       authenticated: MeanUser.loggedin,
       user: MeanUser.user,
-      isAdmin: MeanUser.isAdmin
+      isAdmin: MeanUser.isAdmin,
+      notHome: false
     };
 
     // Default hard coded menu items for main menu
@@ -36,7 +37,7 @@ angular.module('mean.system').controller('HeaderController', ['$scope', '$rootSc
       vm.hdrvars = {
         authenticated: MeanUser.loggedin,
         user: MeanUser.user,
-        isAdmin: MeanUser.isAdmin
+        isAdmin: MeanUser.isAdmin,
       }
     });
 
@@ -53,5 +54,16 @@ angular.module('mean.system').controller('HeaderController', ['$scope', '$rootSc
       queryMenu('main', defaultMainMenu);
       $state.go('home');
     });
+
+     $scope.redirectHome = function(){
+        console.log("LOL");
+        $state.go('home');
+      };
+     $scope.redirectSearchPage = function(){
+        console.log("LOL");
+        $state.go('results');
+        
+      };
+
   }
 ]);
