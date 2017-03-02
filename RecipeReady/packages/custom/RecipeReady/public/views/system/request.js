@@ -1,4 +1,4 @@
-//Implement server API cals below
+//Implement server API calls below
 
 
 var server = angular.module('server', []);
