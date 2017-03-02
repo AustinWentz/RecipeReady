@@ -1,1 +1,16 @@
-<body>PANTRY PAGE</body>
+<!DOCTYPE html>
+<html>
+<div class = "container" ng-controller="IndexController"> 
+  <h2>My Ingredients</h2>
+    <form ng-submit="todoAdd()">
+      <input type="text" ng-model="ingredientInput" size="50" placeholder="Add new ingredient">
+      <input type="submit" value="Add">
+  </form>
+  <br>
+
+    <div ng-repeat="x in ingredientList">
+        <input type="checkbox" ng-model="x.done"> <span ng-bind="x.todoText"></span>
+    </div>
+
+    <p><button ng-click="remove()">Remove marked</button></p>
+</div>

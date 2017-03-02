@@ -58,6 +58,8 @@ input {
 .search {
     height: 30px;
     margin:auto;
+    position: relative;
+    width: 400px;
     outline: none;
 
 }
@@ -89,3 +91,4 @@ input {
 .gridListdemoBasicUsage md-grid-tile {
   transition: all 400ms ease-out 50ms;
 }
+
