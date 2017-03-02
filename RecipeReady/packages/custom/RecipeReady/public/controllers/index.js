@@ -92,6 +92,7 @@ angular.module('mean.system').controller('IndexController', ['$state','$scope', 
       }
     });
     $scope.redirectSearchPage = function(){
+
         console.log('LOL');
         $state.go('results');
     };

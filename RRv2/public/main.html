@@ -6,13 +6,45 @@
     <input class="btn submit-btn pull-right" type="submit" value="Search" />
   </form>
 </div>
-<div id="post-stream" ng-show="searched">
+<<<<<<< HEAD
+
+
+<body ng-app="chirpApp">
+  <div class="container" ng-controller="mainController" style="position: fixed;">
+    <img src="/meanStarter/assets/img/RecipeReadyLogo.png" alt="Google" />
+    <form ng-submit = "search()">
+	    <div class="search">
+	      <input type="text" placeholder="put something" ng-model="s_text" name="search" id = "searchbox" class="round"/>
+	      <input class="button" type="submit" value="Find!!" />
+	    </div>
+		</form>
+  </div>
+</body>
+
+=======
+<!--<div id="post-stream" ng-show="searched">
 	<h4>Recipes</h4>
 		<div class="post" ng-repeat="recipe in recipes" ng-class-odd="'odd'" ng-class-even="'even'"> 
 			<p>{{recipe.name}}</p>
 			<small>Posted by @{{recipe.link}}</small>
 			<small class="pull-right">{{recipe.thumbnail}}</small>
 		</div>
+</div>-->
+>>>>>>> 455b83c000dd6adb17f5d0010527af6d12037531
+
+<br>
+
+<div class="center">
+  <div class="row">
+      <div class="col-md-3" ng-repeat = "recipe in recipes">
+        <div class="thumbnail">
+			<img src="http://placehold.it/150x150" class="md-card-image" alt="user avatar">          
+			<div class="caption">
+	            <h3>{{recipe.name}}</h3>
+	            <input class="btn card-btn" type="submit" value="View" />
+	            <input class="btn card-btn" type="submit" value="Save" />
+          </div>
+        </div>
+      </div>
+  </div>
 </div>
-
-
