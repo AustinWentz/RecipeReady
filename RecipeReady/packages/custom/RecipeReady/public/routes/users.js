@@ -45,6 +45,15 @@ angular.module('mean.meanStarter').config(['$meanStateProvider',
             return MeanUser.checkLoggedOut()
           }
         }
+      }
+      .state('pantry', {
+        url: '/pantry',
+        templateUrl: 'meanStarter/views/users/pantry.html',
+        resolve: {
+          loggedin: function (MeanUser) {
+            return MeanUser.checkLoggedOut()
+          }
+        }
       });
   }
 ]);

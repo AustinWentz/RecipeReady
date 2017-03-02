@@ -11,7 +11,7 @@
   </md-button>
   <span flex></span>
 
-  <md-button class="md-button" aria-label="Pantry" ng-if="hdrctr.hdrvars.authenticated">
+  <md-button class="md-button" aria-label="Lantry" ui-sref="pantry" ng-if="hdrctr.hdrvars.authenticated">
     My Pantry
   </md-button>
 
@@ -34,6 +34,11 @@
           <md-icon>exit_to_app</md-icon>
           Logout
         </md-button>
+
+        <md-button class="md-button">
+          Settings
+        </md-button>
+
       </md-menu-item>
     </md-menu-content>
   </md-menu>
