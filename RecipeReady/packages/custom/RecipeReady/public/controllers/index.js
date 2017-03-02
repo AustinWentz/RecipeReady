@@ -92,6 +92,7 @@ angular.module('mean.system').controller('IndexController', ['$state','$scope', 
     $scope.redirectSearchPage = function(){
         console.log('LOL');
         $state.go('results');
+        getIngredients();
       };
 
     $scope.users = ['Chicken Parmesan', 'Fetuccine Alfredo', 'Falafel', 'Hummus', 'Tacos', 'Empenadas','Butter Chicken', 'Sushi', 'Ramen'];
