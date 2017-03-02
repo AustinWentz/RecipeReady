@@ -43,6 +43,10 @@ app.factory('searchService', function($resource){
 	return $resource('/api/search/:id');
 });
 
+app.factory('pantryService', function($resource){
+	return $resource('/api/pantry/:id');
+});
+
 app.controller('mainController', function(searchService, $scope, $rootScope){
 	$scope.recipes = searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
@@ -52,19 +56,21 @@ app.controller('mainController', function(searchService, $scope, $rootScope){
 	  	$scope.newRecipe.link = $rootScope.current_user;
 	  	$scope.newRecipe.thumbnail = 'temp';
 	  	searchService.save($scope.newRecipe, function(){
-	    	$scope.recipes = searchService.query();
+	    	$scope.recipes = searchService.query($scope.newRecipe);
 	    	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 	  	});
 	};
 });
 
-app.controller('pantryController', function($scope, $rootScope){
-	$scope.ingredientList = [{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
-	$scope.ingrdient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
+app.controller('pantryController', function(pantryService, $scope, $rootScope){
+	$scope.ingredientList = pantryService.query(); //{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
+	$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
 
 	$scope.addIngredient = function() {
-		$scope.ingredientList.push({selected: false, name: $scope.ingredient});
-		$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
+		pantryService.save($scope.ingredient, function() {
+			$scope.ingredientList = pantryService.query();
+			$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
+		});
 	};
 
 	$scope.remove = function() {
