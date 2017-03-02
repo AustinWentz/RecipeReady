@@ -90,7 +90,7 @@ angular.module('mean.system').controller('IndexController', ['$state','$scope', 
       }
     });
     $scope.redirectSearchPage = function(){
-        console.log("LOL");
+        console.log("3");
         $state.go('results');
         $scope.getIngredients();
       };
