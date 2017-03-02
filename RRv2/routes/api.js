@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require( 'mongoose' );
 var Recipe = mongoose.model('Recipe');
+var UserIngredient = mongoose.model('User_Ingredient');
 //Used for routes that must be authenticated.
 function isAuthenticated (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -22,6 +23,7 @@ function isAuthenticated (req, res, next) {
 
 //Register the authentication middleware
 router.use('/search', isAuthenticated);
+router.use('/pantry', isAuthenticated);
 
 router.route('/search')
 	//creates a new post
@@ -40,8 +42,7 @@ router.route('/search')
 	})
 	//gets all posts
 	.get(function(req, res){
-		console.log('debug1');
-		Recipe.find(function(err, posts){
+		Recipe.find({name: req.query.name}, function(err, posts){
 			console.log('debug2');
 			if(err){
 				return res.send(500, err);
@@ -88,5 +89,68 @@ router.route('/search/:id')
 			res.json("deleted :(");
 		});
 	});
+
+router.route('/pantry')
+	//creates a new post
+	.post(function(req, res){
+
+		var post = new UserIngredient();
+		post.name = req.body.name;
+		post.save(function(err, post) {
+			if (err){
+				return res.send(500, err);
+			}
+			return res.json(post);
+		});
+	})
+	//gets all posts
+	.get(function(req, res){
+		console.log('debug1');
+		UserIngredient.find(function(err, posts){
+			console.log('debug2');
+			if(err){
+				return res.send(500, err);
+			}
+			return res.send(200,posts);
+		});
+	});
+
+//post-specific commands. likely won't be used
+router.route('/pantry/:id')
+	//gets specified post
+	.get(function(req, res){
+		UserIngredient.findById(req.params.id, function(err, post){
+			if(err)
+				res.send(err);
+			res.json(post);
+		});
+	}) 
+	//updates specified post
+	.put(function(req, res){
+		UserIngredient.findById(req.params.id, function(err, post){
+			if(err)
+				res.send(err);
+
+			post.name = req.body.name;
+
+			post.save(function(err, post){
+				if(err)
+					res.send(err);
+
+				res.json(post);
+			});
+		});
+	})
+	//deletes the post
+	.delete(function(req, res) {
+		UserIngredient.remove({
+			_id: req.params.id
+		}, function(err) {
+			if (err)
+				res.send(err);
+			res.json("deleted :(");
+		});
+	});
+
 
 module.exports = router;

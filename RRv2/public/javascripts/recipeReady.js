@@ -1,4 +1,4 @@
-var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($http, $rootScope) {
+var app = angular.module('recipeReady', ['ngRoute', 'ngResource']).run(function($http, $rootScope) {
 	$rootScope.authenticated = false;
 	$rootScope.searched = false;
 	$rootScope.current_user = '';
@@ -21,10 +21,14 @@ app.config(function($routeProvider){
 			templateUrl: 'main.html',
 			controller: 'mainController'
 		})
-		//the pantry page
 		.when('/pantry', {
 			templateUrl: 'pantry.html',
-			controller: 'pantryController'
+			controller: 'mainController'
+		})
+		//the search results display
+		.when('/search', {
+			templateUrl: 'search.html',
+			controller: 'mainController'
 		})
 		//the login display
 		.when('/login', {
@@ -35,7 +39,9 @@ app.config(function($routeProvider){
 		.when('/signup', {
 			templateUrl: 'register.html',
 			controller: 'authController'
-		});
+		}
+
+		);
 
 });
 
@@ -43,10 +49,31 @@ app.factory('searchService', function($resource){
 	return $resource('/api/search/:id');
 });
 
-app.factory('pantryService', function($resource){
-	return $resource('/api/pantry/:id');
-});
+<<<<<<< HEAD:RRv2/public/javascripts/chirpApp.js
+app.controller('mainController', function(postService, $scope, $rootScope, $location){
+	$scope.posts = postService.query();
+	$scope.newPost = {created_by: '', text: '', created_at: ''};
+	$scope.recipes = ['Chicken Parmesan', 'Fetuccine Alfredo', 'Falafel', 'Hummus', 'Tacos', 'Empenadas','Butter Chicken', 'Sushi', 'Ramen'];
+	$scope.s_text = '';
 
+
+	$scope.post = function() {
+	  $scope.newPost.created_by = $rootScope.current_user;
+	  $scope.newPost.created_at = Date.now();
+	  postService.save($scope.newPost, function(){
+	    $scope.posts = postService.query();
+	    $scope.newPost = {created_by: '', text: '', created_at: ''};
+	  });
+	};
+
+	$scope.search = function() {
+		console.log('search: ' + $scope.s_text);
+		$location.path('/search');
+	};
+	$scope.addingredient = function() {
+		console.log("username: " + $scope.current_user);
+		console.log("data: " + $scope.ingredient.name);
+=======
 app.controller('mainController', function(searchService, $scope, $rootScope){
 	$scope.recipes = searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
@@ -56,21 +83,19 @@ app.controller('mainController', function(searchService, $scope, $rootScope){
 	  	$scope.newRecipe.link = $rootScope.current_user;
 	  	$scope.newRecipe.thumbnail = 'temp';
 	  	searchService.save($scope.newRecipe, function(){
-	    	$scope.recipes = searchService.query($scope.newRecipe);
+	    	$scope.recipes = searchService.query();
 	    	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 	  	});
 	};
 });
 
-app.controller('pantryController', function(pantryService, $scope, $rootScope){
-	$scope.ingredientList = pantryService.query(); //{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
-	$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
+app.controller('pantryController', function($scope, $rootScope){
+	$scope.ingredientList = [{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
+	$scope.ingredientInput = '';
 
 	$scope.addIngredient = function() {
-		pantryService.save($scope.ingredient, function() {
-			$scope.ingredientList = pantryService.query();
-			$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
-		});
+		$scope.ingredientList.push({selected: false, name: $scope.ingredientInput});
+		$scope.ingredientInput = '';
 	};
 
 	$scope.remove = function() {
@@ -79,7 +104,10 @@ app.controller('pantryController', function(pantryService, $scope, $rootScope){
 				$scope.ingredientList.splice(i, 1);
 			}
 		}
+>>>>>>> 455b83c000dd6adb17f5d0010527af6d12037531:RRv2/public/javascripts/recipeReady.js
 	};
+    
+
 });
 
 app.controller('authController', function($scope, $http, $rootScope, $location){
@@ -112,3 +140,4 @@ app.controller('authController', function($scope, $http, $rootScope, $location){
     });
   };
 });
+
