@@ -1,21 +1,8 @@
-<!DOCTYPE html>
-<html>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-<link rel="stylesheet" href="index.css"></style>
-<body>
-
-<div ng-app="">
-
-
-
-  <Button type="button" class="standardButton">add items</Button>
-  <div class="centerContent">
-      <img src="../../assets/img/RecipeReadyLogo.png"style="width:200px;height:200px;"></img>
-      <h1>Recipe Ready</h1>
-      <p><input class="searchBar" type="text" ng-model="name" placeholder="Search Recipes"></p>
-  </div>
-  <p>{{name}}</p>
-</div>
-
-</body>
-</html>
+<div class="container" style="position: fixed;">
+	<img src="/meanStarter/assets/img/RecipeReadyLogo.png" alt="Google" />
+	<form id="search-form">
+		<div class="search">
+			<input type="text" name="search" class="round" />
+		</div>
+	</form>
+</div> 
