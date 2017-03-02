@@ -94,7 +94,21 @@ angular.module('mean.system').controller('IndexController', ['$state','$scope', 
         $state.go('results');
       };
 
-    $scope.users = ['Chicken Parmesan', 'Fetuccine Alfredo', 'Falafel', 'Hummus', 'Tacos', 'Empenadas','Butter Chicken', 'Sushi', 'Ramen'];
-   
+    $scope.recipes = ['Chicken Parmesan', 'Fetuccine Alfredo', 'Falafel', 'Hummus', 'Tacos', 'Empenadas','Butter Chicken', 'Sushi', 'Ramen'];
+    $scope.ingredientList = [];
+    $scope.todoAdd = function() {
+        console.log("ADDED!!!!");
+        $scope.ingredientList.push({todoText:$scope.ingredientInput, done:false});
+        $scope.todoInput = "";
+    };
+
+    $scope.remove = function() {
+        console.log("REMOVE");
+        var oldList = $scope.ingredientList;
+        $scope.ingredientList = [];
+        angular.forEach(oldList, function(x) {
+            if (!x.done) $scope.ingredientList.push(x);
+        });
+    };
   }
 ]);
