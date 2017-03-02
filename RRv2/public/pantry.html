@@ -1,0 +1,27 @@
+<body>
+	<div class = "container">
+		<h1>MyPantry</h1>
+		<table class = "table">
+			<thead>
+				<tr>
+					<th>Ingredient Name</th>
+					<th>Amount</th>
+					<th>Unit</th>
+					<th>Purchase Date</th>
+					<th>Expiration Date</th>
+				</tr>
+			</thead>
+			<thead>
+				<tr>
+					<th><input class = "form-control" ng-model = "ingredient.name"></th>
+					<th><input class = "form-control" ng-model = "ingredient.amount"></th>
+					<th><input class = "form-control" ng-model = "ingredient.unit"></th>
+					<th><input class = "form-control" ng-model = "ingredient.purchase" placeholder="_ _/ _ _ _ _ (month/year)"></th>
+					<th><input class = "form-control" ng-model = "ingredient.expiration" placeholder="_ _/ _ _ _ _ (month/year)"></th>
+					<td><buttom class ="btn btn-primary" ng-click = "addingredient()">ADD</buttom></td>
+
+				</tr>
+			</thead>
+		</table>			
+	</div>	
+</body>

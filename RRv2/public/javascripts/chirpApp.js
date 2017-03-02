@@ -16,6 +16,10 @@ app.config(function($routeProvider){
 			templateUrl: 'main.html',
 			controller: 'mainController'
 		})
+		.when('/pantry', {
+			templateUrl: 'pantry.html',
+			controller: 'mainController'
+		})
 		//the search results display
 		.when('/search', {
 			templateUrl: 'search.html',
@@ -30,7 +34,9 @@ app.config(function($routeProvider){
 		.when('/signup', {
 			templateUrl: 'register.html',
 			controller: 'authController'
-		});
+		}
+
+		);
 
 });
 
@@ -38,11 +44,13 @@ app.factory('postService', function($resource){
 	return $resource('/api/posts/:id');
 });
 
-app.controller('mainController', function(postService, $scope, $rootScope){
+app.controller('mainController', function(postService, $scope, $rootScope, $location){
 	$scope.posts = postService.query();
 	$scope.newPost = {created_by: '', text: '', created_at: ''};
 	$scope.recipes = ['Chicken Parmesan', 'Fetuccine Alfredo', 'Falafel', 'Hummus', 'Tacos', 'Empenadas','Butter Chicken', 'Sushi', 'Ramen'];
-	
+	$scope.s_text = '';
+
+
 	$scope.post = function() {
 	  $scope.newPost.created_by = $rootScope.current_user;
 	  $scope.newPost.created_at = Date.now();
@@ -53,7 +61,12 @@ app.controller('mainController', function(postService, $scope, $rootScope){
 	};
 
 	$scope.search = function() {
-		console.log('search');
+		console.log('search: ' + $scope.s_text);
+		$location.path('/search');
+	};
+	$scope.addingredient = function() {
+		console.log("username: " + $scope.current_user);
+		console.log("data: " + $scope.ingredient.name);
 	};
 });
 

@@ -5,18 +5,19 @@
     <input class="btn submit-btn pull-right" type="submit" value="Chirp!" />
   </form>
 </div>
-<div>
-	<form ng-Submit="search()">
-		<a href="#/search">Search</a>
-	</form>
-</div>
-<div id="post-stream">
-	<h4>Chirp Feed</h4>
-		<div class="post" ng-repeat="post in posts | orderBy:'created_at':true" ng-class-odd="'odd'" ng-class-even="'even'"> 
-			<p>{{post.text}}</p>
-			<small>Posted by @{{post.created_by}}</small>
-			<small class="pull-right">{{post.created_at | date:"h:mma 'on' MMM d, y"}}</small>
-		</div>
-</div>
+
+
+<body ng-app="chirpApp">
+  <div class="container" ng-controller="mainController" style="position: fixed;">
+    <img src="/meanStarter/assets/img/RecipeReadyLogo.png" alt="Google" />
+    <form ng-submit = "search()">
+	    <div class="search">
+	      <input type="text" placeholder="put something" ng-model="s_text" name="search" id = "searchbox" class="round"/>
+	      <input class="button" type="submit" value="Find!!" />
+	    </div>
+		</form>
+  </div>
+</body>
+
 
 
