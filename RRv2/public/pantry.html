@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <body>
 	<div class = "container">
 		<h1>MyPantry</h1>
@@ -25,3 +26,19 @@
 		</table>			
 	</div>	
 </body>
+=======
+<div class = "container"> 
+  <h2>My Ingredients</h2>
+    <form ng-submit="addIngredient()">
+      <input type="text" ng-model="ingredientInput" size="50" placeholder="Add new ingredient"/>
+      <input type="submit" value="Add"/>
+  </form>
+  <br>
+
+    <div ng-repeat="x in ingredientList">
+        <input type="checkbox" ng-model="x.selected"/> <span ng-bind="x.name"></span>
+    </div>
+
+    <p><button ng-click="remove()">Remove marked</button></p>
+</div>
+>>>>>>> 455b83c000dd6adb17f5d0010527af6d12037531

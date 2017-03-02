@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require( 'mongoose' );
-var Post = mongoose.model('Post');
+var Recipe = mongoose.model('Recipe');
 //Used for routes that must be authenticated.
 function isAuthenticated (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -21,15 +21,16 @@ function isAuthenticated (req, res, next) {
 };
 
 //Register the authentication middleware
-router.use('/posts', isAuthenticated);
+router.use('/search', isAuthenticated);
 
-router.route('/posts')
+router.route('/search')
 	//creates a new post
 	.post(function(req, res){
 
-		var post = new Post();
-		post.text = req.body.text;
-		post.created_by = req.body.created_by;
+		var post = new Recipe();
+		post.name = req.body.name;
+		post.link = req.body.link;
+		post.thumbnail = req.body.thumbnail;
 		post.save(function(err, post) {
 			if (err){
 				return res.send(500, err);
@@ -40,7 +41,7 @@ router.route('/posts')
 	//gets all posts
 	.get(function(req, res){
 		console.log('debug1');
-		Post.find(function(err, posts){
+		Recipe.find(function(err, posts){
 			console.log('debug2');
 			if(err){
 				return res.send(500, err);
@@ -50,10 +51,10 @@ router.route('/posts')
 	});
 
 //post-specific commands. likely won't be used
-router.route('/posts/:id')
+router.route('/search/:id')
 	//gets specified post
 	.get(function(req, res){
-		Post.findById(req.params.id, function(err, post){
+		Recipe.findById(req.params.id, function(err, post){
 			if(err)
 				res.send(err);
 			res.json(post);
@@ -61,12 +62,13 @@ router.route('/posts/:id')
 	}) 
 	//updates specified post
 	.put(function(req, res){
-		Post.findById(req.params.id, function(err, post){
+		Recipe.findById(req.params.id, function(err, post){
 			if(err)
 				res.send(err);
 
-			post.created_by = req.body.created_by;
-			post.text = req.body.text;
+			post.link = req.body.link;
+			post.name = req.body.name;
+			post.thumbnail = req.body.thumbnail;
 
 			post.save(function(err, post){
 				if(err)
@@ -78,23 +80,13 @@ router.route('/posts/:id')
 	})
 	//deletes the post
 	.delete(function(req, res) {
-		Post.remove({
+		Recipe.remove({
 			_id: req.params.id
 		}, function(err) {
 			if (err)
 				res.send(err);
 			res.json("deleted :(");
 		});
-	});
-
-router.route('/search')
-	//creates a new post
-	.post(function(req, res){
-		console.log('post search');
-	})
-	//gets all posts
-	.get(function(req, res){
-		console.log('get search');
 	});
 
 module.exports = router;

@@ -1,10 +1,12 @@
 <div class="clearfix">
-  <form ng-Submit="post()" ng-show="authenticated">
-    <h4>{{current_user}} says</h4>
-    <textarea required class="form-control" maxlength="200" rows="3" placeholder="Say something" ng-model="newPost.text"></textarea>
-    <input class="btn submit-btn pull-right" type="submit" value="Chirp!" />
+  <form ng-Submit="search()">
+    <h4 ng-show="authenticated">{{current_user}} has</h4>
+    <h4 ng-hide="authenticated">You have</h4>
+    <input required class="form-control" maxlength="200" rows="1" placeholder="Search" ng-model="newRecipe.name"/>
+    <input class="btn submit-btn pull-right" type="submit" value="Search" />
   </form>
 </div>
+<<<<<<< HEAD
 
 
 <body ng-app="chirpApp">
@@ -19,5 +21,30 @@
   </div>
 </body>
 
+=======
+<!--<div id="post-stream" ng-show="searched">
+	<h4>Recipes</h4>
+		<div class="post" ng-repeat="recipe in recipes" ng-class-odd="'odd'" ng-class-even="'even'"> 
+			<p>{{recipe.name}}</p>
+			<small>Posted by @{{recipe.link}}</small>
+			<small class="pull-right">{{recipe.thumbnail}}</small>
+		</div>
+</div>-->
+>>>>>>> 455b83c000dd6adb17f5d0010527af6d12037531
 
+<br>
 
+<div class="center">
+  <div class="row">
+      <div class="col-md-3" ng-repeat = "recipe in recipes">
+        <div class="thumbnail">
+			<img src="http://placehold.it/150x150" class="md-card-image" alt="user avatar">          
+			<div class="caption">
+	            <h3>{{recipe.name}}</h3>
+	            <input class="btn card-btn" type="submit" value="View" />
+	            <input class="btn card-btn" type="submit" value="Save" />
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
