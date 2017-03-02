@@ -3,15 +3,23 @@
     <md-icon class="material-icons ng-binding" ng-click="vm.toggleMenu()">menu</md-icon>
   </div>
   <span>&nbsp;&nbsp;</span> 
-  <!-- 
-  <h2 class="pressed-text" ui-sref="home" mean-token="'site-title'">&nbsp;RecipeReady</h2>
-  -->
+  
+ <!-- <h2 class="pressed-text" ui-sref="home" mean-token="'site-title'">&nbsp;RecipeReady</h2> -->
+
   <md-button class="md-button" aria-label="{{item.link}}" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}" ng-repeat="item in hdrctr.menus.main" ui-sref="{{item.link}}" mean-token="item.link">
     {{item.title}}
   </md-button>
+  <img class = "headerLogo" src="/meanStarter/assets/img/RecipeReadyLogo.png" alt="Google" ng-click = "hdrctr.hdrvars.notHome = false; redirectHome()"/>
+
+  <form ng-submit = "redirectSearchPage()" ng-if="hdrctr.hdrvars.notHome">
+        <div class="headerSearch">
+            <input type="text" name="search" id = "searchbox" class="round"/>
+        </div>
+  </form>
+
   <span flex></span>
 
-  <md-button class="md-button" aria-label="Pantry" ng-if="hdrctr.hdrvars.authenticated">
+  <md-button class="md-button" aria-label="Pantry" ui-sref="pantry" ng-if="hdrctr.hdrvars.authenticated" ng-click="hdrctr.hdrvars.notHome = true">
     My Pantry
   </md-button>
 

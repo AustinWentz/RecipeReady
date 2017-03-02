@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('mean.system').controller('IndexController', ['$scope', 'Global',
-  function ($scope, Global) {
+angular.module('mean.system').controller('IndexController', ['$state','$scope', 'Global',
+  function ($state, $scope, Global) {
     $scope.global = Global;
     $scope.sites = [{
       'name': 'makeapoint',
@@ -89,5 +89,12 @@ angular.module('mean.system').controller('IndexController', ['$scope', 'Global',
         console.log('currentSlide:', currentSlide);
       }
     });
+    $scope.redirectSearchPage = function(){
+        console.log("LOL");
+        $state.go('results');
+      };
+
+    $scope.users = ['Chicken Parmesan', 'Fetuccine Alfredo', 'Falafel', 'Hummus', 'Tacos', 'Empenadas','Butter Chicken', 'Sushi', 'Ramen'];
+   
   }
 ]);

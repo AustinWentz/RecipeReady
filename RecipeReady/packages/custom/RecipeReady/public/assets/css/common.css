@@ -61,4 +61,34 @@ input {
     width: 400px;
     height: 30px;
     margin:auto;
+    outline: none;
+
+}
+.round:focus {outline:0;}
+
+.headerLogo{
+    width: 30px;
+    height: 45px;
+    margin:auto;
+    display:block;
+}
+.headerSearch{
+    position: relative;
+    width: 400px;
+    height: 30px;
+    margin: auto auto auto 20px;
+    outline: none;
+}
+.gridListdemoBasicUsage md-grid-list {
+  margin: auto auto auto auto;
+  position: center;
+
+}
+
+.gridListdemoBasicUsage .gray {
+  background: #f5f5f5;
+}
+
+.gridListdemoBasicUsage md-grid-tile {
+  transition: all 400ms ease-out 50ms;
 }
