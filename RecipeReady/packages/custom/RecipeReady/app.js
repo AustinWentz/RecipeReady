@@ -7,6 +7,7 @@ var Module = require('meanio').Module
 var path = require('path')
 var MeanStarter = new Module('meanStarter')
 require('./models.js')
+require('./public/routes/api.js')
 
 /*
  * All MEAN packages require registration

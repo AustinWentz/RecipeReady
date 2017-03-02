@@ -56,11 +56,11 @@ angular.module('mean.system').controller('HeaderController', ['$scope', '$rootSc
     });
 
      $scope.redirectHome = function(){
-        console.log("LOL");
+        console.log('LOL');
         $state.go('home');
       };
      $scope.redirectSearchPage = function(){
-        console.log("LOL");
+        console.log('LOL');
         $state.go('results');
         
       };

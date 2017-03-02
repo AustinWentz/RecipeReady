@@ -3,6 +3,7 @@
 angular.module('mean.system').controller('IndexController', ['$state','$scope', 'Global',
   function ($state, $scope, Global) {
     $scope.global = Global;
+    $scope.recipes = [];
     $scope.sites = [{
       'name': 'makeapoint',
       'text': 'Makeapoint is a platform to craft and fine-tune ideas and messages providing a graphical experience which brough an offline methodlogy online',
@@ -90,11 +91,12 @@ angular.module('mean.system').controller('IndexController', ['$state','$scope', 
       }
     });
     $scope.redirectSearchPage = function(){
-        console.log("LOL");
+        console.log('LOL');
+        $scope.recipes.push($scope.search);
         $state.go('results');
       };
 
-    $scope.users = ['Chicken Parmesan', 'Fetuccine Alfredo', 'Falafel', 'Hummus', 'Tacos', 'Empenadas','Butter Chicken', 'Sushi', 'Ramen'];
+    $scope.recipes = ['Chicken Parmesan', 'Fetuccine Alfredo', 'Falafel', 'Hummus', 'Tacos', 'Empenadas','Butter Chicken', 'Sushi', 'Ramen'];
    
   }
 ]);
