@@ -66,6 +66,7 @@ app.controller('pantryController', function(pantryService, $scope, $rootScope){
 	$scope.ingredientList = pantryService.query(); //{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
 	$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
 
+
 	$scope.addIngredient = function() {
 		pantryService.save($scope.ingredient, function() {
 			$scope.ingredientList = pantryService.query();
@@ -73,9 +74,12 @@ app.controller('pantryController', function(pantryService, $scope, $rootScope){
 		});
 	};
 
-	$scope.remove = function() {
+	$scope.removeIngredient = function(item) {
+		console.log("ToRomove: " + item.name);
+		
 		for (var i = $scope.ingredientList.length - 1; i >= 0; i--) {
-			if ($scope.ingredientList[i].selected) {
+
+			if ($scope.ingredientList[i] == item ) {
 				$scope.ingredientList.splice(i, 1);
 			}
 		}
