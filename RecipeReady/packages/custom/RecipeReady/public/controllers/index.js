@@ -92,10 +92,114 @@ angular.module('mean.system').controller('IndexController', ['$state','$scope', 
     $scope.redirectSearchPage = function(){
         console.log('LOL');
         $state.go('results');
-        getIngredients();
+        $scope.getIngredients();
       };
-
+      
     $scope.users = ['Chicken Parmesan', 'Fetuccine Alfredo', 'Falafel', 'Hummus', 'Tacos', 'Empenadas','Butter Chicken', 'Sushi', 'Ramen'];
+    $scope.ingredientList = [];
+    $scope.todoAdd = function() {
+        console.log("ADDED!!!!");
+        $scope.ingredientList.push({todoText:$scope.ingredientInput, done:false});
+        $scope.todoInput = "";
+    };
+
+    $scope.remove = function() {
+        console.log("REMOVE");
+        var oldList = $scope.ingredientList;
+        $scope.ingredientList = [];
+        angular.forEach(oldList, function(x) {
+            if (!x.done) $scope.ingredientList.push(x);
+        });
+    };
+        //TODO: Get a list of ingredients matching the given expression
+    $scope.getIngredients = function() {
+        console.log("Get Ingredients");
+        $http.get(serverAddress + "api/getIngredients", $scope.prefix).then(
+            function (resp) 
+            {    
+                console.log("success", resp);
+                
+                for each(var ingredient in resp)
+                {
+                    console.log(ingredient);
+                }
+                
+                $scope.ingredients = resp;
+            }, 
+            function(resp)
+            {
+                console.log("failure", resp);
+            }
+        );
+    };
+
+    //TODO: get a listing of recipes containing the given ingredients
+    $scope.getRecipesByIngredient = function() {
+        $http.get(serverAddress + "api/getRecipesByIngredient", $scope.ingredients).then(
+            function (resp) 
+            {    
+                console.log("success", resp);
+                
+                for each(var recipe in resp)
+                {
+                    console.log(recipe.name);
+                }
+                
+                $scope.recipes = resp;
+            }, 
+            function(resp)
+            {
+                console.log("failure", resp);
+            }
+        );
+    };
+
+    //TODO: get the user's saved recipes
+    $scope.getRecipesByUser = function() {
+        $http.get(serverAddress + "/api/getRecipesByUser", $scope.user).then(
+            function (resp) {    
+                console.log("success", resp);
+                
+                for each(var recipe in resp) {
+                    console.log(recipe.name);
+                }
+                $scope.recipes = resp;
+            }, 
+            function(resp) {
+                console.log("failure", resp);
+            }
+        );
+    };
+
+    //TODO get the ingredients in the user's pantry
+    $scope.getPantry = function() {
+        $http.get(serverAddress + "api/getPantry", $scope.user).then(
+            function (resp) {    
+                console.log("success", resp);
+                
+                for each(var ingredient in resp) {
+                    console.log(ingredient.name);
+                }
+                
+                $scope.ingredients = resp;
+            }, 
+            function(resp) {
+                console.log("failure", resp);
+            }
+        );
+    }
+
+    //TODO: get a list of the user's dietary restrictions
+    $scope.getDietaryRestrictions = function() {
+        $http.get(serverAddress + "api/getRecipesByUser", $scope.user).then(
+            function (resp) {    
+                console.log("success", resp);
+            }, 
+            function(resp) {
+                console.log("failure", resp);
+            }
+        );
+    }
    
   }
 ]);
