@@ -1,4 +1,4 @@
-var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($http, $rootScope) {
+var app = angular.module('recipeReady', ['ngRoute', 'ngResource']).run(function($http, $rootScope) {
 	$rootScope.authenticated = false;
 	$rootScope.searched = false;
 	$rootScope.current_user = '';
