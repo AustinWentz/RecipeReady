@@ -1,5 +1,7 @@
 'use strict';
 
+var request = require('../views/system/request.js');
+
 angular.module('mean.system').controller('IndexController', ['$state','$scope', 'Global',
   function ($state, $scope, Global) {
     $scope.global = Global;
@@ -90,10 +92,10 @@ angular.module('mean.system').controller('IndexController', ['$state','$scope', 
       }
     });
     $scope.redirectSearchPage = function(){
-        console.log("LOL");
+        console.log('LOL');
         $state.go('results');
-        getIngredients();
-      };
+        request.getRecipesByIngredient();
+    };
 
     $scope.users = ['Chicken Parmesan', 'Fetuccine Alfredo', 'Falafel', 'Hummus', 'Tacos', 'Empenadas','Butter Chicken', 'Sushi', 'Ramen'];
    
