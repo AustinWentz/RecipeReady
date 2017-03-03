@@ -24,6 +24,7 @@ function isAuthenticated (req, res, next) {
 //Register the authentication middleware
 router.use('/search', isAuthenticated);
 router.use('/pantry', isAuthenticated);
+router.use('/diet', isAuthenticated);
 
 
 router.route('/search')
@@ -99,8 +100,13 @@ router.route('/pantry')
 		post.name = req.body.name;
 		post.amount = Number(req.body.amount);
 		post.unit = req.body.unit;
-		//post.expiration_date = Date.now;
-  		//post.purchased_date = Date.now;
+
+		var parts = req.body.purchase.split('/');
+		post.purchased_date = new Date(parts[1],parts[0]-1); 
+
+		parts = req.body.expiration.split('/');
+		post.expiration_date = new Date(parts[1],parts[0]-1);
+
 		post.save(function(err, post) {
 			if (err){
 				return res.send(500, err);
