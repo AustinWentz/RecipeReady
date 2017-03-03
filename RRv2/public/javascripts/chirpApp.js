@@ -51,7 +51,7 @@ app.factory('recipeSearchService', function($resource){
 	return $resource('https://api.edamam.com/search/');
 });
 
-app.controller('mainController', function(searchService, $scope, $rootScope){
+app.controller('mainController', function(searchService, recipeSearchService, $scope, $rootScope){
 	$scope.recipes = searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 
