@@ -47,7 +47,9 @@ app.factory('pantryService', function($resource){
 	return $resource('/api/pantry/:id', {id: '@id'});
 });
 
-
+app.factory('recipeSearchService', function($resource){
+	return $resource('https://api.edamam.com/search/');
+});
 
 app.controller('mainController', function(searchService, $scope, $rootScope){
 	$scope.recipes = searchService.query();
@@ -61,6 +63,12 @@ app.controller('mainController', function(searchService, $scope, $rootScope){
 	    	$scope.recipes = searchService.query($scope.newRecipe);
 	    	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 	  	});
+	};
+
+	$scope.addRecipe = function() {
+		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: 'apple', from: 0, to: 1000}, function(resp) {
+			console.log(resp);
+		});
 	};
 });
 
