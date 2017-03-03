@@ -146,6 +146,7 @@ router.route('/pantry/:id')
 		UserIngredient.remove({
 			_id: req.params.id
 		}, function(err) {
+
 			if (err)
 				res.send(err);
 			res.json("deleted :(");

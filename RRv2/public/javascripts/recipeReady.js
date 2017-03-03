@@ -49,7 +49,6 @@ app.factory('searchService', function($resource){
 	return $resource('/api/search/:id');
 });
 
-<<<<<<< HEAD:RRv2/public/javascripts/chirpApp.js
 app.controller('mainController', function(postService, $scope, $rootScope, $location){
 	$scope.posts = postService.query();
 	$scope.newPost = {created_by: '', text: '', created_at: ''};
@@ -73,7 +72,7 @@ app.controller('mainController', function(postService, $scope, $rootScope, $loca
 	$scope.addingredient = function() {
 		console.log("username: " + $scope.current_user);
 		console.log("data: " + $scope.ingredient.name);
-=======
+
 app.controller('mainController', function(searchService, $scope, $rootScope){
 	$scope.recipes = searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
@@ -104,7 +103,7 @@ app.controller('pantryController', function($scope, $rootScope){
 				$scope.ingredientList.splice(i, 1);
 			}
 		}
->>>>>>> 455b83c000dd6adb17f5d0010527af6d12037531:RRv2/public/javascripts/recipeReady.js
+
 	};
     
 
