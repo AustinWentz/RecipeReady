@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require( 'mongoose' );
 var Recipe = mongoose.model('Recipe');
-var UserIngredient = mongoose.model('User_Ingredient');
+var UserIngredient = mongoose.model('Instances');
+var 
 //Used for routes that must be authenticated.
 function isAuthenticated (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -24,6 +25,7 @@ function isAuthenticated (req, res, next) {
 //Register the authentication middleware
 router.use('/search', isAuthenticated);
 router.use('/pantry', isAuthenticated);
+
 
 router.route('/search')
 	//creates a new post
@@ -96,6 +98,10 @@ router.route('/pantry')
 
 		var post = new UserIngredient();
 		post.name = req.body.name;
+		post.amount = Number(req.body.amount);
+		post.unit = req.body.unit;
+		//post.expiration_date = Date.now;
+  		//post.purchased_date = Date.now;
 		post.save(function(err, post) {
 			if (err){
 				return res.send(500, err);
@@ -143,6 +149,7 @@ router.route('/pantry/:id')
 	})
 	//deletes the post
 	.delete(function(req, res) {
+		console.log("hi");
 		UserIngredient.remove({
 			_id: req.params.id
 		}, function(err) {
