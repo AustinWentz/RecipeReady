@@ -6,11 +6,6 @@
     <input class="btn submit-btn pull-right" type="submit" value="Search" />
   </form>
 </div>
-<div>
-  <form ng-Submit="addRecipe()">
-    <input class="btn submit-btn pull-right" type="submit" value="Add Recipe" />
-  </form>
-</div>
 <!--<div id="post-stream" ng-show="searched">
 	<h4>Recipes</h4>
 		<div class="post" ng-repeat="recipe in recipes" ng-class-odd="'odd'" ng-class-even="'even'"> 
@@ -26,11 +21,11 @@
   <div class="row">
       <div class="col-md-3" ng-repeat = "recipe in recipes">
         <div class="thumbnail">
-			<img src="http://placehold.it/150x150" class="md-card-image" alt="user avatar">          
+			<img ng-src="{{recipe.recipe.image}}" class="md-card-image" alt="user avatar">          
 			<div class="caption">
-	            <h3>{{recipe.name}}</h3>
-	            <input class="btn card-btn" type="submit" value="View" />
-	            <input class="btn card-btn" type="submit" value="Save" />
+	            <h3>{{recipe.recipe.label}}</h3>
+	            <a ng-href="{{recipe.recipe.url}}" class="btn card-btn">View</a>
+	            <input ng-click = "saveRecipe(recipe.recipe.label)" class="btn card-btn" type="submit" value="Save" />
           </div>
         </div>
       </div>
