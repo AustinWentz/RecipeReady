@@ -47,29 +47,41 @@ app.factory('pantryService', function($resource){
 	return $resource('/api/pantry/:id', {id: '@id'});
 });
 
+app.factory('recipeSearchService', function($resource){
+	return $resource('https://api.edamam.com/search/');
+});
 
-
-app.controller('mainController', function(searchService, $scope, $rootScope){
-	$scope.recipes = searchService.query();
+app.controller('mainController', function(searchService, recipeSearchService, $scope, $rootScope){
+	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 
-	$scope.search = function() {
+	$scope.saveRecipe = function(label) {
 		$rootScope.searched = true;
 	  	$scope.newRecipe.link = $rootScope.current_user;
 	  	$scope.newRecipe.thumbnail = 'temp';
+	  	$scope.newRecipe.name = label;
+	  	console.log("SAVERECIPE")
 	  	searchService.save($scope.newRecipe, function(){
-	    	$scope.recipes = searchService.query($scope.newRecipe);
-	    	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
+	    	//$scope.recipes = searchService.query($scope.newRecipe);
+	    	//$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 	  	});
+	};
+
+	$scope.search = function() {
+		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
+			console.log(resp);
+			$scope.recipes = resp.hits;
+		});
 	};
 });
 
 
 
-app.controller('pantryController', function(pantryService, $scope, $rootScope){
+app.controller('pantryController', function(pantryService, searchService, $scope, $rootScope){
 	$scope.ingredientList = pantryService.query(); //{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
 	$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
 
+	$scope.recipes = searchService.query();
 
 	$scope.addIngredient = function() {
 		pantryService.save($scope.ingredient, function() {

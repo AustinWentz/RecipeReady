@@ -37,11 +37,11 @@ a {
 }
 .caption {
     h3{
-        font-size: 17px;
+        font-size: 12px;
         margin: 2px;
     }
     p{
-        font-size: 15px;
+        font-size: 10px;
         margin: 0px;
     }
 }
