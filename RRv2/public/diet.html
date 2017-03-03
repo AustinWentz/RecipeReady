@@ -1,4 +1,3 @@
-
 <body>
   <div class = "container">
     <h1>MyDiet</h1>
@@ -12,30 +11,9 @@
       <thead>
         <tr>
           <th><input class = "form-control" ng-model = "ingredient.name"></th>
-          <th><input class = "form-control" ng-model = "ingredient.amount"></th>
-          <th><input class = "form-control" ng-model = "ingredient.unit"></th>
-          <th><input class = "form-control" ng-model = "ingredient.purchase" placeholder="_ _/ _ _ _ _ (month/year)"></th>
-          <th><input class = "form-control" ng-model = "ingredient.expiration" placeholder="_ _/ _ _ _ _ (month/year)"></th>
           <td><buttom class ="btn btn-primary" ng-click = "addIngredient()">ADD</buttom></td>
-
         </tr>
       </thead>
-    </table>      
+    </table>    
   </div>  
 </body>
-
-<div class="center">
-  <div class="row">
-      <div class="col-md-3" ng-repeat = "item in ingredientList">
-        <div class="thumbnail">
-          <img src="http://placehold.it/150x150" class="md-card-image" alt="user avatar">          
-          <div class="item">
-            <h3>{{item.name}}</h3>
-            <input class="btn card-btn" type="submit" value="View" />
-            <input class="btn card-btn" type="submit" value="Save" />
-            <input class="btn card-btn" type="submit" value="Delete" ng-click = "removeIngredient(item)"/>
-          </div>
-        </div>
-      </div>
-  </div>
-</div>
