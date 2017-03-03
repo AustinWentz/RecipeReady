@@ -44,8 +44,10 @@ app.factory('searchService', function($resource){
 });
 
 app.factory('pantryService', function($resource){
-	return $resource('/api/pantry/:id');
+	return $resource('/api/pantry/:id', {id: '@id'});
 });
+
+
 
 app.controller('mainController', function(searchService, $scope, $rootScope){
 	$scope.recipes = searchService.query();
@@ -62,6 +64,8 @@ app.controller('mainController', function(searchService, $scope, $rootScope){
 	};
 });
 
+
+
 app.controller('pantryController', function(pantryService, $scope, $rootScope){
 	$scope.ingredientList = pantryService.query(); //{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
 	$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
@@ -69,20 +73,21 @@ app.controller('pantryController', function(pantryService, $scope, $rootScope){
 
 	$scope.addIngredient = function() {
 		pantryService.save($scope.ingredient, function() {
+			console.log("hello from add_In");
 			$scope.ingredientList = pantryService.query();
 			$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
 		});
 	};
 
 	$scope.removeIngredient = function(item) {
-		console.log("ToRomove: " + item.name);
-		
-		for (var i = $scope.ingredientList.length - 1; i >= 0; i--) {
+		console.log("ToRomove: " + item._id);
+		pantryService.delete({id: item._id}, function(resp){
+  			$scope.ingredientList = pantryService.query();
+		});
+	};
 
-			if ($scope.ingredientList[i] == item ) {
-				$scope.ingredientList.splice(i, 1);
-			}
-		}
+	$scope.viewIngredient = function(item) {
+		console.log(item);
 	};
 });
 
