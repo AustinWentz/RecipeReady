@@ -78,7 +78,23 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 
 	$scope.search = function() {
 		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
-			console.log(resp);
+			console.log(resp.hits[0]);
+
+			for (var cur in resp.hits) {
+
+				var ingList = resp.hits[cur].recipe.ingredientLines;//.split(" ");
+
+				for( var i in ingList) {
+					var ingredient = new Object();
+					var curIng = ingList[i].split(" ");
+
+					ingredient.quantity = curIng[0];
+					ingredient.unit = curIng[1];
+					ingredient.type = curIng[2];
+					console.log("ingredient: " + JSON.stringify(ingredient));
+				}
+			}
+
 			$scope.recipes = resp.hits;
 		});
 	};
