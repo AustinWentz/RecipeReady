@@ -2,7 +2,7 @@ var app = angular.module('recipeReady', ['ngRoute', 'ngResource']).run(function(
 	$rootScope.authenticated = false;
 	$rootScope.searched = false;
 	$rootScope.current_user = '';
-	
+
 	$rootScope.signout = function(){
     	$http.get('auth/signout');
     	$rootScope.authenticated = false;
@@ -78,6 +78,7 @@ app.controller('mainController', function(searchService, $scope, $rootScope){
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 
 	$scope.search = function() {
+		console.log("BB");
 		$rootScope.searched = true;
 	  	$scope.newRecipe.link = $rootScope.current_user;
 	  	$scope.newRecipe.thumbnail = 'temp';
@@ -86,6 +87,8 @@ app.controller('mainController', function(searchService, $scope, $rootScope){
 	    	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 	  	});
 	};
+
+
 });
 
 app.controller('pantryController', function($scope, $rootScope){
@@ -105,7 +108,7 @@ app.controller('pantryController', function($scope, $rootScope){
 		}
 
 	};
-    
+
 
 });
 
@@ -139,4 +142,3 @@ app.controller('authController', function($scope, $http, $rootScope, $location){
     });
   };
 });
-

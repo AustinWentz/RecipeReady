@@ -2,7 +2,7 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($ht
 	$rootScope.authenticated = false;
 	$rootScope.searched = false;
 	$rootScope.current_user = '';
-	
+
 	$rootScope.signout = function(){
     	$http.get('auth/signout');
     	$rootScope.authenticated = false;
@@ -60,7 +60,7 @@ app.factory('recipeSearchService', function($resource){
 	return $resource('https://api.edamam.com/search/');
 });
 
-app.controller('mainController', function(searchService, recipeSearchService, $scope, $rootScope){
+app.controller('mainController', function(searchService, recipeSearchService, $scope, $rootScope, $http){
 	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 
@@ -81,6 +81,33 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 			console.log(resp);
 			$scope.recipes = resp.hits;
 		});
+	};
+
+	$scope.autocompleteQuery = function() {
+		console.log("autocomplete");
+		var searchString = "https://api.nutritionix.com/v1_1/search/" + $scope.newRecipe.name;
+
+		var NutritionixQuery = {"appKey":"e7ac4da83fe5ee54e356bd53c0abb7ac",
+			"appId":"9126443f"};
+
+		$http({
+			method: 'GET',
+			url: searchString,
+			params: NutritionixQuery
+		}).then(function formatResults(response) {
+			var arr = response.data.hits;
+			if(arr) {
+				for (var cur in arr) {
+					console.log("result " + cur + JSON.stringify(arr[cur].fields.item_name));
+				}
+			}
+		}, function getErr(response) {
+			console.log("ERR: " + JSON.stringify(response));
+		});
+	};
+
+	$scope.autocomplete = function() {
+
 	};
 });
 
@@ -103,7 +130,7 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 				$scope.ingredientList[i] = $scope.ingredientList[j];
 				$scope.ingredientList[j] = temp;
 			}
-		} 
+		}
 	}*/
 
 	$scope.addIngredient = function() {
@@ -134,7 +161,7 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 					$item[i] = $item[j];
 					$item[j] = temp;
 				}
-			} 
+			}
 		}*/
 		for (i = 0; i < $scope.ingredientList.length; i++) {
 			console.log("Sorting");
@@ -145,7 +172,7 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 					$scope.ingredientList[j] = temp;
 				}
 			}
-		} 
+		}
 	};
 
 });

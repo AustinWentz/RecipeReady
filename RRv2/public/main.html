@@ -1,5 +1,5 @@
 <div class="clearfix">
-  <form ng-Submit="search()">
+  <form ng-Submit="search()" ng-keypress="autocompleteQuery()">
     <h4 ng-show="authenticated">{{current_user}} has</h4>
     <h4 ng-hide="authenticated">You have</h4>
     <input required class="form-control" maxlength="200" rows="1" placeholder="Search" ng-model="newRecipe.name"/>
@@ -8,7 +8,7 @@
 </div>
 <!--<div id="post-stream" ng-show="searched">
 	<h4>Recipes</h4>
-		<div class="post" ng-repeat="recipe in recipes" ng-class-odd="'odd'" ng-class-even="'even'"> 
+		<div class="post" ng-repeat="recipe in recipes" ng-class-odd="'odd'" ng-class-even="'even'">
 			<p>{{recipe.name}}</p>
 			<small>Posted by @{{recipe.link}}</small>
 			<small class="pull-right">{{recipe.thumbnail}}</small>
@@ -21,7 +21,7 @@
   <div class="row">
       <div class="col-md-3" ng-repeat = "recipe in recipes">
         <div class="thumbnail">
-			<img ng-src="{{recipe.recipe.image}}" class="md-card-image" alt="user avatar">          
+			<img ng-src="{{recipe.recipe.image}}" class="md-card-image" alt="user avatar">
 			<div class="caption">
 	            <h3>{{recipe.recipe.label}}</h3>
 	            <a ng-href="{{recipe.recipe.url}}" class="btn card-btn">View</a>
