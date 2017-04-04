@@ -56,8 +56,8 @@ a {
 /* Navigation Menu - Background */
 .navigation {
   /* critical 0sizing and position styles */
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 96%;
   position: fixed;
   top: 0;
   right: 0;
@@ -72,9 +72,18 @@ a {
 /* Navigation Menu - List items */
 .nav-item {
   /* non-critical appearance styles */
+  width: 200px;
   border-top: 1px solid #111;
   border-bottom: 1px solid #000;
   top:110;
+}
+.nav-item-entry {
+  /* non-critical appearance styles */
+  width: 200px;
+  border-top: 1px solid #111;
+  border-bottom: 1px solid #000;
+  position: absolute;
+  bottom: 0;
 }
 
 .nav-item a {
@@ -96,8 +105,6 @@ a {
 /* Site Wrapper - Everything that isn't navigation */
 .site-wrap {
   /* Critical position and size styles */
-  min-height: 100%;
-  min-width: 100%;
   width:100%;
   height: 100%;
   background-color: white; /* Needs a background or else the nav will show through */
@@ -106,10 +113,10 @@ a {
   bottom: 100%;
   left: 0;
   z-index: 1;
-  
+  overflow-x: hidden;
+
   /* non-critical apperance styles */
   padding: 4em;
-  background-image: linear-gradient(135deg, rgb(254,255,255) 0%,rgb(221,241,249) 35%,rgb(160,216,239) 100%);
   background-size: 100%;
 }
 
@@ -145,8 +152,8 @@ label[for="nav-trigger"] {
 
 .nav-trigger:checked ~ .site-wrap {
   left: 200px;
-  box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
 }
+
 
 body {
     /* Without this, the body has excess horizontal scroll when the menu is open */

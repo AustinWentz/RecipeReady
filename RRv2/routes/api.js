@@ -27,6 +27,7 @@ router.use('/pantry', isAuthenticated);
 router.use('/diet', isAuthenticated);
 
 
+
 router.route('/search')
 	//creates a new post
 	.post(function(req, res){

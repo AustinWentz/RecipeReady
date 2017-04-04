@@ -5,7 +5,6 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($ht
 
 	$rootScope.addToShoppingList= function(){
 		console.log("ADD TO SHOPPING LIST");
-
 	}
 
 	$rootScope.signout = function(){
@@ -51,8 +50,6 @@ app.config(function($routeProvider){
 app.factory('dietService', function($resource){
 	return $resource('/api/diet/:id');
 });
-
-
 app.factory('searchService', function($resource){
 	return $resource('/api/search/:id');
 });
