@@ -3,6 +3,11 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($ht
 	$rootScope.searched = false;
 	$rootScope.current_user = '';
 
+	$rootScope.addToShoppingList= function(){
+		console.log("ADD TO SHOPPING LIST");
+
+	}
+
 	$rootScope.signout = function(){
     	$http.get('auth/signout');
     	$rootScope.authenticated = false;
@@ -75,7 +80,6 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 	    	//$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 	  	});
 	};
-
 	$scope.search = function() {
 		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
 			console.log(resp.hits[0]);
