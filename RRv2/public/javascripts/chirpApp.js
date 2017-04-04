@@ -17,6 +17,12 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($ht
 	$rootScope.clear_search = function(){
     	$rootScope.searched = false;
 	};
+
+	$rootScope.accessors = {
+    getScore: function(row) {
+      return row.fields._score;
+    }
+  }
 });
 
 app.config(function($routeProvider){
@@ -68,6 +74,7 @@ app.factory('recipeSearchService', function($resource){
 app.controller('mainController', function(searchService, recipeSearchService, $scope, $rootScope, $http){
 	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
+	$scope.suggestions;
 
 	$scope.saveRecipe = function(label) {
 		$rootScope.searched = true;
@@ -105,6 +112,9 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 
 	$scope.autocompleteQuery = function() {
 		console.log("autocomplete + " + $scope.newRecipe.name);
+
+		return;
+
 		var searchString = "https://api.nutritionix.com/v1_1/search/" + $scope.newRecipe.name;
 
 		var NutritionixQuery = {"appKey":"e7ac4da83fe5ee54e356bd53c0abb7ac",
@@ -116,6 +126,7 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 			params: NutritionixQuery
 		}).then(function formatResults(response) {
 			var arr = response.data.hits;
+			$scope.suggestions = arr;
 			if(arr) {
 				for (var cur in arr) {
 					console.log("result " + cur + JSON.stringify(arr[cur].fields.item_name));

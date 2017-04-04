@@ -5,7 +5,17 @@
     <input required class="form-control" maxlength="200" rows="1" placeholder="Search" ng-model="newRecipe.name" ng-change="autocompleteQuery()"/>
     <input class="btn submit-btn pull-right" type="submit" value="Search" />
   </form>
+
+  <table ng-table="vm.tableParams" class="table" show-filter="true">
+    <tr ng-repeat="suggestion in suggestions">
+        <td>
+            {{suggestion.fields.item_name}}</td>
+        <td>
+            {{accessors.getScore(suggestion)}}</td>
+    </tr>
+  </table>
 </div>
+
 <!--<div id="post-stream" ng-show="searched">
 	<h4>Recipes</h4>
 		<div class="post" ng-repeat="recipe in recipes" ng-class-odd="'odd'" ng-class-even="'even'">
