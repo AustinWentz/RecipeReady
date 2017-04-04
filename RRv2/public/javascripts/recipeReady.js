@@ -108,8 +108,6 @@ app.controller('pantryController', function($scope, $rootScope){
 		}
 
 	};
-
-
 });
 
 app.controller('authController', function($scope, $http, $rootScope, $location){
