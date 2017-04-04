@@ -3,10 +3,10 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($ht
 	$rootScope.searched = false;
 	$rootScope.current_user = '';
 
-	$rootScope.addToShoppingList= function(){
+	/*$rootScope.addToShoppingList= function(){
 		console.log("ADD TO SHOPPING LIST");
 
-	}
+	}*/
 
 	$rootScope.signout = function(){
     	$http.get('auth/signout');
@@ -52,6 +52,9 @@ app.factory('dietService', function($resource){
 	return $resource('/api/diet/:id');
 });
 
+app.factory('shoppingService', function($resource){
+	return $resource('/api/shopping/:id', {id: '@id'});
+});
 
 app.factory('searchService', function($resource){
 	return $resource('/api/search/:id');
@@ -131,6 +134,21 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 	};
 });
 
+// Controller for shopping lists
+app.controller('shoppingController', function(shoppingService, $scope, $rootScope){
+	$rootScope.shoppingList = shoppingService.query();
+	$rootScope.itemInShoppingList = ''
+
+	$rootScope.addItemToShopping = function() {
+		shoppingService.save($rootScope.itemInShoppingList, function() {
+			console.log("9/femboi/nonbinary/genderqueer");
+			$rootScope.shoppingList = shoppingService.query();
+			$rootScope.itemInShoppingList = '';
+		});
+	}
+
+});
+
 app.controller('dietController', function(dietService, $scope, $rootScope){
 	// TODO
 
@@ -162,7 +180,7 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 	};
 
 	$scope.removeIngredient = function(item) {
-		console.log("ToRomove: " + item._id);
+		console.log("ToRemove: " + item._id);
 		pantryService.delete({id: item._id}, function(resp){
   			$scope.ingredientList = pantryService.query();
 		});
