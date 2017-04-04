@@ -1,30 +1,51 @@
 <html>
-	<head>
-		<title>RecipeReady</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
-		<script src="javascripts/chirpApp.js"></script>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-		<link rel="stylesheet" href="stylesheets/style.css">
-	</head>
-	<body ng-app="chirpApp">
-		<div id='main' class="container">
-			<nav class="navbar-fluid navbar-default navbar-fixed-top">
-				<div class="container">
-					<a class="navbar-brand" href="#" ng-click="clear_search()"> Recipe Ready </a>
-					<p class="navbar-text"> Search for recipes by ingredients</p>
-					<p class="navbar-right navbar-text" ng-hide="authenticated"><a href="#/login">Login</a> or <a href="#/signup">Register</a></p>
-					<p class="navbar-right navbar-text" ng-show="authenticated"><a href="#" ng-click="signout()">Logout</a></p>
-					<p class="navbar-right navbar-text" ng-show="authenticated"><a href="#/diet">MyDiet</a></p>
-					<p class="navbar-right navbar-text" ng-show="authenticated"><a href="#/pantry">MyPantry</a></p>
-					<p class="navbar-right navbar-text" ng-show="authenticated">Signed in as {{current_user}}</p>
-				</div>
-			</nav>
-			<div class="col-md-offset-2 col-md-8">
-				<div ng-view>
-				</div>
-			</div>
-		</div>
-	</body>
+  <head>
+    <title>RecipeReady</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-resource.js"></script>
+    <script src="javascripts/chirpApp.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
+  </head>
+
+
+
+
+  <body ng-app="chirpApp">
+    <div id='main'>
+      <nav class="navbar-fluid navbar-default navbar-fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="#" ng-click="clear_search()"> Recipe Ready </a>
+          <p class="navbar-text"> Search for recipes by ingredients</p>
+          <p class="navbar-right navbar-text" ng-hide="authenticated"><a href="#/login">Login</a> or <a href="#/signup">Register</a></p>
+          <p class="navbar-right navbar-text" ng-show="authenticated"><a href="#" ng-click="signout()">Logout</a></p>
+          <p class="navbar-right navbar-text" ng-show="authenticated"><a href="#/diet">MyDiet</a></p>
+          <p class="navbar-right navbar-text" ng-show="authenticated"><a href="#/pantry">MyPantry</a></p>
+          <p class="navbar-right navbar-text" ng-show="authenticated">Signed in as {{current_user}}</p>
+        </div>
+      </nav>
+      <ul class="navigation">
+        <li class="nav-item">
+          <li class="nav-item"><a href="#">Home</a></li>
+          <li class="nav-item"><a href="#">Portfolio</a></li>
+          <li class="nav-item"><a href="#">About</a></li>
+          <li class="nav-item"><a href="#">Blog</a></li>
+          <li class = "nav-item"> 
+              <th><input class = "form-control" ng-model = "ingredient.name"></th>
+              <td><buttom class ="btn btn-primary" ng-click = "addToShoppingList()">ADD</buttom></td>
+          </li>
+      </ul>
+
+      <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+      <label for="nav-trigger"></label>
+      <div class="site-wrap">
+
+      <div>
+        <div ng-view>
+        </div>
+      </div>
+    </div>
+  </body>
+  </div>
 </html>
