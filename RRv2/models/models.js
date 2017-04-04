@@ -33,8 +33,8 @@ var userSchema = new Schema({
 	created_at: {type: Date, default: Date.now},
 
 	pantry: [User_Ingredient],
-  	shopping_list: [Recipe_Ingredient],
-  	recipe_favorites: [Recipe],
+  shopping_list: [Recipe_Ingredient],
+  recipe_favorites: [Recipe],
  	dietary: [Recipe_Ingredient]
 });
 

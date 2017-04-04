@@ -100,7 +100,7 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 	};
 
 	$scope.autocompleteQuery = function() {
-		console.log("autocomplete");
+		console.log("autocomplete + " + $scope.newRecipe.name);
 		var searchString = "https://api.nutritionix.com/v1_1/search/" + $scope.newRecipe.name;
 
 		var NutritionixQuery = {"appKey":"e7ac4da83fe5ee54e356bd53c0abb7ac",
