@@ -1,12 +1,14 @@
+
+
 var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($http, $rootScope) {
 	$rootScope.authenticated = false;
 	$rootScope.searched = false;
 	$rootScope.current_user = '';
 
-	$rootScope.addToShoppingList= function(){
+	/*$rootScope.addToShoppingList= function(){
 		console.log("ADD TO SHOPPING LIST");
 
-	}
+	}*/
 
 	$rootScope.signout = function(){
     	$http.get('auth/signout');
@@ -59,6 +61,10 @@ app.factory('dietService', function($resource){
 	return $resource('/api/diet/:id',{id: '@id'});
 });
 
+app.factory('shoppingService', function($resource){
+	return $resource('/api/shopping/:id', {id: '@id'});
+});
+
 app.factory('searchService', function($resource){
 	return $resource('/api/search/:id');
 });
@@ -88,24 +94,77 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 	};
 	$scope.search = function() {
 		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
-			console.log(resp.hits[0]);
+			console.log(JSON.stringify(resp.hits[0].recipe.ingredientLines));
+
+			var results = new Array();
+
+			var units = ["kg", "kilograms", "kilogram", "g", "gram", "grams",
+				"lb", "lbs", "pound", "pounds", "ounce", "ounces", "oz", "ozs",
+				"tbsp", "tbsps", "tsp", "tsps", "cups", "cup", "clove", "cloves",
+				"clove(s)", "bottle", "can", "jar"];
 
 			for (var cur in resp.hits) {
+
+				var curRecipe = resp.hits[cur].recipe;
+				var newResult = new Object();
+
+				newResult.label = curRecipe.label;
+				newResult.url = curRecipe.url;
+				newResult.image = curRecipe.image;
+				newResult.ingredients = new Array();
 
 				var ingList = resp.hits[cur].recipe.ingredientLines;//.split(" ");
 
 				for( var i in ingList) {
+					var amountIsOver = false;
 					var ingredient = new Object();
 					var curIng = ingList[i].split(" ");
+					var alt = ingList[i].match(/\([a-z|A-Z|0-9]*\)/g);
+					var ref = ingList[i].replace(/\([^s]*\)/g, '');
+					//if(alt && alt.length > 0)
+						//console.log("full: " + curIng + "\nparenths: " + alt
+							//+ "\nwith no parenths: " + ref);
 
-					ingredient.quantity = curIng[0];
-					ingredient.unit = curIng[1];
-					ingredient.type = curIng[2];
+					ingList[i].replace(/\([a-z|A-Z|0-9]*\)/g, '');
+					var fullAmount = "";
+					var unit = "";
+					var ingType = "";
+
+					for( var j in curIng) {
+						var amount1 = curIng[j].match(/[0-9]+/g);
+
+						if(amount1 && amount1.length == 1  && !amountIsOver) {
+							fullAmount += amount1;
+						}
+
+						else if (curIng[j].match(/[0-9]+[\/|\.|\-][0-9]+/g) && !amountIsOver) {
+							fullAmount += " " + curIng[j];
+							amountIsOver = true;
+						}
+
+						else {
+							amountIsOver = true;
+							if(unit == "" && fullAmount != "" && units.indexOf(curIng[j]) != -1) {
+								unit = curIng[j];
+							}
+
+							else {
+								ingType += " " + curIng[j];
+							}
+						}
+					}
+
+					ingredient.quantity = fullAmount;
+					ingredient.unit = unit;
+					ingredient.type = ingType;
+
+					newResult.ingredients.push(ingredient);
 					console.log("ingredient: " + JSON.stringify(ingredient));
 				}
-			}
 
-			$scope.recipes = resp.hits;
+				results.push(newResult);
+			}
+			$scope.recipes = results;
 		});
 	};
 
@@ -135,6 +194,21 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 	$scope.autocomplete = function() {
 
 	};
+});
+
+// Controller for shopping lists
+app.controller('shoppingController', function(shoppingService, $scope, $rootScope){
+	$rootScope.shoppingList = shoppingService.query();
+	$rootScope.itemInShoppingList = ''
+
+	$rootScope.addItemToShopping = function() {
+		shoppingService.save($rootScope.itemInShoppingList, function() {
+			console.log("9/femboi/nonbinary/genderqueer");
+			$rootScope.shoppingList = shoppingService.query();
+			$rootScope.itemInShoppingList = '';
+		});
+	}
+
 });
 
 app.controller('dietController', function(dietService, $scope, $rootScope){
@@ -186,7 +260,7 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 	};
 
 	$scope.removeIngredient = function(item) {
-		console.log("ToRomove: " + item._id);
+		console.log("ToRemove: " + item._id);
 		pantryService.delete({id: item._id}, function(resp){
   			$scope.ingredientList = pantryService.query();
 		});
