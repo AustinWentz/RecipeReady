@@ -77,7 +77,7 @@ app.factory('recipeSearchService', function($resource){
 	return $resource('https://api.edamam.com/search/');
 });
 
-app.controller('mainController', function(searchService, recipeSearchService, $scope, $rootScope, $http){
+app.controller('mainController', function(searchService, recipeSearchService, dietService, $scope, $rootScope, $http){
 	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 
@@ -92,77 +92,137 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 	    	//$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 	  	});
 	};
+
+	//For your sake, please, please don't read this code
 	$scope.search = function() {
+
 		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
 			console.log(JSON.stringify(resp.hits[0].recipe.ingredientLines));
 
+			//The array of formatted recipe objects to return to the search view
 			var results = new Array();
 
-			var units = ["kg", "kilograms", "kilogram", "g", "gram", "grams",
+			/*List of possible unit types. I wasn't able to find any decent
+			unit conversion libraries for this purpose. If you encounter or
+			think of some unit not in the list please add it below */
+			var units = ["x", "kg", "kilograms", "kilogram", "g", "gram", "grams",
 				"lb", "lbs", "pound", "pounds", "ounce", "ounces", "oz", "ozs",
-				"tbsp", "tbsps", "tsp", "tsps", "cups", "cup", "clove", "cloves",
-				"clove(s)", "bottle", "can", "jar"];
+				"tbsp", "tbsps", "tbs", "tablespoon", "tablespoons", "tsp", "tsps",
+				"teaspoon", "teaspoons", "cups", "cup", "clove", "cloves",
+				"clove(s)", "bottle", "can", "jar", "pinch", "dash", "bushel",
+				"peck"];
 
+			//Get list of ingredients to be filtered from the search
+			var restrictions = dietService.query();
+			console.log("restrictions: " + JSON.stringify(restrictions));
+
+			//Format each recipe returned
 			for (var cur in resp.hits) {
 
+				var isRestricted = false;
 				var curRecipe = resp.hits[cur].recipe;
-				var newResult = new Object();
 
+				//The object to represent the formatted recipe
+				var newResult = new Object();
 				newResult.label = curRecipe.label;
 				newResult.url = curRecipe.url;
 				newResult.image = curRecipe.image;
 				newResult.ingredients = new Array();
+				newResult.other = new Array();
+
 
 				var ingList = resp.hits[cur].recipe.ingredientLines;//.split(" ");
 
+				//Format each ingredient in ingredientLines to objects
 				for( var i in ingList) {
+
+					//Prevents rogue numbers elsewhere in the string from
+					//interfering with the actual quantity of the ingredient
 					var amountIsOver = false;
 					var ingredient = new Object();
-					var curIng = ingList[i].split(" ");
-					var alt = ingList[i].match(/\([a-z|A-Z|0-9]*\)/g);
-					var ref = ingList[i].replace(/\([^s]*\)/g, '');
-					//if(alt && alt.length > 0)
-						//console.log("full: " + curIng + "\nparenths: " + alt
-							//+ "\nwith no parenths: " + ref);
 
-					ingList[i].replace(/\([a-z|A-Z|0-9]*\)/g, '');
+					/*Remove anything in parentheses from the ingredient. It is
+					almost always an alternate unit of measurement or some
+					other redundant information and unnecessarily complicates
+					parsing everything else out */
+					ingList[i] = ingList[i].replace(/\([^\~]*\)/g, '');
+					ingList[i] = ingList[i].replace(/\ of\ /g, ' ');
+
+					var curIng = ingList[i].split(" ");
+
 					var fullAmount = "";
 					var unit = "";
 					var ingType = "";
 
 					for( var j in curIng) {
+						//First check if current word is whole number
 						var amount1 = curIng[j].match(/[0-9]+/g);
-
 						if(amount1 && amount1.length == 1  && !amountIsOver) {
 							fullAmount += amount1;
 						}
-
+						//Or it is fraction (NUM/NUM), decimal (NUM.NUM), or range (NUM-NUM)
 						else if (curIng[j].match(/[0-9]+[\/|\.|\-][0-9]+/g) && !amountIsOver) {
-							fullAmount += " " + curIng[j];
+							if(fullAmount != "")
+								fullAmount += " ";
+
+							fullAmount += curIng[j];
 							amountIsOver = true;
 						}
-
 						else {
 							amountIsOver = true;
+
+							/*Remove periods, so we don't need seperate entries
+							for 'lbs' and 'lbs.' for exammple */
+							curIng[j] = curIng[j].replace(".", "");
+
+							/*Anything after "or" is going to be some alternative
+							ingredient, but the user doesn't need to know that...*/
+							if(curIng[j] == "or")
+								break;
+
+							//If we don't already have a unit and the current word matches one in the list
 							if(unit == "" && fullAmount != "" && units.indexOf(curIng[j]) != -1) {
 								unit = curIng[j];
 							}
 
+							/*Otherwise we (erroneously) assume it is part of
+							the actual ingredient's name*/
 							else {
-								ingType += " " + curIng[j];
+								//Eliminate leading space in ingredient name
+								if(ingType != "")
+									ingType += " ";
+								ingType += curIng[j];
 							}
 						}
 					}
 
+					//Check if new ingredient is dietary restriction before adding
+					for (var curRestriction in restrictions) {
+
+						if( ingType.toLowerCase().indexOf(restrictions[curRestriction]) != -1) {
+							isRestricted = true;
+							break;
+						}
+					}
+
+					if(isRestricted)
+						break;
 					ingredient.quantity = fullAmount;
 					ingredient.unit = unit;
 					ingredient.type = ingType;
 
-					newResult.ingredients.push(ingredient);
+					if(ingredient.quantity != "")
+						newResult.ingredients.push(ingredient);
+					else {
+						newResult.other.push(ingredient.type);
+					}
 					console.log("ingredient: " + JSON.stringify(ingredient));
 				}
-
-				results.push(newResult);
+				if(!isRestricted)
+					results.push(newResult);
+				else {
+					console.log("restricted!");
+				}
 			}
 			$scope.recipes = results;
 		});
