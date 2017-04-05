@@ -1,4 +1,5 @@
 var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(shoppingService, $http, $rootScope) {
+
 	$rootScope.authenticated = false;
 	$rootScope.searched = false;
 	$rootScope.current_user = '';
@@ -34,12 +35,6 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(sho
 	$rootScope.clear_search = function(){
     	$rootScope.searched = false;
 	};
-
-	$rootScope.accessors = {
-    getScore: function(row) {
-      return row.fields._score;
-    }
-  }
 });
 
 app.config(function($routeProvider){
@@ -54,6 +49,13 @@ app.config(function($routeProvider){
 			templateUrl: 'pantry.html',
 			controller: 'pantryController'
 		})
+
+		//the diet display
+		.when('/diet', {
+			templateUrl: 'diet.html',
+			controller: 'dietController'
+		})
+
 		//the login display
 		.when('/login', {
 			templateUrl: 'login.html',
@@ -67,12 +69,11 @@ app.config(function($routeProvider){
 			controller: 'authController'
 		});
 
-
-
-
 });
+
+
 app.factory('dietService', function($resource){
-	return $resource('/api/diet/:id');
+	return $resource('/api/diet/:id',{id: '@id'});
 });
 
 app.factory('shoppingService', function($resource){
@@ -94,7 +95,6 @@ app.factory('recipeSearchService', function($resource){
 app.controller('mainController', function(searchService, recipeSearchService, $scope, $rootScope, $http){
 	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
-	$scope.suggestions;
 
 	$scope.saveRecipe = function(label) {
 		$rootScope.searched = true;
@@ -109,32 +109,82 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 	};
 	$scope.search = function() {
 		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
-			console.log(resp.hits[0]);
+			console.log(JSON.stringify(resp.hits[0].recipe.ingredientLines));
+
+			var results = new Array();
+
+			var units = ["kg", "kilograms", "kilogram", "g", "gram", "grams",
+				"lb", "lbs", "pound", "pounds", "ounce", "ounces", "oz", "ozs",
+				"tbsp", "tbsps", "tsp", "tsps", "cups", "cup", "clove", "cloves",
+				"clove(s)", "bottle", "can", "jar"];
 
 			for (var cur in resp.hits) {
+
+				var curRecipe = resp.hits[cur].recipe;
+				var newResult = new Object();
+
+				newResult.label = curRecipe.label;
+				newResult.url = curRecipe.url;
+				newResult.image = curRecipe.image;
+				newResult.ingredients = new Array();
 
 				var ingList = resp.hits[cur].recipe.ingredientLines;//.split(" ");
 
 				for( var i in ingList) {
+					var amountIsOver = false;
 					var ingredient = new Object();
 					var curIng = ingList[i].split(" ");
+					var alt = ingList[i].match(/\([a-z|A-Z|0-9]*\)/g);
+					var ref = ingList[i].replace(/\([^s]*\)/g, '');
+					//if(alt && alt.length > 0)
+						//console.log("full: " + curIng + "\nparenths: " + alt
+							//+ "\nwith no parenths: " + ref);
 
-					ingredient.quantity = curIng[0];
-					ingredient.unit = curIng[1];
-					ingredient.type = curIng[2];
+					ingList[i].replace(/\([a-z|A-Z|0-9]*\)/g, '');
+					var fullAmount = "";
+					var unit = "";
+					var ingType = "";
+
+					for( var j in curIng) {
+						var amount1 = curIng[j].match(/[0-9]+/g);
+
+						if(amount1 && amount1.length == 1  && !amountIsOver) {
+							fullAmount += amount1;
+						}
+
+						else if (curIng[j].match(/[0-9]+[\/|\.|\-][0-9]+/g) && !amountIsOver) {
+							fullAmount += " " + curIng[j];
+							amountIsOver = true;
+						}
+
+						else {
+							amountIsOver = true;
+							if(unit == "" && fullAmount != "" && units.indexOf(curIng[j]) != -1) {
+								unit = curIng[j];
+							}
+
+							else {
+								ingType += " " + curIng[j];
+							}
+						}
+					}
+
+					ingredient.quantity = fullAmount;
+					ingredient.unit = unit;
+					ingredient.type = ingType;
+
+					newResult.ingredients.push(ingredient);
 					console.log("ingredient: " + JSON.stringify(ingredient));
 				}
-			}
 
-			$scope.recipes = resp.hits;
+				results.push(newResult);
+			}
+			$scope.recipes = results;
 		});
 	};
 
 	$scope.autocompleteQuery = function() {
-		console.log("autocomplete + " + $scope.newRecipe.name);
-
-		return;
-
+		console.log("autocomplete");
 		var searchString = "https://api.nutritionix.com/v1_1/search/" + $scope.newRecipe.name;
 
 		var NutritionixQuery = {"appKey":"e7ac4da83fe5ee54e356bd53c0abb7ac",
@@ -146,7 +196,6 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 			params: NutritionixQuery
 		}).then(function formatResults(response) {
 			var arr = response.data.hits;
-			$scope.suggestions = arr;
 			if(arr) {
 				for (var cur in arr) {
 					console.log("result " + cur + JSON.stringify(arr[cur].fields.item_name));
@@ -170,7 +219,24 @@ app.controller('shoppingController', function(shoppingService, $scope, $rootScop
 
 app.controller('dietController', function(dietService, $scope, $rootScope){
 	// TODO
-
+	$scope.ingredientList = dietService.query();
+	$scope.ingredient = {name: ''};
+	$scope.addIngredient = function() {
+		dietService.save($scope.ingredient, function() {
+			console.log("hello from add_In");
+			$scope.ingredientList = dietService.query();
+			$scope.ingredient = {name: ''};
+		});
+	};
+	$scope.removeIngredient = function(item) {
+		console.log("ToRomove: " + item._id);
+		dietService.delete({id: item._id}, function(resp){
+  			$scope.ingredientList = dietService.query();
+		});
+	};
+	$scope.viewIngredient = function(item) {
+		console.log(item);
+	};
 });
 
 
@@ -178,17 +244,6 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 	$scope.ingredientList = pantryService.query(); //{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
 	$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
 	$scope.recipes = searchService.query();
-	/*
-	for (i = 0; i < $scope.ingredientList.length; i++) {
-		console.log("Sorting");
-		for (j = i + 1; j < $scope.ingredientList.length; j++) {
-			if ($scope.ingredientList[i].expiration_date> $scope.ingredientList[j].expiration_date) {
-				var temp = $scope.ingredientList[i]
-				$scope.ingredientList[i] = $scope.ingredientList[j];
-				$scope.ingredientList[j] = temp;
-			}
-		}
-	}*/
 
 	$scope.addIngredient = function() {
 		pantryService.save($scope.ingredient, function() {
@@ -210,16 +265,6 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 	};
 
 	$scope.sortIngredient = function() {
-		/*for (i = 0; i < item.length; i++) {
-			console.log("Sorting");
-			for (j = i + 1; j < $item.length; j++) {
-				if (item[i].expiration_date> item.expiration_date) {
-					var temp = item[i]
-					$item[i] = $item[j];
-					$item[j] = temp;
-				}
-			}
-		}*/
 		for (i = 0; i < $scope.ingredientList.length; i++) {
 			console.log("Sorting");
 			for (j = i + 1; j < $scope.ingredientList.length; j++) {
