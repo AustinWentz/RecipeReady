@@ -50,6 +50,11 @@ app.config(function($routeProvider){
 			controller: 'pantryController'
 		})
 
+		.when('/shopping', {
+			templateUrl: 'shopping.html',
+			controller: 'shoppingController'
+		})
+
 		//the diet display
 		.when('/diet', {
 			templateUrl: 'diet.html',
@@ -213,7 +218,37 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 
 // Controller for shopping lists
 app.controller('shoppingController', function(shoppingService, $scope, $rootScope){
-	//fuck u
+	$scope.shoppingList = shoppingService.query();
+	$scope.itemInShoppingList = {name: ''};
+	/*$rootScope.addToShoppingList= function(){
+		console.log("ADD TO SHOPPING LIST");
+
+	}*/
+
+	$scope.addItemToShopping = function() {
+
+		console.log("Reached addItemToShopping function");
+
+		shoppingService.save($scope.itemInShoppingList, function() {
+			$scope.shoppingList = shoppingService.query();
+			$scope.itemInShoppingList = {name: ''};
+		});
+
+		for (i = 0; i < $scope.shoppingList.length; i++) {
+			console.log($scope.shoppingList[i]);
+		}
+
+	};
+
+	$scope.removeItemFromShopping = function(item) {
+		console.log("ToRomove: " + item._id);
+		shoppingService.delete({id: item._id}, function(resp){
+  			$scope.shoppingList = shoppingService.query();
+		});
+	};
+	$scope.viewItem = function(item) {
+		console.log(item);
+	};
 
 });
 
