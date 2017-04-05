@@ -21,6 +21,7 @@
           <p class="navbar-right navbar-text" ng-hide="authenticated"><a href="#/login">Login</a> or <a href="#/signup">Register</a></p>
           <p class="navbar-right navbar-text" ng-show="authenticated"><a href="#" ng-click="signout()">Logout</a></p>
           <p class="navbar-right navbar-text" ng-show="authenticated"><a href="#/diet">MyDiet</a></p>
+          <p class="navbar-right navbar-text" ng-show="authenticated"><a href="#/shopping">Shopping Lists</a></p>
           <p class="navbar-right navbar-text" ng-show="authenticated"><a href="#/pantry">MyPantry</a></p>
           <p class="navbar-right navbar-text" ng-show="authenticated">Signed in as {{current_user}}</p>
         </div>
@@ -32,8 +33,8 @@
           <li class="nav-item"><a href="#">About</a></li>
           <li class="nav-item"><a href="#">Blog</a></li>
           <li class = "nav-item"> 
-              <th><input class = "form-control" ng-model = "ingredient.name"></th>
-              <td><buttom class ="btn btn-primary" ng-click = "addToShoppingList()">ADD</buttom></td>
+              <th><input class = "form-control" ng-model = "itemInShoppingList.name"></th>
+              <td><buttom class ="btn btn-primary" ng-click = "addItemToShopping()">ADD</buttom></td>
           </li>
       </ul>
 

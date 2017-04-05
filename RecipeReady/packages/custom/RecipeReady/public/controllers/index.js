@@ -1,5 +1,7 @@
 'use strict';
 
+var request = require('../views/system/request.js');
+
 angular.module('mean.system').controller('IndexController', ['$state','$scope', 'Global',
   function ($state, $scope, Global) {
     $scope.global = Global;
@@ -93,6 +95,7 @@ angular.module('mean.system').controller('IndexController', ['$state','$scope', 
 
         console.log('LOL');
         $state.go('results');
+    };
         $scope.getIngredients();
       };
       

@@ -2,7 +2,7 @@
   <form ng-Submit="search()">
     <h4 ng-show="authenticated">{{current_user}} has</h4>
     <h4 ng-hide="authenticated">You have</h4>
-    <input required class="form-control" maxlength="200" rows="1" placeholder="Search" ng-model="newRecipe.name" ng-change="autocompleteQuery()"/>
+    <input required class="form-control" maxlength="200" rows="1" placeholder="Search" ng-model="newRecipe.name"/>
     <input class="btn submit-btn pull-right" type="submit" value="Search" />
   </form>
 
@@ -31,11 +31,22 @@
   <div class="row">
       <div class="col-md-3" ng-repeat = "recipe in recipes">
         <div class="thumbnail">
-			<img ng-src="{{recipe.recipe.image}}" class="md-card-image" alt="user avatar">
+			<img ng-src="{{recipe.image}}" class="md-card-image" alt="user avatar">
 			<div class="caption">
-	            <h3>{{recipe.recipe.label}}</h3>
-	            <a ng-href="{{recipe.recipe.url}}" class="btn card-btn">View</a>
-	            <input ng-click = "saveRecipe(recipe.recipe.label)" class="btn card-btn" type="submit" value="Save" />
+	            <h4>{{recipe.label}}</h4>
+                    <div ng-repeat = "ingredient in recipe.ingredients">
+                            <p><b>Ingredient:</b></p>
+                            <p><b>ingredient.quantity:</b> {{ingredient.quantity}}</p>
+                            <p><b>ingredient.unit:</b> {{ingredient.unit}}</p>
+                            <p><b>ingredient.type:</b> {{ingredient.type}}</p>
+                    </div>
+                    <p><b>FORGIVE ME MASTER. I COULD NOT UNDERSTAND THE FOLLOWING,
+                        FOR I AM BUT A HUMBLE ROBOT:</b></p>
+                    <div ng-repeat = "other in recipe.other">
+                        <p>{{other}}</p>
+                    </div>
+	            <a ng-href="{{recipe.url}}" class="btn card-btn">View</a>
+	            <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
           </div>
         </div>
       </div>

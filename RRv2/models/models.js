@@ -14,6 +14,14 @@ var User_Ingredient = new Schema({
   instances: [Instances]
 });
 
+var Diet_Ingredient = new Schema({
+  name: String
+});
+
+var Shop_Ingredient = new Schema({
+  name: String
+});
+
 var Recipe_Ingredient = new Schema({
   name:  String,
   amount: Number,
@@ -30,6 +38,7 @@ var Recipe = new Schema({
 var userSchema = new Schema({
 	username: String,
 	password: String, //hash created from password
+  //email: String //stores email as a plain text string
 	created_at: {type: Date, default: Date.now},
 
 	pantry: [User_Ingredient],
@@ -43,5 +52,6 @@ mongoose.model('Recipe_Ingredient', Recipe_Ingredient);
 mongoose.model('Recipe', Recipe);
 mongoose.model('Instances', Instances);
 mongoose.model('User_Ingredient', User_Ingredient);
-
+mongoose.model('Diet_Ingredient', Diet_Ingredient);
+mongoose.model('Shop_Ingredient', Shop_Ingredient);
 mongoose.model('User', userSchema);
