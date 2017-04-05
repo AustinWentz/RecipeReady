@@ -1,14 +1,30 @@
+var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(shoppingService, $http, $rootScope) {
 
-
-var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($http, $rootScope) {
 	$rootScope.authenticated = false;
 	$rootScope.searched = false;
 	$rootScope.current_user = '';
 
+
+	$rootScope.shoppingList = shoppingService.query();
+	$rootScope.itemInShoppingList = {name: ''};
 	/*$rootScope.addToShoppingList= function(){
 		console.log("ADD TO SHOPPING LIST");
 
 	}*/
+
+	$rootScope.addItemToShopping = function() {
+
+		console.log("Reached addItemToShopping function");
+
+		shoppingService.save($rootScope.itemInShoppingList, function() {
+			$rootScope.shoppingList = shoppingService.query();
+			$rootScope.itemInShoppingList = {name: ''};
+		});
+
+		for (i = 0; i < $rootScope.shoppingList.length; i++) {
+			console.log($rootScope.shoppingList[i]);
+		}
+	};
 
 	$rootScope.signout = function(){
     	$http.get('auth/signout');
@@ -53,10 +69,9 @@ app.config(function($routeProvider){
 			controller: 'authController'
 		});
 
-
-
-
 });
+
+
 app.factory('dietService', function($resource){
 	return $resource('/api/diet/:id',{id: '@id'});
 });
@@ -258,16 +273,7 @@ app.controller('mainController', function(searchService, recipeSearchService, di
 
 // Controller for shopping lists
 app.controller('shoppingController', function(shoppingService, $scope, $rootScope){
-	$rootScope.shoppingList = shoppingService.query();
-	$rootScope.itemInShoppingList = ''
-
-	$rootScope.addItemToShopping = function() {
-		shoppingService.save($rootScope.itemInShoppingList, function() {
-			console.log("9/femboi/nonbinary/genderqueer");
-			$rootScope.shoppingList = shoppingService.query();
-			$rootScope.itemInShoppingList = '';
-		});
-	}
+	//fuck u
 
 });
 
@@ -291,7 +297,6 @@ app.controller('dietController', function(dietService, $scope, $rootScope){
 	$scope.viewIngredient = function(item) {
 		console.log(item);
 	};
-
 });
 
 
@@ -299,17 +304,6 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 	$scope.ingredientList = pantryService.query(); //{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
 	$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
 	$scope.recipes = searchService.query();
-	/*
-	for (i = 0; i < $scope.ingredientList.length; i++) {
-		console.log("Sorting");
-		for (j = i + 1; j < $scope.ingredientList.length; j++) {
-			if ($scope.ingredientList[i].expiration_date> $scope.ingredientList[j].expiration_date) {
-				var temp = $scope.ingredientList[i]
-				$scope.ingredientList[i] = $scope.ingredientList[j];
-				$scope.ingredientList[j] = temp;
-			}
-		}
-	}*/
 
 	$scope.addIngredient = function() {
 		pantryService.save($scope.ingredient, function() {
@@ -331,16 +325,6 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 	};
 
 	$scope.sortIngredient = function() {
-		/*for (i = 0; i < item.length; i++) {
-			console.log("Sorting");
-			for (j = i + 1; j < $item.length; j++) {
-				if (item[i].expiration_date> item.expiration_date) {
-					var temp = item[i]
-					$item[i] = $item[j];
-					$item[j] = temp;
-				}
-			}
-		}*/
 		for (i = 0; i < $scope.ingredientList.length; i++) {
 			console.log("Sorting");
 			for (j = i + 1; j < $scope.ingredientList.length; j++) {
