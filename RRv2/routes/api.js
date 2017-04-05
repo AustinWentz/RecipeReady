@@ -3,6 +3,7 @@ var router = express.Router();
 var mongoose = require( 'mongoose' );
 var Recipe = mongoose.model('Recipe');
 var UserIngredient = mongoose.model('Instances');
+var DietIngredient = mongoose.model('Diet_Ingredient')
 //Used for routes that must be authenticated.
 function isAuthenticated (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -95,7 +96,6 @@ router.route('/search/:id')
 router.route('/pantry')
 	//creates a new post
 	.post(function(req, res){
-
 		var post = new UserIngredient();
 		post.name = req.body.name;
 		post.amount = Number(req.body.amount);
@@ -165,5 +165,66 @@ router.route('/pantry/:id')
 		});
 	});
 
+router.route('/diet')
+	//creates a new post
+	.post(function(req, res){
+
+		var post = new DietIngredient();
+		post.name = req.body.name;
+
+		post.save(function(err, post) {
+			if (err){
+				return res.send(500, err);
+			}
+			return res.json(post);
+		});
+	})
+	//gets all posts
+	.get(function(req, res){
+		DietIngredient.find(function(err, posts){
+			console.log('debug2');
+			if(err){
+				return res.send(500, err);
+			}
+			return res.send(200,posts);
+		});
+	});
+
+router.route('/diet/:id')
+	//gets specified post
+	.get(function(req, res){
+		DietIngredient.findById(req.params.id, function(err, post){
+			if(err)
+				res.send(err);
+			res.json(post);
+		});
+	}) 
+	//updates specified post
+	.put(function(req, res){
+		DietIngredient.findById(req.params.id, function(err, post){
+			if(err)
+				res.send(err);
+
+			post.name = req.body.name;
+
+			post.save(function(err, post){
+				if(err)
+					res.send(err);
+
+				res.json(post);
+			});
+		});
+	})
+	//deletes the post
+	.delete(function(req, res) {
+		DietIngredient.remove({
+			_id: req.params.id
+		}, function(err) {
+
+			if (err)
+				res.send(err);
+			res.json("deleted :(");
+		});
+	});
 
 module.exports = router;
