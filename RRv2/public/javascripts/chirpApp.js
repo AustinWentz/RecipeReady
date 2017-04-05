@@ -9,7 +9,6 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($ht
 		console.log("ADD TO SHOPPING LIST");
 
 	}*/
-	
 	$rootScope.signout = function(){
     	$http.get('auth/signout');
     	$rootScope.authenticated = false;
@@ -230,7 +229,6 @@ app.controller('dietController', function(dietService, $scope, $rootScope){
 	$scope.viewIngredient = function(item) {
 		console.log(item);
 	};
-
 });
 
 

@@ -4,7 +4,6 @@ var mongoose = require( 'mongoose' );
 var Recipe = mongoose.model('Recipe');
 var UserIngredient = mongoose.model('Instances');
 var DietIngredient = mongoose.model('Diet_Ingredient')
-
 var ShoppingIngredient = mongoose.model('User_Ingredient');
 //Used for routes that must be authenticated.
 function isAuthenticated (req, res, next) {
