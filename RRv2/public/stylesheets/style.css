@@ -57,12 +57,14 @@ a {
 .navigation {
   /* critical 0sizing and position styles */
   width: 80%;
-  height: 96%;
+  height: 96.4%;
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
   z-index: 0;
+  color:white;
+
   
   /* non-critical appearance styles */
   list-style: none;
@@ -75,7 +77,8 @@ a {
   width: 200px;
   border-top: 1px solid #111;
   border-bottom: 1px solid #000;
-  top:110;
+  position:relative;
+  top:60;
 }
 .nav-item-entry {
   /* non-critical appearance styles */

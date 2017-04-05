@@ -3,6 +3,8 @@ var router = express.Router();
 var mongoose = require( 'mongoose' );
 var Recipe = mongoose.model('Recipe');
 var UserIngredient = mongoose.model('Instances');
+var ShoppingIngredient = mongoose.model('User_Ingredient');
+
 //Used for routes that must be authenticated.
 function isAuthenticated (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -25,7 +27,73 @@ function isAuthenticated (req, res, next) {
 router.use('/search', isAuthenticated);
 router.use('/pantry', isAuthenticated);
 router.use('/diet', isAuthenticated);
+router.use('/shopping', isAuthenticated);
 
+
+router.route('/shopping')
+	//creates a new post
+	.post(function(req, res){
+
+		var post = new ShoppingIngredient();
+		post.name = req.body.name;
+		post.instances = null;
+
+		post.save(function(err, post) {
+			if (err){
+				return res.send(500, err);
+			}
+			return res.json(post);
+		});
+	})
+	//gets all posts
+	.get(function(req, res){
+		console.log('Getting an ingredient');
+		ShoppingIngredient.find(function(err, posts){
+			console.log('Returned an ingredient');
+			if(err){
+				return res.send(500, err);
+			}
+			return res.send(200,posts);
+		});
+	});
+
+router.route('/shopping/:id')
+	//creates a new post
+	.get(function(req, res){
+		ShoppingIngredient.findById(req.params.id, function(err, post){
+			if(err)
+				res.send(err);
+			res.json(post);
+		});
+	}) 
+	//updates specified post
+	.put(function(req, res){
+		ShoppingIngredient.findById(req.params.id, function(err, post){
+			if(err)
+				res.send(err);
+
+			post.name = req.body.name;
+
+			post.save(function(err, post){
+				if(err)
+					res.send(err);
+
+				res.json(post);
+			});
+		});
+	})
+	//deletes the post
+	.delete(function(req, res) {
+		console.log("hi");
+		ShoppingIngredient.remove({
+			_id: req.params.id
+		}, function(err) {
+
+			if (err)
+				res.send(err);
+			res.json("deleted :(");
+		});
+	});
 
 
 router.route('/search')
