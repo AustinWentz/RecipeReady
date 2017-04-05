@@ -96,7 +96,9 @@ router.route('/pantry')
 	//creates a new post
 	.post(function(req, res){
 
-		var post = new UserIngredient();
+		var post = UserIngredient.findOne({'name': req.body.name});
+
+		post = new UserIngredient();
 		post.name = req.body.name;
 		post.amount = Number(req.body.amount);
 		post.unit = req.body.unit;
