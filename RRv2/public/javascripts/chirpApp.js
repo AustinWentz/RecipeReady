@@ -1,12 +1,29 @@
-var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function($http, $rootScope) {
+var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(shoppingService, $http, $rootScope) {
 	$rootScope.authenticated = false;
 	$rootScope.searched = false;
 	$rootScope.current_user = '';
 
+
+	$rootScope.shoppingList = shoppingService.query();
+	$rootScope.itemInShoppingList = {name: ''};
 	/*$rootScope.addToShoppingList= function(){
 		console.log("ADD TO SHOPPING LIST");
 
 	}*/
+
+	$rootScope.addItemToShopping = function() {
+
+		console.log("Reached addItemToShopping function");
+
+		shoppingService.save($rootScope.itemInShoppingList, function() {
+			$rootScope.shoppingList = shoppingService.query();
+			$rootScope.itemInShoppingList = {name: ''};
+		});
+
+		for (i = 0; i < $rootScope.shoppingList.length; i++) {
+			console.log($rootScope.shoppingList[i]);
+		}
+	};
 
 	$rootScope.signout = function(){
     	$http.get('auth/signout');
@@ -147,16 +164,7 @@ app.controller('mainController', function(searchService, recipeSearchService, $s
 
 // Controller for shopping lists
 app.controller('shoppingController', function(shoppingService, $scope, $rootScope){
-	$rootScope.shoppingList = shoppingService.query();
-	$rootScope.itemInShoppingList = ''
-
-	$rootScope.addItemToShopping = function() {
-		shoppingService.save($rootScope.itemInShoppingList, function() {
-			console.log("9/femboi/nonbinary/genderqueer");
-			$rootScope.shoppingList = shoppingService.query();
-			$rootScope.itemInShoppingList = '';
-		});
-	}
+	//fuck u
 
 });
 

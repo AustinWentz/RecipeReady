@@ -3,7 +3,7 @@ var router = express.Router();
 var mongoose = require( 'mongoose' );
 var Recipe = mongoose.model('Recipe');
 var UserIngredient = mongoose.model('Instances');
-var ShoppingIngredient = mongoose.model('User_Ingredient');
+var ShoppingIngredient = mongoose.model('Shop_Ingredient');
 
 //Used for routes that must be authenticated.
 function isAuthenticated (req, res, next) {
@@ -33,10 +33,9 @@ router.use('/shopping', isAuthenticated);
 router.route('/shopping')
 	//creates a new post
 	.post(function(req, res){
-
+		console.log("dicks");
 		var post = new ShoppingIngredient();
 		post.name = req.body.name;
-		post.instances = null;
 
 		post.save(function(err, post) {
 			if (err){
@@ -59,6 +58,7 @@ router.route('/shopping')
 
 router.route('/shopping/:id')
 	//creates a new post
+
 	.get(function(req, res){
 		ShoppingIngredient.findById(req.params.id, function(err, post){
 			if(err)
@@ -68,6 +68,7 @@ router.route('/shopping/:id')
 	}) 
 	//updates specified post
 	.put(function(req, res){
+		
 		ShoppingIngredient.findById(req.params.id, function(err, post){
 			if(err)
 				res.send(err);
@@ -164,6 +165,7 @@ router.route('/pantry')
 	//creates a new post
 	.post(function(req, res){
 
+		console.log("in pantry api");
 		var post = new UserIngredient();
 		post.name = req.body.name;
 		post.amount = Number(req.body.amount);
@@ -206,6 +208,7 @@ router.route('/pantry/:id')
 	}) 
 	//updates specified post
 	.put(function(req, res){
+		console.log("in pantry api");
 		UserIngredient.findById(req.params.id, function(err, post){
 			if(err)
 				res.send(err);
