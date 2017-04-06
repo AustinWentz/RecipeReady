@@ -22,6 +22,15 @@ var Shop_Ingredient = new Schema({
   name: String
 });
 
+var Shopping_List = new Schema({
+  name: String 
+  list: [Shop_Ingredient]
+});
+
+var Shopping_Lists = new Schema({
+  list: [Shopping_List]
+});
+
 var Recipe_Ingredient = new Schema({
   name:  String,
   amount: Number,
@@ -54,4 +63,6 @@ mongoose.model('Instances', Instances);
 mongoose.model('User_Ingredient', User_Ingredient);
 mongoose.model('Diet_Ingredient', Diet_Ingredient);
 mongoose.model('Shop_Ingredient', Shop_Ingredient);
+mongoose.model('Shopping_List', Shopping_List);
+mongoose.model('Shopping_Lists', Shopping_Lists);
 mongoose.model('User', userSchema);
