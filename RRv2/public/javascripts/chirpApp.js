@@ -97,9 +97,17 @@ app.factory('recipeSearchService', function($resource){
 	return $resource('https://api.edamam.com/search/');
 });
 
-app.controller('mainController', function(searchService, recipeSearchService, dietService, $scope, $rootScope, $http){
+app.controller('mainController', function(searchService, recipeSearchService, pantryService, dietService, $scope, $rootScope, $http){
 	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
+
+	//Get list of ingredients to be filtered from the search
+	$scope.diet = new Array();
+	var tempDiet = dietService.query();
+
+
+	//Get the user's pantry to compare ingredients in search results
+	$scope.availableIngredients = pantryService.query();
 
 	$scope.saveRecipe = function(label) {
 		$rootScope.searched = true;
@@ -116,6 +124,13 @@ app.controller('mainController', function(searchService, recipeSearchService, di
 	//For your sake, please, please don't read this code
 	$scope.search = function() {
 
+		//Update the scope now that get diet has finally returned
+		if($scope.diet.length == 0) {
+			for(var i = 0; i < tempDiet.length; i++) {
+				$scope.diet.push(tempDiet[i].name);
+			}
+		}
+
 		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
 			console.log(JSON.stringify(resp.hits[0].recipe.ingredientLines));
 
@@ -131,10 +146,6 @@ app.controller('mainController', function(searchService, recipeSearchService, di
 				"teaspoon", "teaspoons", "cups", "cup", "clove", "cloves",
 				"clove(s)", "bottle", "can", "jar", "pinch", "dash", "bushel",
 				"peck"];
-
-			//Get list of ingredients to be filtered from the search
-			var restrictions = dietService.query();
-			console.log("restrictions: " + JSON.stringify(restrictions));
 
 			//Format each recipe returned
 			for (var cur in resp.hits) {
@@ -217,9 +228,8 @@ app.controller('mainController', function(searchService, recipeSearchService, di
 					}
 
 					//Check if new ingredient is dietary restriction before adding
-					for (var curRestriction in restrictions) {
-
-						if( ingType.toLowerCase().indexOf(restrictions[curRestriction]) != -1) {
+					for (var curRestriction in $scope.diet) {
+						if( ingType.toLowerCase().indexOf($scope.diet[curRestriction]) != -1) {
 							isRestricted = true;
 							break;
 						}
