@@ -2,6 +2,7 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(sho
 
 	$rootScope.authenticated = false;
 	$rootScope.searched = false;
+	$rootScope.expanded = new Array(100).fill(false);
 	$rootScope.current_user = '';
 
 	$rootScope.shoppingList = shoppingService.query();
@@ -273,6 +274,12 @@ app.controller('mainController', function(searchService, recipeSearchService, di
 	$scope.autocomplete = function() {
 
 	};
+
+	$scope.expandRecipe = function(index) {
+		$rootScope.expanded[index] = !$rootScope.expanded[index];
+		console.log($rootScope.expanded);
+	};
+
 });
 
 // Controller for shopping lists
