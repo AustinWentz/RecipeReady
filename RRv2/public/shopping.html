@@ -9,13 +9,8 @@
       </thead>
       <thead>
         <tr>
-          <td><buttom class ="btn btn-primary" ng-click = "newList()">New List</buttom></td>
-
-          <th><input class = "form-control" ng-model = "instanceInItem.name"></th>
-          <th><input class = "form-control" ng-model = "listNum.number"></th>
-
-          <td><buttom class ="btn btn-primary" ng-click = "addItemToShopping()">Add to List</buttom></td>
-
+          <th><input class = "form-control" ng-model = "shoppingListName.name"></th>
+          <td><buttom class ="btn btn-primary" ng-click = "addList()">New List</buttom></td>
         </tr>
       </thead>
     </table>    
@@ -24,11 +19,11 @@
 
 <div class="center">
   <div class="row">
-      <div class="col-md-3" ng-repeat = "list in shoppingList">
+      <div class="col-md-3" ng-repeat = "list in masterList">
         <div class="thumbnail">
           <div class="md-card-image" alt="user avatar">
-          <h3>LIST TITLE</h3>
-          <button class="close" ng-click = "removeItemFromShopping(list)">&times;</button>          
+          <h3>{{list.name}}</h3>
+          <button class="close" ng-click = "removeList(list)">&times;</button>          
           <div class="item" ng-repeat = "item in list">
             <table>
               <tr>
@@ -37,9 +32,6 @@
                     <tr>
                       <td>
                        <h1>{{item.name}}</h1>
-                      </td>
-                      <td align="right">
-                        <button class="btn btn-primary" ng-click = "removeItemFromShopping(list)">Remove</button>  
                       </td>
                      </tr>
                   </table>
@@ -50,10 +42,10 @@
           <table>
         <tr>
             <td valign="top">
-              <input class = "form-control" ng-model = "instanceInItem.name">
+              <input class = "form-control" ng-model = "shopIngredient.name">
             </td>
             <td valign="top">
-          <buttom class ="btn btn-primary" ng-click = "addItemToShopping()">Add to List</buttom>
+          <buttom class ="btn btn-primary" ng-click = "addItemToList(list)">Add to List</buttom>
             </td>
         </tr>
     </table>

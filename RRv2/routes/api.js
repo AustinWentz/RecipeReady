@@ -1,10 +1,14 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require( 'mongoose' );
+var User = mongoose.model('User');
 var Recipe = mongoose.model('Recipe');
-var UserIngredient = mongoose.model('Instances');
-var DietIngredient = mongoose.model('Diet_Ingredient');
+var UserIngredient = mongoose.model('User_Ingredient');
+var Instance = mongoose.model('Instances');
+var DietIngredient = mongoose.model('Diet_Ingredient')
 var ShoppingIngredient = mongoose.model('Shop_Ingredient');
+var ShoppingList = mongoose.model('Shopping_List');
+
 //Used for routes that must be authenticated.
 function isAuthenticated (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -28,10 +32,12 @@ router.use('/search', isAuthenticated);
 router.use('/pantry', isAuthenticated);
 router.use('/diet', isAuthenticated);
 router.use('/shopping', isAuthenticated);
+router.use('/shopManage', isAuthenticated);
 
 
+// This route is USELESS
 router.route('/shopping')
-	//creates a new post
+	//Adds to first list it finds
 	.post(function(req, res){
 		
 		var post = new ShoppingIngredient();
@@ -44,7 +50,8 @@ router.route('/shopping')
 			return res.json(post);
 		});
 	})
-	//gets all posts
+
+	//gets items in first list
 	.get(function(req, res){
 		console.log('Getting an ingredient');
 		ShoppingIngredient.find(function(err, posts){
@@ -59,6 +66,7 @@ router.route('/shopping')
 router.route('/shopping/:id')
 	//creates a new post
 
+	// Useless get method
 	.get(function(req, res){
 		ShoppingIngredient.findById(req.params.id, function(err, post){
 			if(err)
@@ -66,14 +74,17 @@ router.route('/shopping/:id')
 			res.json(post);
 		});
 	}) 
+	
 	//updates specified post
 	.put(function(req, res){
 		
-		ShoppingIngredient.findById(req.params.id, function(err, post){
+		ShoppingList.findById(req.params.id, function(err, post){
 			if(err)
 				res.send(err);
 
-			post.name = req.body.name;
+			var listSize = (post.list).length;
+
+			post.list[listSize-1] = req.body.name;
 
 			post.save(function(err, post){
 				if(err)
@@ -95,6 +106,75 @@ router.route('/shopping/:id')
 			res.json("deleted :(");
 		});
 	});
+
+router.route('/shopManage')
+	//creates a new post
+	.post(function(req, res){
+		
+		var post = new ShoppingList();
+		post.name = req.body.name;
+		post.list = [];
+
+		post.save(function(err, post) {
+			if (err){
+				return res.send(500, err);
+			}
+			return res.json(post);
+		});
+	})
+	//gets all posts
+	.get(function(req, res){
+		console.log('Getting an ingredient');
+		ShoppingList.find(function(err, posts){
+			console.log('Returned an ingredient');
+			if(err){
+				return res.send(500, err);
+			}
+			return res.send(200,posts);
+		});
+	});
+
+router.route('/shopManage/:id')
+	//creates a new post
+
+	.get(function(req, res){
+		ShoppingList.findById(req.params.id, function(err, post){
+			if(err)
+				res.send(err);
+			res.json(post);
+		});
+	}) 
+
+	//updates specified post
+	.put(function(req, res){
+		
+		ShoppingList.findById(req.params.id, function(err, post){
+			if(err)
+				res.send(err);
+
+			post.name = req.body.name;
+
+			post.save(function(err, post){
+				if(err)
+					res.send(err);
+
+				res.json(post);
+			});
+		});
+	})
+
+	//deletes the post
+	.delete(function(req, res) {
+		console.log("hi");
+		ShoppingList.remove({
+			_id: req.params.id
+		}, function(err) {
+
+			if (err)
+				res.send(err);
+			res.json("deleted :(");
+		});
+	});	
 
 
 router.route('/search')
@@ -165,34 +245,52 @@ router.route('/search/:id')
 router.route('/pantry')
 	//creates a new post
 	.post(function(req, res){
-		
-		var post = new UserIngredient();
-		post.name = req.body.name;
-		post.amount = Number(req.body.amount);
-		post.unit = req.body.unit;
+
+		var instance = new Instance();
+		instance.amount = Number(req.body.amount);
+		instance.unit = req.body.unit;
 
 		var parts = req.body.purchase.split('/');
-		post.purchased_date = new Date(parts[1],parts[0]-1); 
+		instance.purchased_date = new Date(parts[1],parts[0]-1); 
 
 		parts = req.body.expiration.split('/');
-		post.expiration_date = new Date(parts[1],parts[0]-1);
+		instance.expiration_date = new Date(parts[1],parts[0]-1);
 
-		post.save(function(err, post) {
-			if (err){
-				return res.send(500, err);
-			}
-			return res.json(post);
+		// var user_ingredient = req.user.pantry.some(function(currentValue) {
+		// 	return (currentValue.name === req.body.name);
+		// });
+
+		// if (user_ingredient) {
+		// 	user_ingredient.instances.push(instance);
+		// } else {
+		// 	user_ingredient = new UserIngredient();
+		// 	user_ingredient.name = req.body.name;
+		// 	user_ingredient.instances.push(instance);
+		// 	req.user.pantry.push(user_ingredient);
+		// }
+
+		console.log(req.user.pantry);
+		// return res.json(user_ingredient);
+		UserIngredient.findOneAndUpdate({name: req.body.name}, {$addToSet: {instances: instance}}, {upsert:true, new:true}, function(err, doc){
+		    if(err){
+		        return res.send(500, err);
+		    }
+
+		    return res.json(doc);
 		});
 	})
 	//gets all posts
 	.get(function(req, res){
+		// console.log(req.user.pantry);
+		// return res.send(200, req.user.pantry);
+
 		console.log('debug1');
 		UserIngredient.find(function(err, posts){
 			console.log('debug2');
 			if(err){
 				return res.send(500, err);
 			}
-			return res.send(200,posts);
+			return res.send(200, posts);
 		});
 	});
 
