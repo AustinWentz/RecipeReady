@@ -98,6 +98,7 @@ router.route('/shopping/:id')
 		});
 	});
 
+
 router.route('/search')
 	//creates a new post
 	.post(function(req, res){
