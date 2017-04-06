@@ -26,15 +26,44 @@
   <div class="row">
       <div class="col-md-3" ng-repeat = "list in shoppingList">
         <div class="thumbnail">
-          <img src="http://placehold.it/150x150" class="md-card-image" alt="user avatar">          
+          <div class="md-card-image" alt="user avatar">
+          <h3>LIST TITLE</h3>
+          <button class="close" ng-click = "removeItemFromShopping(list)">&times;</button>          
           <div class="item" ng-repeat = "item in list">
-            <h3>{{item.name}}</h3>
+            <table>
+              <tr>
+                <td class =  "shopListItem">
+                  <table>
+                    <tr>
+                      <td>
+                       <h1>{{item.name}}</h1>
+                      </td>
+                      <td align="right">
+                        <button class="btn btn-primary" ng-click = "removeItemFromShopping(list)">Remove</button>  
+                      </td>
+                     </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
           </div>
-          <input class="btn card-btn" type="submit" value="View" ng-click = "viewItem(item)"/>
-          <input class="btn card-btn" type="submit" value="Delete" ng-click = "removeItemFromShopping(item)"/>
+          <table>
+        <tr>
+            <td valign="top">
+              <input class = "form-control" ng-model = "instanceInItem.name">
+            </td>
+            <td valign="top">
+          <buttom class ="btn btn-primary" ng-click = "addItemToShopping()">Add to List</buttom>
+            </td>
+        </tr>
+    </table>
+          
+          
+         
         </div>
       </div>
   </div>
+</div>
 </div>
 
 

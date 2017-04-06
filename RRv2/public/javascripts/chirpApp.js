@@ -310,7 +310,7 @@ app.controller('shoppingController', function(shoppingService, $scope, $rootScop
 	};
 
 	$scope.removeItemFromShopping = function(item) {
-		console.log("ToRomove: " + item._id);
+		console.log("ToRemove: " + item._id);
 		shoppingService.delete({id: item._id}, function(resp){
   			$scope.shoppingList = shoppingService.query();
 		});
