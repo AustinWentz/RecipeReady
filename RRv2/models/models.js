@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Instances = new Schema({
-  name: String,
   expiration_date:  Date,
   purchased_date: Date,
   amount: Number,

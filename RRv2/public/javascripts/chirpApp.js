@@ -2,6 +2,7 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(sho
 
 	$rootScope.authenticated = false;
 	$rootScope.searched = false;
+	$rootScope.expanded = new Array(100).fill(false);
 	$rootScope.current_user = '';
 
 	$rootScope.shoppingList = shoppingService.query();
@@ -100,9 +101,18 @@ app.factory('recipeSearchService', function($resource){
 	return $resource('https://api.edamam.com/search/');
 });
 
-app.controller('mainController', function(searchService, recipeSearchService, dietService, $scope, $rootScope, $http){
+app.controller('mainController', function(searchService, recipeSearchService, pantryService, dietService, $scope, $rootScope, $http){
 	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
+	$scope.suggestions = new Array();
+
+	//Get list of ingredients to be filtered from the search
+	$scope.diet = new Array();
+	var tempDiet = dietService.query();
+
+
+	//Get the user's pantry to compare ingredients in search results
+	$scope.availableIngredients = pantryService.query();
 
 	$scope.saveRecipe = function(label) {
 		$rootScope.searched = true;
@@ -119,8 +129,14 @@ app.controller('mainController', function(searchService, recipeSearchService, di
 	//For your sake, please, please don't read this code
 	$scope.search = function() {
 
+		//Update the scope now that get diet has finally returned
+		if($scope.diet.length == 0) {
+			for(var i = 0; i < tempDiet.length; i++) {
+				$scope.diet.push(tempDiet[i].name);
+			}
+		}
+
 		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
-			console.log(JSON.stringify(resp.hits[0].recipe.ingredientLines));
 
 			//The array of formatted recipe objects to return to the search view
 			var results = new Array();
@@ -134,10 +150,6 @@ app.controller('mainController', function(searchService, recipeSearchService, di
 				"teaspoon", "teaspoons", "cups", "cup", "clove", "cloves",
 				"clove(s)", "bottle", "can", "jar", "pinch", "dash", "bushel",
 				"peck"];
-
-			//Get list of ingredients to be filtered from the search
-			var restrictions = dietService.query();
-			console.log("restrictions: " + JSON.stringify(restrictions));
 
 			//Format each recipe returned
 			for (var cur in resp.hits) {
@@ -220,9 +232,8 @@ app.controller('mainController', function(searchService, recipeSearchService, di
 					}
 
 					//Check if new ingredient is dietary restriction before adding
-					for (var curRestriction in restrictions) {
-
-						if( ingType.toLowerCase().indexOf(restrictions[curRestriction]) != -1) {
+					for (var curRestriction in $scope.diet) {
+						if( ingType.toLowerCase().indexOf($scope.diet[curRestriction]) != -1) {
 							isRestricted = true;
 							break;
 						}
@@ -239,12 +250,12 @@ app.controller('mainController', function(searchService, recipeSearchService, di
 					else {
 						newResult.other.push(ingredient.type);
 					}
-					console.log("ingredient: " + JSON.stringify(ingredient));
+					//console.log("ingredient: " + JSON.stringify(ingredient));
 				}
 				if(!isRestricted)
 					results.push(newResult);
 				else {
-					console.log("restricted!");
+					//console.log("restricted!");
 				}
 			}
 			$scope.recipes = results;
@@ -252,7 +263,15 @@ app.controller('mainController', function(searchService, recipeSearchService, di
 	};
 
 	$scope.autocompleteQuery = function() {
-		console.log("autocomplete");
+
+		//Update the scope now that get diet has finally returned
+		if($scope.diet.length == 0) {
+			for(var i = 0; i < tempDiet.length; i++) {
+				$scope.diet.push(tempDiet[i].name);
+			}
+		}
+
+		var ret = new Array();
 		var searchString = "https://api.nutritionix.com/v1_1/search/" + $scope.newRecipe.name;
 
 		var NutritionixQuery = {"appKey":"e7ac4da83fe5ee54e356bd53c0abb7ac",
@@ -266,17 +285,39 @@ app.controller('mainController', function(searchService, recipeSearchService, di
 			var arr = response.data.hits;
 			if(arr) {
 				for (var cur in arr) {
-					console.log("result " + cur + JSON.stringify(arr[cur].fields.item_name));
+					var isRestricted = false;
+					var newSuggest = arr[cur].fields.item_name;
+
+					//Check if the suggestion contains a restriction
+					for (var curRestriction = 0; curRestriction < $scope.diet.length; curRestriction++) {
+						if( newSuggest.toLowerCase().indexOf($scope.diet[curRestriction]) != -1) {
+							isRestricted = true;
+							break;
+						}
+					}
+
+					if( !isRestricted  ) {
+						if( ret.indexOf(newSuggest) == -1) {
+							ret.push(newSuggest);
+						}
+					}
 				}
 			}
 		}, function getErr(response) {
 			console.log("ERR: " + JSON.stringify(response));
 		});
+		$scope.suggestions = ret;
 	};
 
 	$scope.autocomplete = function() {
 
 	};
+
+	$scope.expandRecipe = function(index) {
+		$rootScope.expanded[index] = !$rootScope.expanded[index];
+		console.log($rootScope.expanded);
+	};
+
 });
 
 // Controller for shopping lists
