@@ -82,7 +82,7 @@ router.route('/shopping/:id')
 			if(err)
 				res.send(err);
 
-			int listSize = post.list.length;
+			var listSize = (post.list).length;
 
 			post.list[listSize-1] = req.body.name;
 

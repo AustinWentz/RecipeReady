@@ -364,7 +364,6 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 			console.log($scope.shoppingList[i]);
 		}
 	};
-
 	// Remove item from specific list in database
 	$scope.removeItemFromList = function(item) {
 		console.log("ToRomove: " + item._id);

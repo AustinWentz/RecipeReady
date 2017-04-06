@@ -50,6 +50,19 @@ a {
 .card-btn {
     margin: 0;
 }
+.close{
+  position:absolute;
+  top:5;
+  right:25;
+}
+.form-control-card{
+  position:absolute;
+  bottom: 5
+}
+.shopListItem{
+  font:"Helvetica Neue";
+}
+
 
 /* Navigation Menu - Background */
 .navigation {
