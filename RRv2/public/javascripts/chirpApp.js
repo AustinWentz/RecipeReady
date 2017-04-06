@@ -99,6 +99,7 @@ app.factory('recipeSearchService', function($resource){
 app.controller('mainController', function(searchService, recipeSearchService, pantryService, dietService, $scope, $rootScope, $http){
 	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
+	$scope.suggestions = new Array();
 
 	//Get list of ingredients to be filtered from the search
 	$scope.diet = new Array();
@@ -131,7 +132,6 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 		}
 
 		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
-			console.log(JSON.stringify(resp.hits[0].recipe.ingredientLines));
 
 			//The array of formatted recipe objects to return to the search view
 			var results = new Array();
@@ -245,12 +245,12 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 					else {
 						newResult.other.push(ingredient.type);
 					}
-					console.log("ingredient: " + JSON.stringify(ingredient));
+					//console.log("ingredient: " + JSON.stringify(ingredient));
 				}
 				if(!isRestricted)
 					results.push(newResult);
 				else {
-					console.log("restricted!");
+					//console.log("restricted!");
 				}
 			}
 			$scope.recipes = results;
@@ -258,7 +258,15 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	};
 
 	$scope.autocompleteQuery = function() {
-		console.log("autocomplete");
+
+		//Update the scope now that get diet has finally returned
+		if($scope.diet.length == 0) {
+			for(var i = 0; i < tempDiet.length; i++) {
+				$scope.diet.push(tempDiet[i].name);
+			}
+		}
+
+		var ret = new Array();
 		var searchString = "https://api.nutritionix.com/v1_1/search/" + $scope.newRecipe.name;
 
 		var NutritionixQuery = {"appKey":"e7ac4da83fe5ee54e356bd53c0abb7ac",
@@ -272,12 +280,28 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 			var arr = response.data.hits;
 			if(arr) {
 				for (var cur in arr) {
-					console.log("result " + cur + JSON.stringify(arr[cur].fields.item_name));
+					var isRestricted = false;
+					var newSuggest = arr[cur].fields.item_name;
+
+					//Check if the suggestion contains a restriction
+					for (var curRestriction = 0; curRestriction < $scope.diet.length; curRestriction++) {
+						if( newSuggest.toLowerCase().indexOf($scope.diet[curRestriction]) != -1) {
+							isRestricted = true;
+							break;
+						}
+					}
+
+					if( !isRestricted  ) {
+						if( ret.indexOf(newSuggest) == -1) {
+							ret.push(newSuggest);
+						}
+					}
 				}
 			}
 		}, function getErr(response) {
 			console.log("ERR: " + JSON.stringify(response));
 		});
+		$scope.suggestions = ret;
 	};
 
 	$scope.autocomplete = function() {
