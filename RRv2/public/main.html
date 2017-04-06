@@ -2,7 +2,7 @@
   <form ng-Submit="search()">
     <h4 ng-show="authenticated">{{current_user}} has</h4>
     <h4 ng-hide="authenticated">You have</h4>
-    <input required class="form-control" maxlength="200" rows="1" placeholder="Search" ng-model="newRecipe.name"/>
+    <input required class="form-control" maxlength="200" rows="1" placeholder="Search" ng-model="newRecipe.name" ng-change="autocompleteQuery()" />
     <input class="btn submit-btn pull-right" type="submit" value="Search" />
   </form>
 
