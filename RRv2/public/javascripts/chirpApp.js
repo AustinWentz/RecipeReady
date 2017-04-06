@@ -2,6 +2,7 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(sho
 
 	$rootScope.authenticated = false;
 	$rootScope.searched = false;
+	$rootScope.expanded = new Array(100).fill(false);
 	$rootScope.current_user = '';
 
 	$rootScope.shoppingList = shoppingService.query();
@@ -82,6 +83,10 @@ app.factory('dietService', function($resource){
 
 app.factory('shoppingService', function($resource){
 	return $resource('/api/shopping/:id', {id: '@id'});
+});
+
+app.factory('shoppingManager', function($resource){
+	return $resource('/api/shopManage/:id', {id: '@id'});
 });
 
 app.factory('searchService', function($resource){
@@ -308,7 +313,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 								neededIng.name = ownedIng.name + "!";
 
 								if(ownedIng.unit != foundIng.unit) {
-									neededIng.amount = " whatever the hell " + foundIng.amount + " " + foundIng.unit + " minus " + ownedIng.amount + " " + ownedIng.unit + " is, figure out yourself asshole";
+									neededIng.amount = " whatever " + foundIng.amount + " " + foundIng.unit + " minus " + ownedIng.amount + " " + ownedIng.unit + " is, figure out yourself asshole";
 								}
 
 								else {
@@ -392,48 +397,66 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	$scope.autocomplete = function() {
 
 	};
+
+	$scope.expandRecipe = function(index) {
+		$rootScope.expanded[index] = !$rootScope.expanded[index];
+		console.log($rootScope.expanded);
+	};
+
 });
 
 // Controller for shopping lists
-app.controller('shoppingController', function(shoppingService, $scope, $rootScope){
-	$scope.shoppingList = shoppingService.query();
+app.controller('shoppingController', function(shoppingService, shoppingManager, $scope, $rootScope){
+	$scope.masterList = shoppingManager.query();
 	$scope.listNum = {number: ''};
-	$scope.itemInShoppingList = [];
-	$scope.instanceInItem = {name: ''};
+	$scope.shoppingListName = {name: ''};
+	$scope.shopIngredient = {name: ''};
 
-	$scope.newList = function() {
+	// Add a list to the database
+	$scope.addList = function() {
 		console.log("newList");
-		shoppingService.save($scope.itemInShoppingList, function() {
-			$scope.shoppingList = shoppingService.query();
-			$scope.itemInShoppingList = [];
+		shoppingManager.save($scope.shoppingListName, function() {
+			$scope.masterList = shoppingManager.query();
+			$scope.shoppingListName = '';
 		});
 
-		for (i = 0; i < $scope.shoppingList.length; i++) {
-			console.log($scope.shoppingList[i]);
+		for (i = 0; i < $scope.masterList.length; i++) {
+			console.log($scope.masterList[i]);
 		}
 
 	};
 
-	$scope.addItemToShopping = function() {
-		console.log("Reached addItemToShopping function");
-		var num = parseInt($scope.listNum.number);
+	// Remove a list from the database
+	$scope.removeList = function(item) {
+		console.log("ToRomove: " + item._id);
+		shoppingManager.delete({id: item._id}, function(resp){
+  			$scope.masterList = shoppingManager.query();
+		});
+	};
 
-		shoppingService.save($scope.instanceInItem, function() {
-			$scope.shoppingList[num] = shoppingService.query();
-			$scope.instanceInItem = {name: ''};
+	// Add item to specific list in database
+	// "item" is the list youre adding it to
+	$scope.addItemToList = function(item) {
+		console.log("Reached addItemToShopping function");
+		//var num = parseInt($scope.listNum.number);
+
+		shoppingService.put({id: item._id}, $scope.shopIngredient, function() {
+			$scope.masterList = shoppingManager.query();
+			$scope.shopIngredient = {name: ''};
 		});
 
 		for (i = 0; i < ($scope.shoppingList[num]).length; i++) {
 			console.log($scope.shoppingList[i]);
 		}
 	};
-
-	$scope.removeItemFromShopping = function(item) {
+	// Remove item from specific list in database
+	$scope.removeItemFromList = function(item) {
 		console.log("ToRomove: " + item._id);
-		shoppingService.delete({id: item._id}, function(resp){
-  			$scope.shoppingList = shoppingService.query();
+		shoppingService.delete({id: item._id}, $scope.shopIngredient, function(resp){
+  			$scope.masterList = shoppingManager.query();
 		});
 	};
+
 	$scope.viewItem = function(item) {
 		console.log(item);
 	};
