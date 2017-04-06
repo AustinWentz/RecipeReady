@@ -1,0 +1,46 @@
+<body>
+  <div class = "container">
+    <h1>Shopping Lists</h1>
+    <table class = "table">
+      <thead>
+        <tr>
+          <th>Shopping List</th>
+        </tr>
+      </thead>
+      <thead>
+        <tr>
+          <td><buttom class ="btn btn-primary" ng-click = "newList()">New List</buttom></td>
+
+          <th><input class = "form-control" ng-model = "instanceInItem.name"></th>
+          <th><input class = "form-control" ng-model = "listNum.number"></th>
+
+          <td><buttom class ="btn btn-primary" ng-click = "addItemToShopping()">Add to List</buttom></td>
+
+        </tr>
+      </thead>
+    </table>    
+  </div>  
+</body>
+
+<div class="center">
+  <div class="row">
+      <div class="col-md-3" ng-repeat = "list in shoppingList">
+        <div class="thumbnail">
+          <img src="http://placehold.it/150x150" class="md-card-image" alt="user avatar">          
+          <div class="item" ng-repeat = "item in list">
+            <h3>{{item.name}}</h3>
+          </div>
+          <input class="btn card-btn" type="submit" value="View" ng-click = "viewItem(item)"/>
+          <input class="btn card-btn" type="submit" value="Delete" ng-click = "removeItemFromShopping(item)"/>
+        </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
