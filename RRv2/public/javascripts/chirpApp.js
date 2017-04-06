@@ -4,7 +4,6 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(sho
 	$rootScope.searched = false;
 	$rootScope.current_user = '';
 
-
 	$rootScope.shoppingList = shoppingService.query();
 	$rootScope.itemInShoppingList = {name: ''};
 	/*$rootScope.addToShoppingList= function(){
@@ -289,25 +288,35 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 // Controller for shopping lists
 app.controller('shoppingController', function(shoppingService, $scope, $rootScope){
 	$scope.shoppingList = shoppingService.query();
-	$scope.itemInShoppingList = {name: ''};
-	/*$rootScope.addToShoppingList= function(){
-		console.log("ADD TO SHOPPING LIST");
+	$scope.listNum = {number: ''};
+	$scope.itemInShoppingList = [];
+	$scope.instanceInItem = {name: ''};
 
-	}*/
-
-	$scope.addItemToShopping = function() {
-
-		console.log("Reached addItemToShopping function");
-
+	$scope.newList = function() {
+		console.log("newList");
 		shoppingService.save($scope.itemInShoppingList, function() {
 			$scope.shoppingList = shoppingService.query();
-			$scope.itemInShoppingList = {name: ''};
+			$scope.itemInShoppingList = [];
 		});
 
 		for (i = 0; i < $scope.shoppingList.length; i++) {
 			console.log($scope.shoppingList[i]);
 		}
 
+	};
+
+	$scope.addItemToShopping = function() {
+		console.log("Reached addItemToShopping function");
+		var num = parseInt($scope.listNum.number);
+
+		shoppingService.save($scope.instanceInItem, function() {
+			$scope.shoppingList[num] = shoppingService.query();
+			$scope.instanceInItem = {name: ''};
+		});
+
+		for (i = 0; i < ($scope.shoppingList[num]).length; i++) {
+			console.log($scope.shoppingList[i]);
+		}
 	};
 
 	$scope.removeItemFromShopping = function(item) {

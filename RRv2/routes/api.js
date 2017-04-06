@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require( 'mongoose' );
+var User = mongoose.model('User');
 var Recipe = mongoose.model('Recipe');
-var UserIngredient = mongoose.model('Instances');
+var UserIngredient = mongoose.model('User_Ingredient');
+var Instance = mongoose.model('Instances');
 var DietIngredient = mongoose.model('Diet_Ingredient')
 var ShoppingIngredient = mongoose.model('Shop_Ingredient');
 //Used for routes that must be authenticated.
@@ -96,6 +98,7 @@ router.route('/shopping/:id')
 		});
 	});
 
+
 router.route('/search')
 	//creates a new post
 	.post(function(req, res){
@@ -164,34 +167,52 @@ router.route('/search/:id')
 router.route('/pantry')
 	//creates a new post
 	.post(function(req, res){
-		
-		var post = new UserIngredient();
-		post.name = req.body.name;
-		post.amount = Number(req.body.amount);
-		post.unit = req.body.unit;
+
+		var instance = new Instance();
+		instance.amount = Number(req.body.amount);
+		instance.unit = req.body.unit;
 
 		var parts = req.body.purchase.split('/');
-		post.purchased_date = new Date(parts[1],parts[0]-1); 
+		instance.purchased_date = new Date(parts[1],parts[0]-1); 
 
 		parts = req.body.expiration.split('/');
-		post.expiration_date = new Date(parts[1],parts[0]-1);
+		instance.expiration_date = new Date(parts[1],parts[0]-1);
 
-		post.save(function(err, post) {
-			if (err){
-				return res.send(500, err);
-			}
-			return res.json(post);
+		// var user_ingredient = req.user.pantry.some(function(currentValue) {
+		// 	return (currentValue.name === req.body.name);
+		// });
+
+		// if (user_ingredient) {
+		// 	user_ingredient.instances.push(instance);
+		// } else {
+		// 	user_ingredient = new UserIngredient();
+		// 	user_ingredient.name = req.body.name;
+		// 	user_ingredient.instances.push(instance);
+		// 	req.user.pantry.push(user_ingredient);
+		// }
+
+		console.log(req.user.pantry);
+		// return res.json(user_ingredient);
+		UserIngredient.findOneAndUpdate({name: req.body.name}, {$addToSet: {instances: instance}}, {upsert:true, new:true}, function(err, doc){
+		    if(err){
+		        return res.send(500, err);
+		    }
+
+		    return res.json(doc);
 		});
 	})
 	//gets all posts
 	.get(function(req, res){
+		// console.log(req.user.pantry);
+		// return res.send(200, req.user.pantry);
+
 		console.log('debug1');
 		UserIngredient.find(function(err, posts){
 			console.log('debug2');
 			if(err){
 				return res.send(500, err);
 			}
-			return res.send(200,posts);
+			return res.send(200, posts);
 		});
 	});
 
