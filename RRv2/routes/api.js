@@ -78,22 +78,27 @@ router.route('/shopping/:id')
 	//updates specified post
 	.put(function(req, res){
 		
+		console.log(req.body.name);
+
 		ShoppingList.findById(req.params.id, function(err, post){
-			if(err)
-				res.send(err);
+			if(err) {
+				res.send(500, err);
+			}
 
-			var listSize = (post.list).length;
-
-			post.list[listSize-1] = req.body.name;
+			var ingredient = new ShoppingIngredient();
+			ingredient.name = req.body.name;
+			post.list.push(ingredient);
 
 			post.save(function(err, post){
-				if(err)
-					res.send(err);
+				if(err) {
+					res.send(500, err);
+				}
 
 				res.json(post);
 			});
 		});
 	})
+
 	//deletes the post
 	.delete(function(req, res) {
 		console.log("hi");

@@ -82,7 +82,10 @@ app.factory('dietService', function($resource){
 });
 
 app.factory('shoppingService', function($resource){
-	return $resource('/api/shopping/:id', {id: '@id'});
+	return $resource('/api/shopping/:id', {id: '@id'}, 
+		{
+        'update': { method:'PUT' }
+    	});
 });
 
 app.factory('shoppingManager', function($resource){
@@ -458,17 +461,14 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 	// Add item to specific list in database
 	// "item" is the list youre adding it to
 	$scope.addItemToList = function(item) {
-		console.log("Reached addItemToShopping function");
+		console.log("Reached addItemToList function");
 		//var num = parseInt($scope.listNum.number);
 
-		shoppingService.put({id: item._id}, $scope.shopIngredient, function() {
+		shoppingService.update({id: item._id}, $scope.shopIngredient, function(resp) {
 			$scope.masterList = shoppingManager.query();
 			$scope.shopIngredient = {name: ''};
+			console.log($scope.masterList);
 		});
-
-		for (i = 0; i < ($scope.shoppingList[num]).length; i++) {
-			console.log($scope.shoppingList[i]);
-		}
 	};
 	// Remove item from specific list in database
 	$scope.removeItemFromList = function(item) {
