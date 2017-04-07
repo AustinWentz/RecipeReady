@@ -7,7 +7,7 @@ body {
     max-width: 100%;
     overflow-x: hidden;
     font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
-   
+
 }
 
 a {
@@ -76,7 +76,7 @@ a {
   z-index: 0;
   color:white;
 
-  
+
   /* non-critical appearance styles */
   list-style: none;
   background: #111;
@@ -146,7 +146,7 @@ label[for="nav-trigger"] {
   position: fixed;
   left: 15px; top: 70px;
   z-index: 2;
-  
+
   /* non-critical apperance styles */
   height: 30px;
   width: 30px;
@@ -186,4 +186,3 @@ code {
 /* Micro reset */
 *,*:before,*:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0;}
 html, body { height: 100%; width: 100%; font-family: Helvetica, Arial, sans-serif; }
-

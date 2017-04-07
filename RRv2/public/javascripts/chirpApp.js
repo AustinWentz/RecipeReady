@@ -107,7 +107,7 @@ app.factory('recipeSearchService', function($resource){
 app.controller('mainController', function(searchService, recipeSearchService, pantryService, dietService, $scope, $rootScope, $http){
 	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
-	$scope.suggestions = new Array();
+	$scope.suggestions = [];
 
 	//Get list of ingredients to be filtered from the search
 	$scope.diet = new Array();
@@ -115,7 +115,8 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 
 
 	//Get the user's pantry to compare ingredients in search results
-	$scope.availableIngredients = pantryService.query();
+	$scope.availableIngredients = new Array();
+	var tempAvail = pantryService.query();
 
 	$scope.saveRecipe = function(label) {
 		$rootScope.searched = true;
@@ -139,6 +140,37 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 			}
 		}
 
+		//Update the scope now that get diet has finally returned
+		if($scope.availableIngredients.length == 0) {
+			for(var i = 0; i < tempAvail.length; i++) {
+				console.log("avail: " + JSON.stringify(tempAvail[i]));
+
+				var newAvail = new Object();
+				newAvail.name = tempAvail[i].name;
+				newAvail.amount = 0;
+				newAvail.unit = "";
+
+				for(var j in tempAvail[i].instances){
+					var curInst = tempAvail[i].instances[j];
+
+					if( j == 0) {
+						newAvail.unit = curInst.unit;
+					}
+
+					if(curInst.unit == newAvail.unit) {
+						newAvail.amount += Number(curInst.amount);
+					}
+
+					else {
+						console.log("AHH, FUCK, THEY\'RE DIFFERENT UNITS");
+					}
+				}
+				console.log("curInst: " + JSON.stringify(newAvail));
+				$scope.availableIngredients.push(newAvail);
+			}
+		}
+
+		console.log("pantry: " + JSON.stringify($scope.availableIngredients));
 		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
 
 			//The array of formatted recipe objects to return to the search view
@@ -165,14 +197,24 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 				newResult.label = curRecipe.label;
 				newResult.url = curRecipe.url;
 				newResult.image = curRecipe.image;
+				newResult.fullIng = new Array();
 				newResult.ingredients = new Array();
 				newResult.other = new Array();
-
+				newResult.have = new Array();
+				newResult.need = new Array();
+				newResult.full = new Array();
 
 				var ingList = resp.hits[cur].recipe.ingredientLines;//.split(" ");
 
 				//Format each ingredient in ingredientLines to objects
 				for( var i in ingList) {
+
+					var formatIng= new Object();
+					formatIng.name = "";
+					formatIng.unit = "";
+					formatIng.req = 0;
+					formatIng.have = 0;
+					formatIng.surplus = 0;
 
 					//Prevents rogue numbers elsewhere in the string from
 					//interfering with the actual quantity of the ingredient
@@ -185,10 +227,9 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 					parsing everything else out */
 					ingList[i] = ingList[i].replace(/\([^\~]*\)/g, '');
 					ingList[i] = ingList[i].replace(/\ of\ /g, ' ');
-
 					var curIng = ingList[i].split(" ");
 
-					var fullAmount = "";
+					var fullAmount = 0;
 					var unit = "";
 					var ingType = "";
 
@@ -196,16 +237,26 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 						//First check if current word is whole number
 						var amount1 = curIng[j].match(/[0-9]+/g);
 						if(amount1 && amount1.length == 1  && !amountIsOver) {
-							fullAmount += amount1;
+							fullAmount += Number(amount1);
 						}
 						//Or it is fraction (NUM/NUM), decimal (NUM.NUM), or range (NUM-NUM)
-						else if (curIng[j].match(/[0-9]+[\/|\.|\-][0-9]+/g) && !amountIsOver) {
-							if(fullAmount != "")
-								fullAmount += " ";
-
-							fullAmount += curIng[j];
+						else if (curIng[j].match(/[0-9]+[\/][0-9]+/g) && !amountIsOver) {
+							var params = curIng[j].split("/");
+							fullAmount += Number(params[0]) / Number(params[1]);
 							amountIsOver = true;
 						}
+
+						else if (curIng[j].match(/[0-9]+[\.][0-9]+/g) && !amountIsOver) {
+							fullAmount += Number(curIng[j]);
+							amountIsOver = true;
+						}
+
+						else if (curIng[j].match(/[0-9]+[\-][0-9]+/g) && !amountIsOver) {
+							var params = curIng[j].split("-");
+							fullAmount += Number(params[1]);
+							amountIsOver = true;
+						}
+
 						else {
 							amountIsOver = true;
 
@@ -244,28 +295,87 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 
 					if(isRestricted)
 						break;
-					ingredient.quantity = fullAmount;
-					ingredient.unit = unit;
-					ingredient.type = ingType;
 
-					if(ingredient.quantity != "")
+					ingredient.amount = fullAmount;
+					ingredient.unit = unit;
+					ingredient.name = ingType;
+
+					formatIng.req = fullAmount;
+					formatIng.unit = unit;
+					formatIng.name = ingredient.name;
+					formatIng.surplus -= fullAmount;
+
+					if(ingredient.amount != "" ) {
+						newResult.full.push(formatIng);
 						newResult.ingredients.push(ingredient);
+					}
 					else {
-						newResult.other.push(ingredient.type);
+						newResult.other.push(ingredient.name);
 					}
 					//console.log("ingredient: " + JSON.stringify(ingredient));
 				}
+
+				for(var i in newResult.ingredients) {
+					var isAvailable = false;
+					var isEnough = true;
+					var foundIng = newResult.ingredients[i];
+					for(var j in $scope.availableIngredients) {
+						var ownedIng = $scope.availableIngredients[j];
+
+						//console.log("found: " + JSON.stringify(foundIng) + " owned: " + ownedIng);
+
+						if(ownedIng.name == foundIng.name) {
+							newResult.have.push(ownedIng);
+							formatIng.have = ownedIng.amount;
+							formatIng.surplus += ownedIng.amount;
+
+							if (ownedIng.amount < foundIng.amount) {
+								var neededIng = new Object();
+								neededIng.unit = ownedIng.unit;
+								neededIng.name = ownedIng.name + "!";
+
+								if(ownedIng.unit != foundIng.unit) {
+									neededIng.amount = " whatever " + foundIng.amount + " " + foundIng.unit + " minus " + ownedIng.amount + " " + ownedIng.unit + " is, figure out yourself asshole";
+								}
+
+								else {
+									neededIng.amount = foundIng.amount - ownedIng.amount;
+								}
+								newResult.need.push(neededIng);
+							}
+
+							else if(ownedIng.unit != foundIng.unit) {
+								var neededIng = new Object();
+								neededIng.unit = ownedIng.unit;
+								neededIng.name = ownedIng.name + "!";
+								neededIng.amount = " whatever the hell " + foundIng.amount + " " + foundIng.unit + " minus " + ownedIng.amount + " " + ownedIng.unit + " is, figure out yourself asshole";
+								newResult.need.push(neededIng);
+							}
+
+							isAvailable = true;
+							break;
+						}
+					}
+
+					if(!isAvailable) {
+						newResult.need.push(foundIng);
+					}
+				}
+
 				if(!isRestricted)
 					results.push(newResult);
-				else {
-					//console.log("restricted!");
-				}
 			}
 			$scope.recipes = results;
 		});
 	};
 
 	$scope.autocompleteQuery = function() {
+
+		if(!$scope.newRecipe.name) {
+			$scope.suggestions = [];
+			return;
+		}
+		return;
 
 		//Update the scope now that get diet has finally returned
 		if($scope.diet.length == 0) {
@@ -312,13 +422,13 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 		$scope.suggestions = ret;
 	};
 
-	$scope.autocomplete = function() {
-
+	$scope.autocomplete = function(entry) {
+		console.log(entry);
+		$scope.newRecipe.name = entry;
 	};
 
 	$scope.expandRecipe = function(index) {
 		$rootScope.expanded[index] = !$rootScope.expanded[index];
-		console.log($rootScope.expanded);
 	};
 
 });
