@@ -24,7 +24,7 @@
           <div class="md-card-image" alt="user avatar">
           <h3>{{aList.name}}</h3>
           <button class="close" ng-click = "removeList(aList)">&times;</button>          
-          <div class="item" ng-repeat = "item in aList">
+          <div class="item" ng-repeat = "item in aList.list">
             <table>
               <tr>
                 <td class =  "shopListItem">
@@ -42,7 +42,7 @@
           <table>
         <tr>
             <td valign="top">
-              <input class = "form-control" ng-model = "shopIngredient.name">
+              <input class = "form-control" ng-model = "shopIngredient[$index]">
             </td>
             <td valign="top">
           <buttom class ="btn btn-primary" ng-click = "addItemToList(aList)">Add to List</buttom>

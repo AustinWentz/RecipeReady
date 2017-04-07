@@ -438,8 +438,7 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 	$scope.masterList = shoppingManager.query();
 	$scope.listNum = {number: ''};
 	$scope.shoppingListName = {name: ''};
-	$scope.shopIngredient = {name: ''};
-
+	$scope.shopIngredient = [];
 	// Add a list to the database
 	$scope.addList = function() {
 		console.log("newList");
