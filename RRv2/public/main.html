@@ -42,7 +42,9 @@
                           </tr>
                           <tr ng-repeat = "ingredient in recipe.full " style="border:2px solid black; border-spacing: 2px;">
                               <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.name}}</td>
-                              <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.req}} {{ingredient.unit}}</td>
+                              <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.req}} {{ingredient.unit}}
+                                <input ng-click="addToShoppingList(ingredient)" class="btn card-btn" type="submit" value="Add" />
+                              </td>
                               <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.surplus}} {{ingredient.unit}}</td>
                           </tr>
                       </table>
@@ -56,7 +58,7 @@
               <a ng-href="{{recipe.url}}" class="btn card-btn">View</a>
 	            <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
               -->
-              <input ng-click="addToShoppingList(recipe)" class="btn card-btn" type="submit" value="Add to List" />
+              <input ng-click="addAllToShoppingList(recipe)" class="btn card-btn" type="submit" value="Add to List" />
               <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
           </div>
           <input ng-click="expandRecipe($index)" class="btn card-btn" type="submit" value="View" />

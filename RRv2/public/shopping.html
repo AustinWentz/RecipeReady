@@ -23,6 +23,7 @@
         <div class="thumbnail">
           <div class="md-card-image" alt="user avatar">
           <h1>{{aList.name}}</h1>
+          <input ng-click="makeMainList(aList)" type="submit" value="Make Main" />
           <button class="close" ng-click = "removeList(aList)">&times;</button>          
           <div class="item" ng-repeat = "item in aList.list">
             <table>

@@ -166,7 +166,7 @@ router.route('/shopManage/:id')
 		console.log(req);
 		ShoppingList.findById(req.params.id, function(err, post){
 			if(err) {
-				res.send(500, err);
+				return res.send(500, err);
 			}
 
 			//var index = (post.list).indexOf(req.body.name);
@@ -177,10 +177,10 @@ router.route('/shopManage/:id')
 
 			post.save(function(err, post){
 				if(err) {
-					res.send(500, err);
+					return res.send(500, err);
 				}
 
-				res.json(post);
+				return res.json(post);
 			});
 		});
 	})

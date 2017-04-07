@@ -7,6 +7,7 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(sho
 
 	$rootScope.shoppingList = shoppingService.query();
 	$rootScope.itemInShoppingList = {name: ''};
+	$rootScope.mainList;
 	/*$rootScope.addToShoppingList= function(){
 		console.log("ADD TO SHOPPING LIST");
 
@@ -107,7 +108,7 @@ app.factory('recipeSearchService', function($resource){
 	return $resource('https://api.edamam.com/search/');
 });
 
-app.controller('mainController', function(searchService, recipeSearchService, pantryService, dietService, $scope, $rootScope, $http){
+app.controller('mainController', function(searchService, recipeSearchService, pantryService, dietService, shoppingService, shoppingManager, $scope, $rootScope, $http){
 	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 	$scope.suggestions = [];
@@ -441,6 +442,27 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 		$rootScope.expanded[index] = !$rootScope.expanded[index];
 	};
 
+	$scope.addToShoppingList = function(ingredient) {
+		if ($scope.mainList) {
+			shoppingService.update({id: $rootScope.mainList._id}, ingredient, function() {
+				console.log('added');
+			});
+		} else {
+			console.log("NO LIST SELECTED");
+		}
+	};
+
+	$scope.addAllToShoppingList = function(recipe) {
+		shoppingManager.save({name: recipe.label}, function(resp) {
+			console.log('test1');
+			for (i = 0; i < recipe.full.length; i++) {
+				shoppingService.update({id: resp._id}, {name: recipe.full[i].name}, function() {
+					console.log('test2');
+				});
+			}
+		});
+	};
+
 });
 
 // Controller for shopping lists
@@ -453,14 +475,13 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 	// Add a list to the database
 	$scope.addList = function() {
 		console.log("newList");
-		shoppingManager.save($scope.shoppingListName, function() {
+		shoppingManager.save($scope.shoppingListName, function(resp) {
 			$scope.masterList = shoppingManager.query();
 			$scope.shoppingListName = '';
+			console.log(resp);
 		});
 
-		for (i = 0; i < $scope.masterList.length; i++) {
-			console.log($scope.masterList[i]);
-		}
+		console.log($scope.masterList);
 
 	};
 
@@ -495,6 +516,10 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 
 	$scope.viewItem = function(item) {
 		console.log(item);
+	};
+
+	$scope.makeMainList = function(list) {
+		$rootScope.mainList = list;
 	};
 
 });
