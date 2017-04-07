@@ -43,11 +43,12 @@ router.route('/shopping')
 		var post = new ShoppingIngredient();
 		post.name = req.body.name;
 
-		post.save(function(err, post) {
-			if (err){
-				return res.send(500, err);
-			}
-			return res.json(post);
+		ShoppingList.findOneAndUpdate({name: req.body.name}, {$addToSet: {list: post}}, {upsert:true, new:true}, function(err, doc){
+		    if(err){
+		        return res.send(500, err);
+		    }
+
+		    return res.json(doc);
 		});
 	})
 

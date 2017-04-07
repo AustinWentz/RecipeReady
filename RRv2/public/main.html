@@ -55,14 +55,16 @@
                       <div ng-repeat = "other in recipe.other">
                           {{other}}
                       </div>
+                      <a ng-href="{{recipe.url}}" class="btn card-btn">Go to Website</a>
                     </div>
 	            <!--
               <a ng-href="{{recipe.url}}" class="btn card-btn">View</a>
 	            <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
               -->
+              <input ng-click="addToShoppingList(recipe)" class="btn card-btn" type="submit" value="Add to List" />
+              <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
           </div>
           <input ng-click="expandRecipe($index)" class="btn card-btn" type="submit" value="View" />
-          <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
         </div>
       </div>
     </div>
