@@ -82,7 +82,7 @@ app.factory('dietService', function($resource){
 });
 
 app.factory('shoppingService', function($resource){
-	return $resource('/api/shopping/:id', {id: '@id'}, 
+	return $resource('/api/shopping/:id', {id: '@id'},
 		{
         'update': { method:'PUT' }
     	});
@@ -203,6 +203,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 				newResult.have = new Array();
 				newResult.need = new Array();
 				newResult.full = new Array();
+				newResult.ratio = 0;
 
 				var ingList = resp.hits[cur].recipe.ingredientLines;//.split(" ");
 
@@ -326,6 +327,12 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 							formatIng.have = ownedIng.amount;
 							formatIng.surplus += ownedIng.amount;
 
+							var ratio = Math.abs(ownedIng.amount / foundIng.amount);
+							if(ratio > 1)
+								ratio = 1;
+
+							newResult.ratio += ratio;
+
 							if (ownedIng.amount < foundIng.amount) {
 								var neededIng = new Object();
 								neededIng.unit = ownedIng.unit;
@@ -360,6 +367,10 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 					newResult.full.push(formatIng);
 				}
 
+				newResult.ratio = Math.trunc((newResult.ratio / newResult.full.length) * 100 ) / 100;
+
+				if(newResult.ratio && !isRestricted)
+					console.log("newResult " + newResult.label + " " + newResult.ratio + " pahcentoh");
 
 				if(!isRestricted)
 					results.push(newResult);
