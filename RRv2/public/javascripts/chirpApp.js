@@ -445,7 +445,7 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 	$scope.masterList = shoppingManager.query();
 	$scope.listNum = {number: ''};
 	$scope.shoppingListName = {name: ''};
-	$scope.shopIngredient = {name: ''};
+	$scope.shopIngredient = [];
 
 	// Add a list to the database
 	$scope.addList = function() {
@@ -471,13 +471,13 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 
 	// Add item to specific list in database
 	// "item" is the list youre adding it to
-	$scope.addItemToList = function(item) {
+	$scope.addItemToList = function(item, index) {
 		console.log("Reached addItemToList function");
 		//var num = parseInt($scope.listNum.number);
 
-		shoppingService.update({id: item._id}, $scope.shopIngredient, function(resp) {
+		shoppingService.update({id: item._id}, {name: $scope.shopIngredient[index]}, function(resp) {
 			$scope.masterList = shoppingManager.query();
-			$scope.shopIngredient = {name: ''};
+			$scope.shopIngredient = [];
 			console.log($scope.masterList);
 		});
 	};
