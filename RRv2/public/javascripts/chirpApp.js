@@ -466,7 +466,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 });
 
 // Controller for shopping lists
-app.controller('shoppingController', function(shoppingService, shoppingManager, $scope, $rootScope){
+app.controller('shoppingController', function(shoppingService, shoppingManager, pantryService, $scope, $rootScope){
 	$scope.masterList = shoppingManager.query();
 	$scope.listNum = {number: ''};
 	$scope.shoppingListName = {name: ''};
@@ -520,6 +520,15 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 
 	$scope.makeMainList = function(list) {
 		$rootScope.mainList = list;
+	};
+
+	$scope.addAllIngredientToPantry = function(list) {
+		for(i = 0; i < list.list.length; i++) {
+			pantryService.save({name: list.list[i].name, amount:'1', unit:'unit', purchase:'0/0', expiration:'0/0'}, function(resp) {
+				console.log("hello from add_In");
+			});
+		}
+		$scope.removeList(list);
 	};
 
 });
