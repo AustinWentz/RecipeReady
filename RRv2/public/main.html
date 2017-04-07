@@ -8,10 +8,8 @@
 
   <table ng-table="vm.tableParams" class="table" show-filter="true">
     <tr ng-repeat="suggestion in suggestions">
-        <td>
-            {{suggestion.fields.item_name}}</td>
-        <td>
-            {{accessors.getScore(suggestion)}}</td>
+        <td ng-click="autocomplete(suggestion)">
+            {{suggestion}}</td>
     </tr>
   </table>
 </div>
@@ -34,23 +32,29 @@
 			<img ng-src="{{recipe.image}}" class="md-card-image" alt="user avatar">
 			<div class="caption">
 	            <h4>{{recipe.label}}</h4>
-                <table style="border:2px solid black; border-spacing: 2px;">
-                    <tr "border:2px solid black; border-spacing: 2px;">
-                        <th style="border:2px solid black; border-spacing: 5px;">Ingredient</th>
-                        <th style="border:2px solid black; border-spacing: 5px;">Required</th>
-                        <th style="border:2px solid black; border-spacing: 5px;">Left</th>
-                    </tr>
-                    <tr ng-repeat = "ingredient in recipe.full" style="border:2px solid black; border-spacing: 2px;">
-                        <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.name}}</td>
-                        <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.req}} {{ingredient.unit}}</td>
-                        <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.surplus}} {{ingredient.unit}}</td>
-                    </tr>
-                </table>
-
-                    <br><br><b>Could not parse:</b>
-                    <div ng-repeat = "other in recipe.other">
-                        {{other}}
+                    <div ng-show="expanded[$index]">
+                      <p><b>Required:</b></p>
+                      <table style="border:2px solid black; border-spacing: 2px;">
+                          <tr "border:2px solid black; border-spacing: 2px;">
+                              <th style="border:2px solid black; border-spacing: 5px;">Ingredient</th>
+                              <th style="border:2px solid black; border-spacing: 5px;">Required</th>
+                              <th style="border:2px solid black; border-spacing: 5px;">Left</th>
+                          </tr>
+                          <tr ng-repeat = "ingredient in recipe.full" style="border:2px solid black; border-spacing: 2px;">
+                              <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.name}}</td>
+                              <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.req}} {{ingredient.unit}}</td>
+                              <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.surplus}} {{ingredient.unit}}</td>
+                          </tr>
+                      </table>
+                      <br><br><b>Could not parse:</b>
+                      <div ng-repeat = "other in recipe.other">
+                          {{other}}
+                      </div>
                     </div>
+	            <!--
+              <a ng-href="{{recipe.url}}" class="btn card-btn">View</a>
+	            <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
+              -->
           </div>
           <input ng-click="expandRecipe($index)" class="btn card-btn" type="submit" value="View" />
           <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
