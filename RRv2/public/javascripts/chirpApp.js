@@ -194,15 +194,24 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 				newResult.label = curRecipe.label;
 				newResult.url = curRecipe.url;
 				newResult.image = curRecipe.image;
+				newResult.fullIng = new Array();
 				newResult.ingredients = new Array();
 				newResult.other = new Array();
 				newResult.have = new Array();
 				newResult.need = new Array();
+				newResult.full = new Array();
 
 				var ingList = resp.hits[cur].recipe.ingredientLines;//.split(" ");
 
 				//Format each ingredient in ingredientLines to objects
 				for( var i in ingList) {
+
+					var formatIng= new Object();
+					formatIng.name = "";
+					formatIng.unit = "";
+					formatIng.req = 0;
+					formatIng.have = 0;
+					formatIng.surplus = 0;
 
 					//Prevents rogue numbers elsewhere in the string from
 					//interfering with the actual quantity of the ingredient
@@ -283,12 +292,20 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 
 					if(isRestricted)
 						break;
+
 					ingredient.amount = fullAmount;
 					ingredient.unit = unit;
 					ingredient.name = ingType;
 
-					if(ingredient.amount != "" )
+					formatIng.req = fullAmount;
+					formatIng.unit = unit;
+					formatIng.name = ingredient.name;
+					formatIng.surplus -= fullAmount;
+
+					if(ingredient.amount != "" ) {
+						newResult.full.push(formatIng);
 						newResult.ingredients.push(ingredient);
+					}
 					else {
 						newResult.other.push(ingredient.name);
 					}
@@ -306,6 +323,8 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 
 						if(ownedIng.name == foundIng.name) {
 							newResult.have.push(ownedIng);
+							formatIng.have = ownedIng.amount;
+							formatIng.surplus += ownedIng.amount;
 
 							if (ownedIng.amount < foundIng.amount) {
 								var neededIng = new Object();
