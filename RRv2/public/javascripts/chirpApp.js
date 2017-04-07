@@ -513,14 +513,14 @@ app.controller('dietController', function(dietService, $scope, $rootScope){
 
 app.controller('pantryController', function(pantryService, searchService, $scope, $rootScope){
 	$scope.ingredientList = pantryService.query(); //{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
-	$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
+	$scope.ingredient = {name: '', amount:'1', unit:'unit', purchase:'0/0', expiration:'0/0'};
 	$scope.recipes = searchService.query();
 
 	$scope.addIngredient = function() {
 		pantryService.save($scope.ingredient, function() {
 			console.log("hello from add_In");
 			$scope.ingredientList = pantryService.query();
-			$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
+			$scope.ingredient = {name: '', amount:'1', unit:'unit', purchase:'0/0', expiration:'0/0'};
 		});
 	};
 
