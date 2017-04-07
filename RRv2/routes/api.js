@@ -77,8 +77,6 @@ router.route('/shopping/:id')
 	
 	//updates specified post
 	.put(function(req, res){
-		
-		console.log(req.body.name);
 
 		ShoppingList.findById(req.params.id, function(err, post){
 			if(err) {
