@@ -34,30 +34,23 @@
 			<img ng-src="{{recipe.image}}" class="md-card-image" alt="user avatar">
 			<div class="caption">
 	            <h4>{{recipe.label}}</h4>
-                    <p><b>Required:</b></p>
-                    <div ng-repeat = "ingredient in recipe.ingredients">
-                            <b>amount:</b> {{ingredient.amount}}
-                            <b>unit:</b> {{ingredient.unit}}
-                            <b>type:</b> {{ingredient.name}}
-                    </div>
-                    <br><b>Available:</b>
-                    <div ng-repeat = "ingredient in recipe.have">
-                        <b>amount:</b> {{ingredient.amount}}
-                        <b>unit:</b> {{ingredient.unit}}
-                        <b>type:</b> {{ingredient.name}}
-                    </div>
-                    <br><b>Still need:</b>
-                    <div ng-repeat = "ingredient in recipe.need">
-                        <b>amount:</b> {{ingredient.amount}}
-                        <b>unit:</b> {{ingredient.unit}}
-                        <b>type:</b> {{ingredient.name}}
-                    </div>
+                <table style="border:2px solid black; border-spacing: 2px;">
+                    <tr "border:2px solid black; border-spacing: 2px;">
+                        <th style="border:2px solid black; border-spacing: 5px;">Ingredient</th>
+                        <th style="border:2px solid black; border-spacing: 5px;">Required</th>
+                        <th style="border:2px solid black; border-spacing: 5px;">Left</th>
+                    </tr>
+                    <tr ng-repeat = "ingredient in recipe.full" style="border:2px solid black; border-spacing: 2px;">
+                        <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.name}}</td>
+                        <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.req}} {{ingredient.unit}}</td>
+                        <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.surplus}} {{ingredient.unit}}</td>
+                    </tr>
+                </table>
+
                     <br><br><b>Could not parse:</b>
                     <div ng-repeat = "other in recipe.other">
                         {{other}}
                     </div>
-	            <a ng-href="{{recipe.url}}" class="btn card-btn">View</a>
-	            <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
           </div>
           <input ng-click="expandRecipe($index)" class="btn card-btn" type="submit" value="View" />
           <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
