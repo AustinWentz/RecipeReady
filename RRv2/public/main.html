@@ -8,8 +8,8 @@
 
   <table ng-table="vm.tableParams" class="table" show-filter="true">
     <tr ng-repeat="suggestion in suggestions">
-        <td ng-click="autocomplete(suggestion.fields.item_name)">
-            {{suggestion.fields.item_name}}</td>
+        <td ng-click="autocomplete(suggestion)">
+            {{suggestion}}</td>
     </tr>
   </table>
 </div>

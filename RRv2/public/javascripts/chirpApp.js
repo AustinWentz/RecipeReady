@@ -104,8 +104,7 @@ app.factory('recipeSearchService', function($resource){
 app.controller('mainController', function(searchService, recipeSearchService, pantryService, dietService, $scope, $rootScope, $http){
 	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
-	$scope.suggestions = [{fields: {item_name: "cheese"}}, {fields: {item_name: "chicken"}}, 
-		{fields: {item_name: "chia"}}, {fields: {item_name: "cheesy"}}, {fields: {item_name: "cucumber"}}];
+	$scope.suggestions = [];
 
 	//Get list of ingredients to be filtered from the search
 	$scope.diet = new Array();
@@ -350,7 +349,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 
 	$scope.autocompleteQuery = function() {
 
-		if($scope.newRecipe.name === "") {
+		if(!$scope.newRecipe.name) {
 			$scope.suggestions = [];
 			return;
 		}
