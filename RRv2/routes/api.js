@@ -78,33 +78,47 @@ router.route('/shopping/:id')
 	
 	//updates specified post
 	.put(function(req, res){
-		
+
 		ShoppingList.findById(req.params.id, function(err, post){
-			if(err)
-				res.send(err);
+			if(err) {
+				res.send(500, err);
+			}
 
-			var listSize = (post.list).length;
-
-			post.list[listSize-1] = req.body.name;
+			var ingredient = new ShoppingIngredient();
+			ingredient.name = req.body.name;
+			post.list.push(ingredient);
 
 			post.save(function(err, post){
-				if(err)
-					res.send(err);
+				if(err) {
+					res.send(500, err);
+				}
 
 				res.json(post);
 			});
 		});
 	})
+
 	//deletes the post
 	.delete(function(req, res) {
-		console.log("hi");
-		ShoppingIngredient.remove({
-			_id: req.params.id
-		}, function(err) {
+		console.log(req);
+		ShoppingList.findById(req.params.id, function(err, post){
+			if(err) {
+				res.send(500, err);
+			}
 
-			if (err)
-				res.send(err);
-			res.json("deleted :(");
+			var index = (post.list).indexOf(req.body.name);
+
+			if(index > -1){
+				(post.list).splice(index,1);
+			}
+
+			post.save(function(err, post){
+				if(err) {
+					res.send(500, err);
+				}
+
+				res.json(post);
+			});
 		});
 	});
 
@@ -149,15 +163,22 @@ router.route('/shopManage/:id')
 	//updates specified post
 	.put(function(req, res){
 		
+		console.log(req);
 		ShoppingList.findById(req.params.id, function(err, post){
-			if(err)
-				res.send(err);
+			if(err) {
+				res.send(500, err);
+			}
 
-			post.name = req.body.name;
+			//var index = (post.list).indexOf(req.body.name);
+
+			//if(index > -1){
+				(post.list).splice(req.body.i,1);
+			//}
 
 			post.save(function(err, post){
-				if(err)
-					res.send(err);
+				if(err) {
+					res.send(500, err);
+				}
 
 				res.json(post);
 			});

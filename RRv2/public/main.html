@@ -27,7 +27,7 @@
 
 <div class="center">
   <div class="row">
-      <div class="col-md-3" ng-repeat = "recipe in recipes">
+      <div class="col-md-3" ng-repeat = "recipe in recipes | orderBy: '-ratio'">
         <div class="thumbnail">
 			<img ng-src="{{recipe.image}}" class="md-card-image" alt="user avatar">
 			<div class="caption">
@@ -40,7 +40,7 @@
                               <th style="border:2px solid black; border-spacing: 5px;">Required</th>
                               <th style="border:2px solid black; border-spacing: 5px;">Left</th>
                           </tr>
-                          <tr ng-repeat = "ingredient in recipe.full" style="border:2px solid black; border-spacing: 2px;">
+                          <tr ng-repeat = "ingredient in recipe.full " style="border:2px solid black; border-spacing: 2px;">
                               <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.name}}</td>
                               <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.req}} {{ingredient.unit}}</td>
                               <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.surplus}} {{ingredient.unit}}</td>

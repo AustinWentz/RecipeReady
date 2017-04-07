@@ -82,11 +82,17 @@ app.factory('dietService', function($resource){
 });
 
 app.factory('shoppingService', function($resource){
-	return $resource('/api/shopping/:id', {id: '@id'});
+	return $resource('/api/shopping/:id', {id: '@id'},
+		{
+        'update': { method:'PUT' }
+    	});
 });
 
 app.factory('shoppingManager', function($resource){
-	return $resource('/api/shopManage/:id', {id: '@id'});
+	return $resource('/api/shopManage/:id', {id: '@id'},
+		{
+        'update': { method:'PUT' }
+    	});
 });
 
 app.factory('searchService', function($resource){
@@ -140,7 +146,6 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 		//Update the scope now that get diet has finally returned
 		if($scope.availableIngredients.length == 0) {
 			for(var i = 0; i < tempAvail.length; i++) {
-				console.log("avail: " + JSON.stringify(tempAvail[i]));
 
 				var newAvail = new Object();
 				newAvail.name = tempAvail[i].name;
@@ -162,12 +167,10 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 						console.log("AHH, FUCK, THEY\'RE DIFFERENT UNITS");
 					}
 				}
-				console.log("curInst: " + JSON.stringify(newAvail));
 				$scope.availableIngredients.push(newAvail);
 			}
 		}
 
-		console.log("pantry: " + JSON.stringify($scope.availableIngredients));
 		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
 
 			//The array of formatted recipe objects to return to the search view
@@ -200,18 +203,13 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 				newResult.have = new Array();
 				newResult.need = new Array();
 				newResult.full = new Array();
+				newResult.ratio = 0;
 
 				var ingList = resp.hits[cur].recipe.ingredientLines;//.split(" ");
 
 				//Format each ingredient in ingredientLines to objects
 				for( var i in ingList) {
 
-					var formatIng= new Object();
-					formatIng.name = "";
-					formatIng.unit = "";
-					formatIng.req = 0;
-					formatIng.have = 0;
-					formatIng.surplus = 0;
 
 					//Prevents rogue numbers elsewhere in the string from
 					//interfering with the actual quantity of the ingredient
@@ -239,7 +237,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 						//Or it is fraction (NUM/NUM), decimal (NUM.NUM), or range (NUM-NUM)
 						else if (curIng[j].match(/[0-9]+[\/][0-9]+/g) && !amountIsOver) {
 							var params = curIng[j].split("/");
-							fullAmount += Number(params[0]) / Number(params[1]);
+							fullAmount += Math.trunc((Number(params[0]) / Number(params[1])) * 100) / 100;
 							amountIsOver = true;
 						}
 
@@ -297,13 +295,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 					ingredient.unit = unit;
 					ingredient.name = ingType;
 
-					formatIng.req = fullAmount;
-					formatIng.unit = unit;
-					formatIng.name = ingredient.name;
-					formatIng.surplus -= fullAmount;
-
 					if(ingredient.amount != "" ) {
-						newResult.full.push(formatIng);
 						newResult.ingredients.push(ingredient);
 					}
 					else {
@@ -313,9 +305,18 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 				}
 
 				for(var i in newResult.ingredients) {
+
 					var isAvailable = false;
 					var isEnough = true;
 					var foundIng = newResult.ingredients[i];
+
+					var formatIng= new Object();
+					formatIng.have = 0;
+					formatIng.req = foundIng.amount;
+					formatIng.unit = foundIng.unit;
+					formatIng.name = foundIng.name;
+					formatIng.surplus = -foundIng.amount;
+
 					for(var j in $scope.availableIngredients) {
 						var ownedIng = $scope.availableIngredients[j];
 
@@ -325,6 +326,12 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 							newResult.have.push(ownedIng);
 							formatIng.have = ownedIng.amount;
 							formatIng.surplus += ownedIng.amount;
+
+							var ratio = Math.abs(ownedIng.amount / foundIng.amount);
+							if(ratio > 1)
+								ratio = 1;
+
+							newResult.ratio += ratio;
 
 							if (ownedIng.amount < foundIng.amount) {
 								var neededIng = new Object();
@@ -357,7 +364,13 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 					if(!isAvailable) {
 						newResult.need.push(foundIng);
 					}
+					newResult.full.push(formatIng);
 				}
+
+				newResult.ratio = Math.trunc((newResult.ratio / newResult.full.length) * 100 ) / 100;
+
+				if(newResult.ratio && !isRestricted)
+					console.log("newResult " + newResult.label + " " + newResult.ratio + " pahcentoh");
 
 				if(!isRestricted)
 					results.push(newResult);
@@ -435,7 +448,7 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 	$scope.masterList = shoppingManager.query();
 	$scope.listNum = {number: ''};
 	$scope.shoppingListName = {name: ''};
-	$scope.shopIngredient = {name: ''};
+	$scope.shopIngredient = [];
 
 	// Add a list to the database
 	$scope.addList = function() {
@@ -461,24 +474,22 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 
 	// Add item to specific list in database
 	// "item" is the list youre adding it to
-	$scope.addItemToList = function(item) {
-		console.log("Reached addItemToShopping function");
+	$scope.addItemToList = function(item, index) {
+		console.log("Reached addItemToList function");
 		//var num = parseInt($scope.listNum.number);
 
-		shoppingService.put({id: item._id}, $scope.shopIngredient, function() {
+		shoppingService.update({id: item._id}, {name: $scope.shopIngredient[index]}, function(resp) {
 			$scope.masterList = shoppingManager.query();
-			$scope.shopIngredient = {name: ''};
+			$scope.shopIngredient = [];
+			console.log($scope.masterList);
 		});
-
-		for (i = 0; i < ($scope.shoppingList[num]).length; i++) {
-			console.log($scope.shoppingList[i]);
-		}
 	};
 	// Remove item from specific list in database
-	$scope.removeItemFromList = function(item) {
-		console.log("ToRomove: " + item._id);
-		shoppingService.delete({id: item._id}, $scope.shopIngredient, function(resp){
+	$scope.removeItemFromList = function(list, index) {
+		console.log("ToRomove: " + list._id);
+		shoppingManager.update({id: list._id}, {i: index}, function(resp){
   			$scope.masterList = shoppingManager.query();
+  			console.log($scope.masterList);
 		});
 	};
 

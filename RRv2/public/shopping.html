@@ -19,20 +19,23 @@
 
 <div class="center">
   <div class="row">
-      <div class="col-md-3" ng-repeat = "list in masterList">
+      <div class="col-md-3" ng-repeat = "aList in masterList">
         <div class="thumbnail">
           <div class="md-card-image" alt="user avatar">
-          <h3>{{list.name}}</h3>
-          <button class="close" ng-click = "removeList(list)">&times;</button>          
-          <div class="item" ng-repeat = "item in list">
+          <h1>{{aList.name}}</h1>
+          <button class="close" ng-click = "removeList(aList)">&times;</button>          
+          <div class="item" ng-repeat = "item in aList.list">
             <table>
               <tr>
                 <td class =  "shopListItem">
                   <table>
                     <tr>
                       <td>
-                       <h1>{{item.name}}</h1>
+                       <h3>{{item.name}}</h3>
                       </td>
+                      <td>
+                        <buttom class ="btn btn-primary" ng-click = "removeItemFromList(aList,$index)">&times;</buttom>
+                     </td>
                      </tr>
                   </table>
                 </td>
@@ -42,16 +45,13 @@
           <table>
         <tr>
             <td valign="top">
-              <input class = "form-control" ng-model = "shopIngredient.name">
+              <input class = "form-control" ng-model = "shopIngredient[$index]">
             </td>
             <td valign="top">
-          <buttom class ="btn btn-primary" ng-click = "addItemToList(list)">Add to List</buttom>
+          <buttom class ="btn btn-primary" ng-click = "addItemToList(aList,$index)">Add to List</buttom>
             </td>
         </tr>
     </table>
-          
-          
-         
         </div>
       </div>
   </div>
