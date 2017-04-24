@@ -316,6 +316,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 					formatIng.req = foundIng.amount;
 					formatIng.unit = foundIng.unit;
 					formatIng.name = foundIng.name;
+					formatIng.isRed = false;
 					formatIng.surplus = -foundIng.amount;
 
 					for(var j in $scope.availableIngredients) {
@@ -365,6 +366,9 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 					if(!isAvailable) {
 						newResult.need.push(foundIng);
 					}
+					if(formatIng.surplus < 0)
+						formatIng.isRed = true;
+
 					newResult.full.push(formatIng);
 				}
 

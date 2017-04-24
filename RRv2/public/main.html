@@ -13,6 +13,14 @@
     </tr>
   </table>
 </div>
+<style>
+    .redSquare {
+        background-color: #ff3333;
+    }
+    .greenSquare {
+        background-color: #99ff66;
+    }
+</style>
 
 <!--<div id="post-stream" ng-show="searched">
 	<h4>Recipes</h4>
@@ -31,7 +39,7 @@
         <div class="thumbnail">
 			<img ng-src="{{recipe.image}}" class="md-card-image" alt="user avatar">
 			<div class="caption">
-	            <h4>{{recipe.label}}</h4>
+	            <h4>{{recipe.label}} - {{recipe.ratio * 100}}%</h4>
                     <div ng-show="expanded[$index]">
                       <p><b>Required:</b></p>
                       <table style="border:2px solid black; border-spacing: 2px;">
@@ -45,7 +53,7 @@
                               <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.req}} {{ingredient.unit}}
                                 <input ng-click="addToShoppingList(ingredient)" class="btn card-btn" type="submit" value="Add" />
                               </td>
-                              <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.surplus}} {{ingredient.unit}}</td>
+                              <td ng-class="{true:'redSquare',false:'greenSquare'}[ingredient.isRed]" style="border:2px solid black; border-spacing: 5px;">{{ingredient.surplus}} {{ingredient.unit}}</td>
                           </tr>
                       </table>
                       <br><br><b>Could not parse:</b>
