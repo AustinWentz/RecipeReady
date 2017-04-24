@@ -7,12 +7,7 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(sho
 
 	$rootScope.shoppingList = shoppingService.query();
 	$rootScope.itemInShoppingList = {name: ''};
-<<<<<<< HEAD
-
-
-=======
 	$rootScope.mainList;
->>>>>>> 389f9f5616a0c7e65dcf0d15af9989e9d0fb5651
 	/*$rootScope.addToShoppingList= function(){
 		console.log("ADD TO SHOPPING LIST");
 
@@ -122,8 +117,14 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	var e = document.getElementById('feedback-main');
 	e.style.display = 'none';
 	//array to add ingredients too
-	$scope.tempIngredient = ["aaaa","bbbb","ccc","ddd","eee","ffff","gggg","hhh","iiii", "aaaa","bbbb","ccc","ddd","eee","ffff","gggg","hhh","iiii"];
-    
+	$scope.tempIngredient = new Array();
+
+	$scope.addIng = function() {
+		console.log($scope.newRecipe.name);
+		$scope.tempIngredient.push($scope.newRecipe.name);
+		$scope.newRecipe.name = "";
+	}
+
     $scope.toggleVisibility = function() {
     	console.log("eeeeeeeeeee");
     	var e = document.getElementById('feedback-main');
