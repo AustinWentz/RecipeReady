@@ -116,13 +116,26 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	$scope.suggestions = [];
 	var e = document.getElementById('feedback-main');
 	e.style.display = 'none';
+	$scope.ingredientTags
 	//array to add ingredients too
-	$scope.tempIngredient = new Array();
+	$scope.tempIngredient = [];
 
 	$scope.addIng = function() {
 		console.log($scope.newRecipe.name);
 		$scope.tempIngredient.push($scope.newRecipe.name);
 		$scope.newRecipe.name = "";
+		$scope.ingredientTags = chunk($scope.tempIngredient,6);
+   		$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
+
+	}
+	$scope.removeIng = function(itemName){
+		console.log(itemName);
+		var index = $scope.tempIngredient.indexOf(itemName);
+		if(index != -1) {
+			$scope.tempIngredient.splice(index, 1);
+		}
+		$scope.ingredientTags = chunk($scope.tempIngredient,6);
+   		$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
 	}
 
     $scope.toggleVisibility = function() {
@@ -160,8 +173,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 
 
    //array of ROWS that front end uses
-   $scope.ingredientTags = chunk($scope.tempIngredient,6);
-   	$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
+   
    $scope.$watch('ingredientTags', function(val) {
    $scope.tempIngredient = [].concat.apply([], val);
    }, true);

@@ -28,7 +28,7 @@
     <h3>Find a recipe.</h3>
     <h4>Use ingredients you already have.</h4>
     <input required class="form-control" maxlength="200" rows="1" placeholder="Search" ng-model="newRecipe.name" ng-change="autocompleteQuery()" />
-    <input class="btn submit-btn pull-right" type="submit" value="+" />
+    <input class="btn submit-btn pull-right" ng-click = "addIng()" type="submit" value="+" />
   </form>
 
 
@@ -36,7 +36,7 @@
   <table>
     <tr ng-repeat = "row in ingredientTags">
        <td ng-repeat = "item in row">
-          <li><a href="#" class="tag">{{item}}</a></li>
+          <li><a class="tag" ng-click = "removeIng(item)">{{item}}</a></li>
       </td>
     </tr>
     <td><input class="btn submit-btn btn-search" type="submit" value="Search" ng-show = "isNotEmpty"/></td>
