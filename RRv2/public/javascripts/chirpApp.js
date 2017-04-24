@@ -197,6 +197,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 		//Update the scope now that get diet has finally returned
 		if($scope.diet.length == 0) {
 			for(var i = 0; i < tempDiet.length; i++) {
+				console.log(tempDiet[i].name);
 				$scope.diet.push(tempDiet[i].name);
 			}
 		}
@@ -229,6 +230,12 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 			}
 		}
 
+		var searchString = "";
+		for(var i = 0; i < $scope.tempRecipe.length; i++) {
+			console.log("i: " + i);
+			searchString += $scope.tempRecipe[i];
+		}
+		console.log("search for: " + searchString);
 		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
 
 			//The array of formatted recipe objects to return to the search view
