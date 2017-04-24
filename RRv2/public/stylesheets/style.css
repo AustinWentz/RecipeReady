@@ -9,28 +9,199 @@ body {
     font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
 
 }
-
-a {
-    color: #00B7FF;
+@font-face{
+    font-family: shine;
+    src: url("shine.ttf");
+    color: #ff9205;
+    color:#ff9205
 }
+@font-face{
+    font-family: mont;
+    src: url("monteserrat-alt-light.otf");
+    color: #ff9205;
+    color:#ff9205
+}
+a {
+    color: initial;
+    color:#787878;
 
+
+}
+.index title{
+  position: center;
+}
+.diet h1{
+  font-family: mont;
+}
+.diet th{
+  font-family: mont;
+}
+.pantry h1{
+  font-family: mont;
+}
+.pantry th{
+  font-family: mont;
+}
+.shop h1{
+  font-family: mont;
+}
+.shop h3{
+  font-family: mont;
+}
+.form-auth h2{
+  font-family: mont;
+}
+.navbar-default .navbar-brand{
+  color:#ff9205;
+}
+.navbar-default .navbar-brand:hover{
+  color:#ef8600
+}
+.navbar-fluid{
+  background-color: white;
+  
+}
+.navbar-default{
+  color:#00000;
+  height: 100%;
+  top:0;
+}
+.navbar-brand{
+  font-family: shine;
+  position: absolute;
+  top:25%;
+  bottom: 25%
+  left: 40%;
+  right:40%;
+  color: #ff9205;
+  font-size: 43px;
+}
+.container table{
+  position:absolute;
+  margin: 8.5% auto;
+  word-wrap: normal;
+  display: inline-block;
+}
+#container .navbar-text{
+  padding-left: 80px;
+  padding-right: 60px;
+  font-weight: bolder;
+  color: #000000;
+  font-family: mont;
+  font-size: 15px;
+}
+#nav-link .navbar-text{
+  padding-left: 80px;
+  padding-right: 80px;
+  font-weight: bolder;
+  color: #000000;
+  font-family: mont;
+  font-size: 18px;
+}
+.navbar-text p{
+color:#000000;
+}
+h3{
+  padding-left:10px;
+  font-size: 24px;
+  color:#212121;
+  font-weight: bold;
+}
+h4{
+  font-size: 15px;
+  padding-left:15px;
+  color: #757575;
+}
+.btn-primary{
+  background-color: #03A9F4;
+}
+.btn-primary:hover{
+  background-color: #008ac9;
+}
 .submit-btn {
-    background-color: #b1dbff;
+  color:#FFFFFF;
+    background-color: #03A9F4;
     margin: 10px 0 10px 0;
 }
-
-
+.submit-btn:hover{
+      background-color: #008ac9;
+        color:white;
+}
+.shopListForm{
+  padding: 4px;
+}
 .form-auth {
     max-width: 330px;
     padding: 5px;
     margin: 0 auto;
 }
+.navbar-fluid{
+  height: 25%;
+}
+.clearfix h3{
+    font-weight: bolder;
+    font-family:mont;
+    color: #ff9205;
+    font-size: 35;
+    position: absolute;
+    left:20%;
+    top:17%;
+}
+.clearfix h4{
+    font-weight: normal;
+    font-size: 35;
+    font-family:mont;
+    color: #787878;
+    position: absolute;
+    left:19.5%;
+    top:27%;
+}
+.clearfix .form-control{
+  position:absolute;
+  width:50%;
+  left:20%;
+  right:25%;
+  top: 40%;
+}
+.clearfix .btn{
+  position:absolute;
+  left:71%;
+  right:25%;
+  top: 38.6%;
+}
 .center{
     text-align: center;
 }
-
+.shopListForm .form-control{
+  position: absolute;
+  bottom: 29px;
+  left: 8%;
+  width:74%;
+  height:32px;
+}
+.btn{
+  color:background-color: #03A9F4;
+  border: none;
+}
+.shopListForm .btn{
+  background-color: #03A9F4;
+  position: absolute;
+  bottom: 29px;
+  right:8%;
+  height: 30px;
+  border: none;
+  hover:;
+}
+.shopListForm .btn:hover{
+  background-color: #008ac9;
+  border: none;
+}
 .col-md-3:nth-child(4n+1){
     clear: left;
+}
+.thumbnail{
+      box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),0 3px 1px -2px rgba(0,0,0,0.2),0 1px 5px 0 rgba(0,0,0,0.12);
+      padding: 14px;
 }
 .col-md-6{
     h3{font-size: 45px;}
@@ -52,8 +223,18 @@ a {
 }
 .close{
   position:absolute;
-  top:5;
-  right:25;
+  top:8;
+  right:28;
+}
+.closeItem{
+  display: none;
+  position:absolute;
+  padding-top: 10px;
+  right:30;
+  color:grey;
+  border: none;
+  background: none;
+
 }
 .form-control-card{
   position:absolute;
@@ -62,68 +243,22 @@ a {
 .shopListItem{
   font:"Helvetica Neue";
 }
-
-
-/* Navigation Menu - Background */
-.navigation {
-  /* critical 0sizing and position styles */
-  width: 80%;
-  height: 96.4%;
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 0;
-  color:white;
-
-
-  /* non-critical appearance styles */
-  list-style: none;
-  background: #111;
+.shopListItem:hover .closeItem {
+   display: block; /* On :hover of div show button */
 }
-
-/* Navigation Menu - List items */
-.nav-item {
-  /* non-critical appearance styles */
-  width: 200px;
-  border-top: 1px solid #111;
-  border-bottom: 1px solid #000;
-  position:relative;
-  top:60;
-}
-.nav-item-entry {
-  /* non-critical appearance styles */
-  width: 200px;
-  border-top: 1px solid #111;
-  border-bottom: 1px solid #000;
-  position: absolute;
-  bottom: 0;
-}
-
-.nav-item a {
-  /* non-critical appearance styles */
-  display: block;
-  padding: 1em;
-  background: #111;
-  color: white;
-  font-size: 1.2em;
-  text-decoration: none;
-  transition: color 0.2s, background 0.5s;
-}
-
-.nav-item a:hover {
-  color: #c74438;
-  background: linear-gradient(135deg, rgba(0,0,0,0) 0%,rgba(75,20,20,0.65) 100%);
+.shopList{
+  font:"Times New Roman";
 }
 
 /* Site Wrapper - Everything that isn't navigation */
 .site-wrap {
   /* Critical position and size styles */
   width:100%;
-  height: 100%;
-  background-color: white; /* Needs a background or else the nav will show through */
-  position: relative;
-  top: -20;
+  height: 75%;
+  background-color: #EFEDE7
+; /* Needs a background or else the nav will show through */
+  position: absolute;
+  top: 25%;
   bottom: 100%;
   left: 0;
   z-index: 1;
@@ -134,55 +269,229 @@ a {
   background-size: 100%;
 }
 
-/* Nav Trigger */
-.nav-trigger {
-  /* critical styles - hide the checkbox input */
+.tags {
+  list-style: none;
+  margin: 0;
+  overflow: hidden; 
+  padding: 0;
+  display: inline-block;
   position: absolute;
-  clip: rect(0, 0, 0, 0);
+  top:50%;
+  left:20%;
 }
 
-label[for="nav-trigger"] {
-  /* critical positioning styles */
-  position: fixed;
-  left: 15px; top: 70px;
-  z-index: 2;
-
-  /* non-critical apperance styles */
-  height: 30px;
-  width: 30px;
-  cursor: pointer;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 30 30' enable-background='new 0 0 30 30' xml:space='preserve'><rect width='30' height='6'/><rect y='24' width='30' height='6'/><rect y='12' width='30' height='6'/></svg>");
-  background-size: contain;
+.tags li {
+  float: left; 
+  display: inline-block;
 }
 
-/* Make the Magic Happen */
-.nav-trigger + label, .site-wrap {
-  transition: left 0.2s;
+.tag {
+  background: #FF9205;
+  border-radius: 3px 0 0 3px;
+  color: white;
+  display: inline-block;
+  height: 26px;
+  line-height: 26px;
+  padding: 0 20px 0 23px;
+  position: relative;
+  margin: 0 10px 10px 0;
+  text-decoration: none;
+  -webkit-transition: color 0.2s;
+}
+.tags .btn-search{
+  background-color: #03A9F4;
+  color: white;
+  position: relative;
+  display: inline-block;
+  left:0;
 }
 
-.nav-trigger:checked + label {
-  left: 215px;
+
+
+.tag::before {
+  background: #EFEDE7;
+  border-radius: 10px;
+  content: '';
+  height: 6px;
+  left: 10px;
+  position: absolute;
+  text-decoration: none;
+  width: 6px;
+  top: 10px;
 }
 
-.nav-trigger:checked ~ .site-wrap {
-  left: 200px;
+.tag::after {
+  background: #EFEDE7;
+  border-bottom: 14px solid transparent;
+  border-left: 10px solid #FF9205;
+  border-top: 13px solid transparent;
+  content: '';
+  position: absolute;
+  text-decoration: none;
+  right: 0;
+  top: 0;
 }
 
-
-body {
-    /* Without this, the body has excess horizontal scroll when the menu is open */
-  overflow-x: hidden;
+.tag:hover {
+  background-color: #ef8600;
+  color: white;
 }
 
-/* Additional non-critical styles */
-
-
-
-code {
-    padding: 2px;
-    background: #ddd;
+.tag:hover::after {
+   border-left-color: #ef8600; 
+}
+.tag a{
+  text-decoration: none;
 }
 
-/* Micro reset */
-*,*:before,*:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;margin:0;padding:0;}
-html, body { height: 100%; width: 100%; font-family: Helvetica, Arial, sans-serif; }
+@import url(http://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
+
+.contactClose{
+  position:absolute;
+  color:grey;
+  border: none;
+  background: none;
+  position:absolute;
+  font-size: 24px;
+  top:8;
+  right:15;
+}
+
+.feedback-button {position:absolute height:40px; background:#787878; width:100px; line-height:32px; -webkit-transform:rotate(-90deg); font-weight:600; color:white; transform:rotate(-90deg);  -ms-transform:rotate(-90deg);  -moz-transform:rotate(-90deg); text-align:center; font-size:14px; position:fixed; right:-40px; top:45%; font-family: mont; z-index:999 !important; border-radius: 8px;
+ }
+
+
+
+.alerting {
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -o-filter: blur(10px);
+    -ms-filter: blur(10px);
+    filter: blur(10px);
+}
+  
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600);
+
+#contact * {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -webkit-font-smoothing:antialiased;
+  -moz-font-smoothing:antialiased;
+  -o-font-smoothing:antialiased;
+  font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+#contact body {
+  font-family: mont;
+  font-weight:300;
+  font-size: 12px;
+  line-height:30px;
+  color:#777;
+  background:#0CF;
+
+}
+
+.bontainer {
+  max-width:400px;
+  width:50%;
+  margin:0 auto;
+  position:relative;
+  top:0;
+  left:0;
+  z-index: 99 !important;
+}
+
+#contact input[type="text"], #contact input[type="email"], #contact textarea, #contact button[type="submit"] { font:400 12px/16px "Roboto", Helvetica, Arial, sans-serif; }
+
+#contact {
+  background:#F9F9F9;
+  padding:25px;
+  margin:50px 0;
+}
+
+#contact h3 {
+  font-family: mont;
+  color: #F96;
+  display: block;
+  font-size: 30px;
+  font-weight: 400;
+}
+
+#contact h4 {
+  margin:5px 0 15px;
+  display:block;
+  font-size:13px;
+}
+
+fieldset {
+  border: medium none !important;
+  margin: 0 0 10px;
+  min-width: 100%;
+  padding: 0;
+  width: 100%;
+}
+
+#contact input[type="text"], #contact input[type="email"], #contact input[type="tel"], #contact input[type="url"], #contact textarea {
+  width:100%;
+  border:1px solid #CCC;
+  background:#FFF;
+  margin:0 0 5px;
+  padding:10px;
+}
+
+#contact input[type="text"]:hover, #contact input[type="email"]:hover, #contact input[type="tel"]:hover, #contact input[type="url"]:hover, #contact textarea:hover {
+  -webkit-transition:border-color 0.3s ease-in-out;
+  -moz-transition:border-color 0.3s ease-in-out;
+  transition:border-color 0.3s ease-in-out;
+  border:1px solid #AAA;
+}
+
+#contact textarea {
+  height:100px;
+  max-width:100%;
+  resize:none;
+}
+
+#contact button[type="submit"] {
+  cursor:pointer;
+  width:100%;
+  border:none;
+  background:#0CF;
+  color:#FFF;
+  margin:0 0 5px;
+  padding:10px;
+  font-size:15px;
+  z-index: 99 !important;
+
+}
+
+#contact button[type="submit"]:hover {
+  background:#09C;
+  -webkit-transition:background 0.3s ease-in-out;
+  -moz-transition:background 0.3s ease-in-out;
+  transition:background-color 0.3s ease-in-out;
+}
+
+#contact button[type="submit"]:active { box-shadow:inset 0 1px 3px rgba(0, 0, 0, 0.5); }
+
+#contact input:focus, #contact textarea:focus {
+  outline:0;
+  border:1px solid #999;
+}
+::-webkit-input-placeholder {
+ color:#888;
+}
+:-moz-placeholder {
+ color:#888;
+}
+::-moz-placeholder {
+ color:#888;
+}
+:-ms-input-placeholder {
+ color:#888;
+}

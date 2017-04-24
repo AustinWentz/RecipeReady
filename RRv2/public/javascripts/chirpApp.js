@@ -7,10 +7,14 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(sho
 
 	$rootScope.shoppingList = shoppingService.query();
 	$rootScope.itemInShoppingList = {name: ''};
+
+
 	/*$rootScope.addToShoppingList= function(){
 		console.log("ADD TO SHOPPING LIST");
 
 	}*/
+
+	//////
 
 	$rootScope.addItemToShopping = function() {
 
@@ -111,6 +115,52 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 	$scope.suggestions = [];
+	var e = document.getElementById('feedback-main');
+	e.style.display = 'none';
+	//array to add ingredients too
+	$scope.tempIngredient = ["aaaa","bbbb","ccc","ddd","eee","ffff","gggg","hhh","iiii", "aaaa","bbbb","ccc","ddd","eee","ffff","gggg","hhh","iiii"];
+    
+    $scope.toggleVisibility = function() {
+    	console.log("eeeeeeeeeee");
+    	var e = document.getElementById('feedback-main');
+    	var b = document.getElementById('mainPage');
+    	var button = document.getElementById('popup');
+        if(e.style.display == 'block'){
+          e.style.display = 'none';
+          b.classList.remove('alerting');
+
+          console.log("clear");
+       }
+       else{
+          e.style.display = 'block';
+          b.classList.add('alerting');
+       }
+    }
+    //function to split original array into ROWS
+    function chunk(arr, size) {
+   		var newArr = [];
+  	    for (var i=0; i < arr.length; i+=size) {
+      		newArr.push(arr.slice(i, i+size));
+   		}
+   		return newArr;
+   }
+   function isArrayLoaded(arr){
+   	if(arr.length > 0){
+   		return true;
+   	}
+   	else{
+   		return false;
+   	}
+   }
+
+
+   //array of ROWS that front end uses
+   $scope.ingredientTags = chunk($scope.tempIngredient,6);
+   	$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
+   $scope.$watch('ingredientTags', function(val) {
+   $scope.tempIngredient = [].concat.apply([], val);
+   }, true);
+
 
 	//Get list of ingredients to be filtered from the search
 	$scope.diet = new Array();
@@ -135,6 +185,9 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 
 	//For your sake, please, please don't read this code
 	$scope.search = function() {
+		var e = document.getElementById('beforeSearchContent');
+		e.style.display = 'none';
+
 
 		//Update the scope now that get diet has finally returned
 		if($scope.diet.length == 0) {
@@ -570,6 +623,7 @@ app.controller('authController', function($scope, $http, $rootScope, $location){
       if(data.state == 'success'){
         $rootScope.authenticated = true;
         $rootScope.current_user = data.user.username;
+
         $location.path('/');
       }
       else{

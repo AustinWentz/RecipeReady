@@ -1,57 +1,52 @@
 <body>
-  <div class = "container">
+  <div class = "shop">
     <h1>Shopping Lists</h1>
-    <table class = "table">
-      <thead>
+    <table class = "table" >
         <tr>
-          <th>Shopping List</th>
+          <td><input class = "form-control" ng-model = "shoppingListName.name"></td>
+          <td><button class ="btn btn-primary cener" ng-click = "addList()">New List</button></td>
         </tr>
-      </thead>
-      <thead>
-        <tr>
-          <th><input class = "form-control" ng-model = "shoppingListName.name"></th>
-          <td><buttom class ="btn btn-primary" ng-click = "addList()">New List</buttom></td>
-        </tr>
-      </thead>
     </table>    
   </div>  
 </body>
 
-<div class="center">
+<div class = "shop">
   <div class="row">
       <div class="col-md-3" ng-repeat = "aList in masterList">
         <div class="thumbnail">
           <div class="md-card-image" alt="user avatar">
-          <h1>{{aList.name}}</h1>
+          <h3>{{aList.name}}</h3>
           <button class="close" ng-click = "removeList(aList)">&times;</button>          
-          <div class="item" ng-repeat = "item in aList.list">
+          <div class="shopListItem" ng-repeat = "item in aList.list">
             <table>
               <tr>
-                <td class =  "shopListItem">
+                <td>
                   <table>
                     <tr>
                       <td>
-                       <h3>{{item.name}}</h3>
+                       <h4>&#43; {{item.name}}</h4>
                       </td>
-                      <td>
-                        <buttom class ="btn btn-primary" ng-click = "removeItemFromList(aList,$index)">&times;</buttom>
-                     </td>
+                        <button class ="closeItem" ng-click = "removeItemFromList(aList,$index)">&times;</button>
                      </tr>
                   </table>
                 </td>
               </tr>
             </table>
           </div>
+           <br>
+           <div class = "shopListForm">
           <table>
         <tr>
             <td valign="top">
               <input class = "form-control" ng-model = "shopIngredient[$index]">
+              &nbsp;
             </td>
             <td valign="top">
-          <buttom class ="btn btn-primary" ng-click = "addItemToList(aList,$index)">Add to List</buttom>
+          <buttom class ="btn btn-primary" ng-click = "addItemToList(aList,$index)">&#43;</buttom>
             </td>
         </tr>
     </table>
+    </div>
         </div>
       </div>
   </div>
