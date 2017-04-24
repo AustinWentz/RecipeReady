@@ -53,6 +53,14 @@
   <button id="popup" class="feedback-button" ng-click="toggleVisibility()">Feedback</button>
 </div>
 </div>
+<style>
+    .redSquare {
+        background-color: #ff3333;
+    }
+    .greenSquare {
+        background-color: #99ff66;
+    }
+</style>
 
 <!--<div id="post-stream" ng-show="searched">
 	<h4>Recipes</h4>
@@ -71,7 +79,7 @@
         <div class="thumbnail">
 			<img ng-src="{{recipe.image}}" class="md-card-image" alt="user avatar">
 			<div class="caption">
-	            <h4>{{recipe.label}}</h4>
+	            <h4>{{recipe.label}} - {{recipe.ratio * 100}}%</h4>
                     <div ng-show="expanded[$index]">
                       <p><b>Required:</b></p>
                       <table style="border:2px solid black; border-spacing: 2px;">
@@ -82,22 +90,26 @@
                           </tr>
                           <tr ng-repeat = "ingredient in recipe.full " style="border:2px solid black; border-spacing: 2px;">
                               <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.name}}</td>
-                              <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.req}} {{ingredient.unit}}</td>
-                              <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.surplus}} {{ingredient.unit}}</td>
+                              <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.req}} {{ingredient.unit}}
+                                <input ng-click="addToShoppingList(ingredient)" class="btn card-btn" type="submit" value="Add" />
+                              </td>
+                              <td ng-class="{true:'redSquare',false:'greenSquare'}[ingredient.isRed]" style="border:2px solid black; border-spacing: 5px;">{{ingredient.surplus}} {{ingredient.unit}}</td>
                           </tr>
                       </table>
                       <br><br><b>Could not parse:</b>
                       <div ng-repeat = "other in recipe.other">
                           {{other}}
                       </div>
+                      <a ng-href="{{recipe.url}}" class="btn card-btn">Go to Website</a>
                     </div>
 	            <!--
               <a ng-href="{{recipe.url}}" class="btn card-btn">View</a>
 	            <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
               -->
+              <input ng-click="addAllToShoppingList(recipe)" class="btn card-btn" type="submit" value="Add to List" />
+              <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
           </div>
           <input ng-click="expandRecipe($index)" class="btn card-btn" type="submit" value="View" />
-          <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
         </div>
       </div>
     </div>

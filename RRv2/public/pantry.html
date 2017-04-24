@@ -1,3 +1,4 @@
+
 <body>
   <div class = "pantry">
     <h1>My Pantry</h1>
@@ -22,8 +23,10 @@
         </tr>
       </thead>
     </table>      
-  </div>  
+  </div> 
 </body>
+
+
 <div>
   <td><buttom class ="btn btn-primary" ng-click = "sortIngredient(ingredientList)">SORT</buttom></td>
 </div>
@@ -45,19 +48,3 @@
 
 
 
-<br>
-
-<div class="center">
-  <div class="row">
-      <div class="col-md-3" ng-repeat = "item in recipes">
-        <div class="thumbnail">
-          <img src="http://placehold.it/150x150" class="md-card-image" alt="user avatar">          
-          <div class="item">
-            <h3>{{item.name}}</h3>
-            <input class="btn card-btn" type="submit" value="View" ng-click = "viewIngredient(item)"/>
-            <input class="btn card-btn" type="submit" value="Delete" ng-click = "removeIngredient(item)"/>
-          </div>
-        </div>
-      </div>
-  </div>
-</div>  

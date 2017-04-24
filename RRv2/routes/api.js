@@ -43,11 +43,12 @@ router.route('/shopping')
 		var post = new ShoppingIngredient();
 		post.name = req.body.name;
 
-		post.save(function(err, post) {
-			if (err){
-				return res.send(500, err);
-			}
-			return res.json(post);
+		ShoppingList.findOneAndUpdate({name: req.body.name}, {$addToSet: {list: post}}, {upsert:true, new:true}, function(err, doc){
+		    if(err){
+		        return res.send(500, err);
+		    }
+
+		    return res.json(doc);
 		});
 	})
 
@@ -165,7 +166,7 @@ router.route('/shopManage/:id')
 		console.log(req);
 		ShoppingList.findById(req.params.id, function(err, post){
 			if(err) {
-				res.send(500, err);
+				return res.send(500, err);
 			}
 
 			//var index = (post.list).indexOf(req.body.name);
@@ -176,10 +177,10 @@ router.route('/shopManage/:id')
 
 			post.save(function(err, post){
 				if(err) {
-					res.send(500, err);
+					return res.send(500, err);
 				}
 
-				res.json(post);
+				return res.json(post);
 			});
 		});
 	})

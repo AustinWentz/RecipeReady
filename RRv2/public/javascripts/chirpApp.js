@@ -7,8 +7,12 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(sho
 
 	$rootScope.shoppingList = shoppingService.query();
 	$rootScope.itemInShoppingList = {name: ''};
+<<<<<<< HEAD
 
 
+=======
+	$rootScope.mainList;
+>>>>>>> 389f9f5616a0c7e65dcf0d15af9989e9d0fb5651
 	/*$rootScope.addToShoppingList= function(){
 		console.log("ADD TO SHOPPING LIST");
 
@@ -111,7 +115,7 @@ app.factory('recipeSearchService', function($resource){
 	return $resource('https://api.edamam.com/search/');
 });
 
-app.controller('mainController', function(searchService, recipeSearchService, pantryService, dietService, $scope, $rootScope, $http){
+app.controller('mainController', function(searchService, recipeSearchService, pantryService, dietService, shoppingService, shoppingManager, $scope, $rootScope, $http){
 	$scope.recipes; //= searchService.query();
 	$scope.newRecipe = {link: '', name: '', thumbnail: ''};
 	$scope.suggestions = [];
@@ -368,6 +372,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 					formatIng.req = foundIng.amount;
 					formatIng.unit = foundIng.unit;
 					formatIng.name = foundIng.name;
+					formatIng.isRed = false;
 					formatIng.surplus = -foundIng.amount;
 
 					for(var j in $scope.availableIngredients) {
@@ -417,6 +422,9 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 					if(!isAvailable) {
 						newResult.need.push(foundIng);
 					}
+					if(formatIng.surplus < 0)
+						formatIng.isRed = true;
+
 					newResult.full.push(formatIng);
 				}
 
@@ -494,10 +502,31 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 		$rootScope.expanded[index] = !$rootScope.expanded[index];
 	};
 
+	$scope.addToShoppingList = function(ingredient) {
+		if ($scope.mainList) {
+			shoppingService.update({id: $rootScope.mainList._id}, ingredient, function() {
+				console.log('added');
+			});
+		} else {
+			console.log("NO LIST SELECTED");
+		}
+	};
+
+	$scope.addAllToShoppingList = function(recipe) {
+		shoppingManager.save({name: recipe.label}, function(resp) {
+			console.log('test1');
+			for (i = 0; i < recipe.full.length; i++) {
+				shoppingService.update({id: resp._id}, {name: recipe.full[i].name}, function() {
+					console.log('test2');
+				});
+			}
+		});
+	};
+
 });
 
 // Controller for shopping lists
-app.controller('shoppingController', function(shoppingService, shoppingManager, $scope, $rootScope){
+app.controller('shoppingController', function(shoppingService, shoppingManager, pantryService, $scope, $rootScope){
 	$scope.masterList = shoppingManager.query();
 	$scope.listNum = {number: ''};
 	$scope.shoppingListName = {name: ''};
@@ -506,14 +535,13 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 	// Add a list to the database
 	$scope.addList = function() {
 		console.log("newList");
-		shoppingManager.save($scope.shoppingListName, function() {
+		shoppingManager.save($scope.shoppingListName, function(resp) {
 			$scope.masterList = shoppingManager.query();
 			$scope.shoppingListName = '';
+			console.log(resp);
 		});
 
-		for (i = 0; i < $scope.masterList.length; i++) {
-			console.log($scope.masterList[i]);
-		}
+		console.log($scope.masterList);
 
 	};
 
@@ -550,6 +578,19 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 		console.log(item);
 	};
 
+	$scope.makeMainList = function(list) {
+		$rootScope.mainList = list;
+	};
+
+	$scope.addAllIngredientToPantry = function(list) {
+		for(i = 0; i < list.list.length; i++) {
+			pantryService.save({name: list.list[i].name, amount:'1', unit:'unit', purchase:'0/0', expiration:'0/0'}, function(resp) {
+				console.log("hello from add_In");
+			});
+		}
+		$scope.removeList(list);
+	};
+
 });
 
 app.controller('dietController', function(dietService, $scope, $rootScope){
@@ -577,14 +618,14 @@ app.controller('dietController', function(dietService, $scope, $rootScope){
 
 app.controller('pantryController', function(pantryService, searchService, $scope, $rootScope){
 	$scope.ingredientList = pantryService.query(); //{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
-	$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
+	$scope.ingredient = {name: '', amount:'1', unit:'unit', purchase:'0/0', expiration:'0/0'};
 	$scope.recipes = searchService.query();
 
 	$scope.addIngredient = function() {
 		pantryService.save($scope.ingredient, function() {
 			console.log("hello from add_In");
 			$scope.ingredientList = pantryService.query();
-			$scope.ingredient = {name: '', amount:'', unit:'', purchase:'', expiration:''};
+			$scope.ingredient = {name: '', amount:'1', unit:'unit', purchase:'0/0', expiration:'0/0'};
 		});
 	};
 
