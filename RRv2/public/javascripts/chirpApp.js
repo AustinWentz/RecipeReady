@@ -117,8 +117,14 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	var e = document.getElementById('feedback-main');
 	e.style.display = 'none';
 	//array to add ingredients too
-	$scope.tempIngredient = ["aaaa","bbbb","ccc","ddd","eee","ffff","gggg","hhh","iiii", "aaaa","bbbb","ccc","ddd","eee","ffff","gggg","hhh","iiii"];
-    
+	$scope.tempIngredient = new Array();
+
+	$scope.addIng = function() {
+		console.log($scope.newRecipe.name);
+		$scope.tempIngredient.push($scope.newRecipe.name);
+		$scope.newRecipe.name = "";
+	}
+
     $scope.toggleVisibility = function() {
     	console.log("eeeeeeeeeee");
     	var e = document.getElementById('feedback-main');
