@@ -542,6 +542,16 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 		$scope.toggleVisibility();
 	};
 
+	$scope.make = function(recipe) {
+		console.log(recipe.full);
+		for (i = 0; i < recipe.full.length; i++) {
+			if (recipe.full[i].surplus < 0) {
+				console.log("Not enough ingredient");
+				return;
+			}
+		}
+	}
+
 });
 
 // Controller for shopping lists
