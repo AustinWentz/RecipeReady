@@ -7,12 +7,8 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(sho
 
 	$rootScope.shoppingList = shoppingService.query();
 	$rootScope.itemInShoppingList = {name: ''};
-<<<<<<< HEAD
 
-
-=======
 	$rootScope.mainList;
->>>>>>> 389f9f5616a0c7e65dcf0d15af9989e9d0fb5651
 	/*$rootScope.addToShoppingList= function(){
 		console.log("ADD TO SHOPPING LIST");
 
@@ -521,6 +517,11 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 				});
 			}
 		});
+	};
+
+	$scope.sendFeedback = function(form) {
+		window.open('mailto:feedback.cs.purdue@gmail.com?subject=Feedback from ' + form.name + '&body=' + form.message);
+		$scope.toggleVisibility();
 	};
 
 });
