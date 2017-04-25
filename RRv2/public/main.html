@@ -1,6 +1,6 @@
 <div id = "beforeSearchContent">
 <div id="feedback-main">
-  <div class="bontainer">  
+  <div class="bontainer">
   <form id="contact" action="" method="post">
    <button class = "contactClose" ng-click = "toggleVisibility()">&times;</button>
     <h3>Quick Contact</h3>
@@ -17,7 +17,7 @@
     <fieldset>
       <button name="submit" type="submit" id="contact-submit" data-submit="...Sending" ng-click="sendFeedback(feedback)">Submit</button>
     </fieldset>
-  </form> 
+  </form>
 </div>
   </div>
 <div class="clearfix" id = "mainPage">
@@ -28,7 +28,7 @@
     <h3>Find a recipe.</h3>
     <h4>Use ingredients you already have.</h4>
     <input required class="form-control" maxlength="200" rows="1" placeholder="Search" ng-model="newRecipe.name" ng-change="autocompleteQuery()" />
-    <input class="btn submit-btn pull-right" type="submit" value="+" />
+    <input class="btn submit-btn pull-right" ng-click = "addIng()" type="submit" value="+" />
   </form>
 
 
@@ -36,10 +36,10 @@
   <table>
     <tr ng-repeat = "row in ingredientTags">
        <td ng-repeat = "item in row">
-          <li><a href="#" class="tag">{{item}}</a></li>
+          <li><a class="tag" ng-click = "removeIng(item)">{{item}}</a></li>
       </td>
     </tr>
-    <td><input class="btn submit-btn btn-search" type="submit" value="Search" ng-show = "isNotEmpty"/></td>
+    <td><input class="btn submit-btn btn-search" ng-click="search()" value="Search" ng-show = "isNotEmpty"/></td>
   </table>
 </ul>
 
@@ -79,7 +79,7 @@
         <div class="thumbnail">
 			<img ng-src="{{recipe.image}}" class="md-card-image" alt="user avatar">
 			<div class="caption">
-	            <h4>{{recipe.label}} - {{recipe.ratio * 100}}%</h4>
+	            <h4>{{recipe.label}} - {{recipe.ratio}}%</h4>
                     <div ng-show="expanded[$index]">
                       <p><b>Required:</b></p>
                       <table style="border:2px solid black; border-spacing: 2px;">
