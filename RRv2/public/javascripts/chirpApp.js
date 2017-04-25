@@ -263,7 +263,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 				var isRestricted = false;
 				var curRecipe = resp.hits[cur].recipe;
 
-				//The object to represent the formatted recipe
+				//The object to reprreresent the formatted recipe
 				var newResult = new Object();
 				newResult.label = curRecipe.label;
 				newResult.url = curRecipe.url;

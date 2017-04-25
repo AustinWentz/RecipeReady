@@ -34,8 +34,8 @@
 
   <ul class="tags">
   <table>
-    <tr ng-repeat = "row in ingredientTags">
-       <td ng-repeat = "item in row">
+    <tr ng-repeat = "row in ingredientTags track by $index">
+       <td ng-repeat = "item in row track by $index">
           <li><a class="tag" ng-click = "removeIng(item)">{{item}}</a></li>
       </td>
     </tr>
@@ -55,10 +55,11 @@
 </div>
 <style>
     .redSquare {
-        background-color: #ff3333;
+        color: #ff704d;
     }
     .greenSquare {
-        background-color: #99ff66;
+        color: #85e085
+;
     }
 </style>
 
@@ -77,39 +78,47 @@
   <div class="row">
       <div class="col-md-3" ng-repeat = "recipe in recipes | orderBy: '-ratio'">
         <div class="thumbnail">
-			<img ng-src="{{recipe.image}}" class="md-card-image" alt="user avatar">
+			<a href = {{recipe.url}}><img ng-src="{{recipe.image}}" class="md-card-image" alt="user avatar"></a>
 			<div class="caption">
 	            <h4>{{recipe.label}} - {{recipe.ratio}}%</h4>
                     <div ng-show="expanded[$index]">
                       <p><b>Required:</b></p>
-                      <table style="border:2px solid black; border-spacing: 2px;">
-                          <tr "border:2px solid black; border-spacing: 2px;">
-                              <th style="border:2px solid black; border-spacing: 5px;">Ingredient</th>
-                              <th style="border:2px solid black; border-spacing: 5px;">Required</th>
-                              <th style="border:2px solid black; border-spacing: 5px;">Left</th>
+                      <div class = "ingredientContainer">
+                      <table>
+                          <tr>
+                              <th>Ingredient</th>
+                              <th>Required</th>
+                              <th>Left</th>
                           </tr>
-                          <tr ng-repeat = "ingredient in recipe.full " style="border:2px solid black; border-spacing: 2px;">
-                              <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.name}}</td>
-                              <td style="border:2px solid black; border-spacing: 5px;">{{ingredient.req}} {{ingredient.unit}}
-                                <input ng-click="addToShoppingList(ingredient)" class="btn card-btn" type="submit" value="Add" />
+                          <tr ng-repeat = "ingredient in recipe.full track by $index">
+                              <td>{{ingredient.name}}</td>
+                              <td>{{ingredient.req}} {{ingredient.unit}}
+                          
+                                 <input ng-click="addToShoppingList(ingredient)" class="btn card-btn" type="submit" value="+" />
+
                               </td>
-                              <td ng-class="{true:'redSquare',false:'greenSquare'}[ingredient.isRed]" style="border:2px solid black; border-spacing: 5px;">{{ingredient.surplus}} {{ingredient.unit}}</td>
+
+                                
+                              <td ng-class="{true:'redSquare',false:'greenSquare'}[ingredient.isRed]">{{ingredient.surplus}} {{ingredient.unit}}</td>
                           </tr>
                       </table>
-                      <br><br><b>Could not parse:</b>
-                      <div ng-repeat = "other in recipe.other">
+                      </div>
+                      <br><br><b>Other:</b>
+                      <div ng-repeat = "other in recipe.other track by $index">
                           {{other}}
                       </div>
-                      <a ng-href="{{recipe.url}}" class="btn card-btn">Go to Website</a>
                     </div>
 	            <!--
               <a ng-href="{{recipe.url}}" class="btn card-btn">View</a>
 	            <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
               -->
-              <input ng-click="addAllToShoppingList(recipe)" class="btn card-btn" type="submit" value="Add to List" />
-              <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
+              <div class = "recipeButtons">
+                <input ng-click="addAllToShoppingList(recipe)" class="btn card-btn" type="submit" value="Add to List"/>
+                <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save"/>
+                <input ng-click="expandRecipe($index)" class="btn card-btn" type="submit" value="View"/>
+              </div>
+
           </div>
-          <input ng-click="expandRecipe($index)" class="btn card-btn" type="submit" value="View" />
         </div>
       </div>
     </div>

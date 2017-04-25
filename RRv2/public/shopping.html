@@ -17,8 +17,10 @@
           <div class="md-card-image" alt="user avatar">
 
           <h3>{{aList.name}}</h3>
-          <input ng-click="makeMainList(aList)" type="submit" value="Make Main" />
+          <div class = shopListTopButons>
+          <input class = "btnng-click="makeMainList(aList)" type="submit" value="Make Main" />
           <input ng-click="addAllIngredientToPantry(aList)" type="submit" value="Add to Pantry" />
+          </div>
           <button class="close" ng-click = "removeList(aList)">&times;</button>          
           <div class="shopListItem" ng-repeat = "item in aList.list">
             <table>
