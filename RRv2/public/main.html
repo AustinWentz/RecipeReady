@@ -20,7 +20,6 @@
   </form>
 </div>
   </div>
-  <input class="btn submit-btn" ng-click = "searchWithPantry()" type="submit" value="Find recipes based on your pantry contents" />
 <div class="clearfix" id = "mainPage">
   <form ng-Submit="search()">
     <!--<h4 ng-show="authenticated">{{current_user}} has</h4>
@@ -45,6 +44,8 @@
     <td><input class="btn submit-btn btn-search" ng-click="search()" value="Search" ng-show = "isNotEmpty"/></td>
   </table>
 </ul>
+
+
   <table ng-table="vm.tableParams" class="table" show-filter="true">
     <tr ng-repeat="suggestion in suggestions">
         <td ng-click="autocomplete(suggestion)">
