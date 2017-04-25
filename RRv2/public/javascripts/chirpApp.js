@@ -554,6 +554,7 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 	// Add a list to the database
 	$scope.addList = function() {
 		console.log("newList");
+		if($scope.shoppingListName.length > 0)
 		shoppingManager.save($scope.shoppingListName, function(resp) {
 			$scope.masterList = shoppingManager.query();
 			$scope.shoppingListName = '';
