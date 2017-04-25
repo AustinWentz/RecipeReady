@@ -45,8 +45,7 @@
             <tr ng-repeat="i in item.instances  | orderBy:sort">
               <td>{{i.amount}}</td>
               <td>{{i.unit}}</td>
-              <td>{{i.expiration_date}}
-              </td>
+              <td>{{i.expiration_date | date : 'MM/yy'}} </td>
             </tr>
           </table>   
           </div>    
