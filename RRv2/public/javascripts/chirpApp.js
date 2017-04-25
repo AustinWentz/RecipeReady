@@ -669,16 +669,29 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 	$scope.ingredient = {name: '', amount:'1', unit:'unit', purchase:'0/0', expiration:'0/0'};
 	$scope.recipes = searchService.query();
 
+	$scope.show_expiration = function(temp) {
+		//console.log(temp.expiration_date);
+		var i = parseInt(temp.expiration_date);
+		var ge = temp.expiration_date[6];
+		var shi = temp.expiration_date[5];
+		var text = ""
+		text += i;
+		text += "-";
+		text += shi;
+		text += ge;
+		return text;
+	};
+
 	$scope.sort = function(temp) {
 		var i = parseInt(temp.expiration_date);
 		var ge = Number(temp.expiration_date[6]);
 		var shi = Number(temp.expiration_date[5]);
 
 		i = i * 100 + shi * 10 + ge;
-		console.log(temp.expiration_date);
-		console.log(i);
+		//console.log(temp.expiration_date);
+		//console.log(i);
 		return i;
-	}
+	};
 
 	$scope.addIngredient = function() {
 		pantryService.save($scope.ingredient, function() {
@@ -699,18 +712,6 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 		console.log(item);
 	};
 
-	$scope.sortIngredient = function() {
-		for (i = 0; i < $scope.ingredientList.length; i++) {
-			console.log("Sorting");
-			for (j = i + 1; j < $scope.ingredientList.length; j++) {
-				if ($scope.ingredientList[i].expiration_date> $scope.ingredientList[j].expiration_date) {
-					var temp = $scope.ingredientList[i]
-					$scope.ingredientList[i] = $scope.ingredientList[j];
-					$scope.ingredientList[j] = temp;
-				}
-			}
-		}
-	};
 
 });
 
