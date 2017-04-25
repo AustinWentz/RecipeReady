@@ -578,12 +578,17 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 	$scope.addItemToList = function(item, index) {
 		console.log("Reached addItemToList function");
 		//var num = parseInt($scope.listNum.number);
-
-		shoppingService.update({id: item._id}, {name: $scope.shopIngredient[index]}, function(resp) {
-			$scope.masterList = shoppingManager.query();
-			$scope.shopIngredient = [];
-			console.log($scope.masterList);
-		});
+		console.log("list: " + $scope.shopIngredient);
+		if($scope.shopIngredient.length > 0) {
+			shoppingService.update({id: item._id}, {name: $scope.shopIngredient[index]}, function(resp) {
+				$scope.masterList = shoppingManager.query();
+				$scope.shopIngredient = [];
+				console.log($scope.masterList);
+			});
+		}
+		else {
+			console.log("emptty!");
+		}
 	};
 	// Remove item from specific list in database
 	$scope.removeItemFromList = function(list, index) {
