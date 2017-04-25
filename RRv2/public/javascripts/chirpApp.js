@@ -646,6 +646,17 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 	$scope.ingredient = {name: '', amount:'1', unit:'unit', purchase:'0/0', expiration:'0/0'};
 	$scope.recipes = searchService.query();
 
+	$scope.sort = function(temp) {
+		var i = parseInt(temp.expiration_date);
+		var ge = Number(temp.expiration_date[6]);
+		var shi = Number(temp.expiration_date[5]);
+
+		i = i * 100 + shi * 10 + ge;
+		console.log(temp.expiration_date);
+		console.log(i);
+		return i; 
+	}
+
 	$scope.addIngredient = function() {
 		pantryService.save($scope.ingredient, function() {
 			console.log("hello from add_In");
