@@ -28,8 +28,10 @@
 
     <h3>Find a recipe.</h3>
     <h4>Use ingredients you already have.</h4>
-    <input required novalidate class="form-control" maxlength="200" rows="1" title = " " placeholder="Search" ng-model="newRecipe.name" ng-change="autocompleteQuery()" />
+    <div id="searchbar">
+    <input required class="form-control" maxlength="200" rows="1" placeholder="Search" ng-model="newRecipe.name" ng-change="autocompleteQuery()" />
     <input class="btn submit-btn pull-right" ng-click = "addIng()" type="submit" value="+" />
+    </div>
   </form>
 
 

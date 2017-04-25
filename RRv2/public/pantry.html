@@ -30,14 +30,28 @@
 <div class="center">
   <div class="row">
       <div class="col-md-3" ng-repeat = "item in ingredientList">
+        
+         <div class="thumbnail">
+          <input class="close" type="submit" value="x" ng-click = "removeIngredient(item)"/>
 
-        <div class="thumbnail">
-          <div class="item">
-            <h3>{{item.name}}</h3>
-            <input class="btn card-btn" type="submit" value="View" ng-click = "viewIngredient(item)"/>
-            <input class="btn card-btn" type="submit" value="Delete" ng-click = "removeIngredient(item)"/>
-          </div>
-
+          <h3>{{item.name}}</h3>  
+          <div class = "ingredientContainer">
+          <table>
+            <tr>
+                <th>Amount</th>
+                <th>Unit</th>
+                <th>Expire</th>
+            </tr>
+            <tr ng-repeat="i in item.instances  | orderBy:sort">
+              <td>{{i.amount}}</td>
+              <td>{{i.unit}}</td>
+              <td>{{i.expiration_date}}
+              </td>
+            </tr>
+          </table>   
+          </div>    
+          <input class="btn card-btn btn-primary" type="submit" value="View" ng-click = "viewIngredient(item)"/>
+          <input class="btn card-btn btn-primary" type="submit" value="Delete" ng-click = "removeIngredient(item)"/>
         </div>
       </div>
   </div>
