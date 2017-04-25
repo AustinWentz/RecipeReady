@@ -115,11 +115,15 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	$scope.tempIngredient = [];
 
 	$scope.addIng = function() {
-		console.log($scope.newRecipe.name);
-		$scope.tempIngredient.push($scope.newRecipe.name);
-		$scope.newRecipe.name = "";
-		$scope.ingredientTags = chunk($scope.tempIngredient,6);
-   		$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
+
+		if($scope.newRecipe.name.length > 0)
+		{
+			console.log($scope.newRecipe.name);
+			$scope.tempIngredient.push($scope.newRecipe.name);
+			$scope.newRecipe.name = "";
+			$scope.ingredientTags = chunk($scope.tempIngredient,6);
+	   		$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
+		}
 	}
 	$scope.removeIng = function(itemName){
 		console.log(itemName);
@@ -573,15 +577,15 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 	// Add a list to the database
 	$scope.addList = function() {
 		console.log("newList");
-		if($scope.shoppingListName.length > 0)
 		shoppingManager.save($scope.shoppingListName, function(resp) {
 			$scope.masterList = shoppingManager.query();
 			$scope.shoppingListName = '';
 			console.log(resp);
-		});
+					console.log($scope.masterList);
+					console.log("A")
 
-		console.log($scope.masterList);
-
+			});
+		
 	};
 
 	// Remove a list from the database
@@ -673,7 +677,7 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 		i = i * 100 + shi * 10 + ge;
 		console.log(temp.expiration_date);
 		console.log(i);
-		return i; 
+		return i;
 	}
 
 	$scope.addIngredient = function() {

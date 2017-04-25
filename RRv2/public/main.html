@@ -20,8 +20,12 @@
   </form>
 </div>
   </div>
-<div class="clearfix" id = "mainPage">
+  <input class="btn submit-btn" ng-click = "searchWithPantry()" type="submit" value="Find recipes based on your pantry contents" />
+<div novalidate class="clearfix" id = "mainPage">
+  <form novalidate ng-Submit="addIng()">
+  <div class="clearfix" id = "mainPage">
   <form ng-Submit="search()">
+
     <!--<h4 ng-show="authenticated">{{current_user}} has</h4>
     <h4 ng-hide="authenticated">You have</h4>-->
 
@@ -95,12 +99,12 @@
                           <tr ng-repeat = "ingredient in recipe.full track by $index">
                               <td>{{ingredient.name}}</td>
                               <td>{{ingredient.req}} {{ingredient.unit}}
-                          
+
                                  <input ng-click="addToShoppingList(ingredient)" class="btn card-btn" type="submit" value="+" />
 
                               </td>
 
-                                
+
                               <td ng-class="{true:'redSquare',false:'greenSquare'}[ingredient.isRed]">{{ingredient.surplus}} {{ingredient.unit}}</td>
                           </tr>
                       </table>

@@ -14,13 +14,9 @@
   <div class="row">
       <div class="col-md-3" ng-repeat = "aList in masterList">
         <div class="thumbnail">
-          <div class="md-card-image" alt="user avatar">
-
           <h3>{{aList.name}}</h3>
-          <div id = "shopListTopButons">
-            <input class = "btn submit-btn" ng-click="makeMainList(aList)" type="submit" value="Make Main" />
-             <input class = "btn submit-btn" ng-click="addAllIngredientToPantry(aList)" type="submit" value="Add to Pantry" />
-          </div>
+          <input class = "btn submit-btn" ng-click="makeMainList(aList)" type="submit" value="Make Main" />
+          <input class = "btn submit-btn" ng-click="addAllIngredientToPantry(aList)" type="submit" value="Add to Pantry" />
           <button class="close" ng-click = "removeList(aList)">&times;</button>          
           <div class="shopListItem" ng-repeat = "item in aList.list">
             <table>
@@ -52,7 +48,6 @@
         </tr>
     </table>
     </div>
-        </div>
       </div>
   </div>
 </div>
