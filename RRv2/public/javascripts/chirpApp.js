@@ -274,7 +274,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 				var isRestricted = false;
 				var curRecipe = resp.hits[cur].recipe;
 
-				//The object to represent the formatted recipe
+				//The object to reprreresent the formatted recipe
 				var newResult = new Object();
 				newResult.label = curRecipe.label;
 				newResult.url = curRecipe.url;
@@ -551,6 +551,16 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 		$scope.toggleVisibility();
 	};
 
+	$scope.make = function(recipe) {
+		console.log(recipe.full);
+		for (i = 0; i < recipe.full.length; i++) {
+			if (recipe.full[i].surplus < 0) {
+				console.log("Not enough ingredient");
+				return;
+			}
+		}
+	}
+
 });
 
 // Controller for shopping lists
@@ -654,6 +664,17 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 	$scope.ingredientList = pantryService.query(); //{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
 	$scope.ingredient = {name: '', amount:'1', unit:'unit', purchase:'0/0', expiration:'0/0'};
 	$scope.recipes = searchService.query();
+
+	$scope.sort = function(temp) {
+		var i = parseInt(temp.expiration_date);
+		var ge = Number(temp.expiration_date[6]);
+		var shi = Number(temp.expiration_date[5]);
+
+		i = i * 100 + shi * 10 + ge;
+		console.log(temp.expiration_date);
+		console.log(i);
+		return i; 
+	}
 
 	$scope.addIngredient = function() {
 		pantryService.save($scope.ingredient, function() {

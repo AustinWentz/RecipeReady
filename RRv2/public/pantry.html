@@ -27,19 +27,17 @@
 </body>
 
 
-<div>
-  <td><buttom class ="btn btn-primary" ng-click = "sortIngredient(ingredientList)">SORT</buttom></td>
-</div>
-
 <div class="center">
   <div class="row">
       <div class="col-md-3" ng-repeat = "item in ingredientList">
-        <div class="thumbnail">         
+
+        <div class="thumbnail">
           <div class="item">
             <h3>{{item.name}}</h3>
             <input class="btn card-btn" type="submit" value="View" ng-click = "viewIngredient(item)"/>
             <input class="btn card-btn" type="submit" value="Delete" ng-click = "removeIngredient(item)"/>
           </div>
+
         </div>
       </div>
   </div>
