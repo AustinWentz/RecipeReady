@@ -7,18 +7,7 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(sho
 
 	$rootScope.shoppingList = shoppingService.query();
 	$rootScope.itemInShoppingList = {name: ''};
-<<<<<<< HEAD
-
-
-=======
 	$rootScope.mainList;
->>>>>>> 389f9f5616a0c7e65dcf0d15af9989e9d0fb5651
-	/*$rootScope.addToShoppingList= function(){
-		console.log("ADD TO SHOPPING LIST");
-
-	}*/
-
-	//////
 
 	$rootScope.addItemToShopping = function() {
 
@@ -121,9 +110,28 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	$scope.suggestions = [];
 	var e = document.getElementById('feedback-main');
 	e.style.display = 'none';
+	$scope.ingredientTags = new Array();
 	//array to add ingredients too
-	$scope.tempIngredient = ["aaaa","bbbb","ccc","ddd","eee","ffff","gggg","hhh","iiii", "aaaa","bbbb","ccc","ddd","eee","ffff","gggg","hhh","iiii"];
-    
+	$scope.tempIngredient = [];
+
+	$scope.addIng = function() {
+		console.log($scope.newRecipe.name);
+		$scope.tempIngredient.push($scope.newRecipe.name);
+		$scope.newRecipe.name = "";
+		$scope.ingredientTags = chunk($scope.tempIngredient,6);
+   		$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
+
+	}
+	$scope.removeIng = function(itemName){
+		console.log(itemName);
+		var index = $scope.tempIngredient.indexOf(itemName);
+		if(index != -1) {
+			$scope.tempIngredient.splice(index, 1);
+		}
+		$scope.ingredientTags = chunk($scope.tempIngredient,6);
+   		$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
+	}
+
     $scope.toggleVisibility = function() {
     	console.log("eeeeeeeeeee");
     	var e = document.getElementById('feedback-main');
@@ -159,8 +167,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 
 
    //array of ROWS that front end uses
-   $scope.ingredientTags = chunk($scope.tempIngredient,6);
-   	$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
+
    $scope.$watch('ingredientTags', function(val) {
    $scope.tempIngredient = [].concat.apply([], val);
    }, true);
@@ -196,6 +203,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 		//Update the scope now that get diet has finally returned
 		if($scope.diet.length == 0) {
 			for(var i = 0; i < tempDiet.length; i++) {
+				console.log(tempDiet[i].name);
 				$scope.diet.push(tempDiet[i].name);
 			}
 		}
@@ -228,7 +236,13 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 			}
 		}
 
-		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
+		var searchString = "";
+		for(var i = 0; i < $scope.tempIngredient.length; i++) {
+			console.log("i: " + i);
+			searchString += $scope.tempIngredient[i] + " ";
+		}
+		console.log("search for: " + searchString);
+		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: searchString, from: 0, to: 100}, function(resp) {
 
 			//The array of formatted recipe objects to return to the search view
 			var results = new Array();
@@ -249,7 +263,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 				var isRestricted = false;
 				var curRecipe = resp.hits[cur].recipe;
 
-				//The object to represent the formatted recipe
+				//The object to reprreresent the formatted recipe
 				var newResult = new Object();
 				newResult.label = curRecipe.label;
 				newResult.url = curRecipe.url;
@@ -428,7 +442,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 					newResult.full.push(formatIng);
 				}
 
-				newResult.ratio = Math.trunc((newResult.ratio / newResult.full.length) * 100 ) / 100;
+				newResult.ratio = Math.trunc((newResult.ratio / newResult.full.length) * 100 );
 
 				if(newResult.ratio && !isRestricted)
 					console.log("newResult " + newResult.label + " " + newResult.ratio + " pahcentoh");
@@ -523,6 +537,21 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 		});
 	};
 
+	$scope.sendFeedback = function(form) {
+		window.open('mailto:feedback.cs.purdue@gmail.com?subject=Feedback from ' + form.name + '&body=' + form.message);
+		$scope.toggleVisibility();
+	};
+
+	$scope.make = function(recipe) {
+		console.log(recipe.full);
+		for (i = 0; i < recipe.full.length; i++) {
+			if (recipe.full[i].surplus < 0) {
+				console.log("Not enough ingredient");
+				return;
+			}
+		}
+	}
+
 });
 
 // Controller for shopping lists
@@ -535,6 +564,7 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 	// Add a list to the database
 	$scope.addList = function() {
 		console.log("newList");
+		if($scope.shoppingListName.length > 0)
 		shoppingManager.save($scope.shoppingListName, function(resp) {
 			$scope.masterList = shoppingManager.query();
 			$scope.shoppingListName = '';
@@ -558,12 +588,17 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 	$scope.addItemToList = function(item, index) {
 		console.log("Reached addItemToList function");
 		//var num = parseInt($scope.listNum.number);
-
-		shoppingService.update({id: item._id}, {name: $scope.shopIngredient[index]}, function(resp) {
-			$scope.masterList = shoppingManager.query();
-			$scope.shopIngredient = [];
-			console.log($scope.masterList);
-		});
+		console.log("list: " + $scope.shopIngredient);
+		if($scope.shopIngredient.length > 0) {
+			shoppingService.update({id: item._id}, {name: $scope.shopIngredient[index]}, function(resp) {
+				$scope.masterList = shoppingManager.query();
+				$scope.shopIngredient = [];
+				console.log($scope.masterList);
+			});
+		}
+		else {
+			console.log("emptty!");
+		}
 	};
 	// Remove item from specific list in database
 	$scope.removeItemFromList = function(list, index) {
@@ -620,6 +655,17 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 	$scope.ingredientList = pantryService.query(); //{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
 	$scope.ingredient = {name: '', amount:'1', unit:'unit', purchase:'0/0', expiration:'0/0'};
 	$scope.recipes = searchService.query();
+
+	$scope.sort = function(temp) {
+		var i = parseInt(temp.expiration_date);
+		var ge = Number(temp.expiration_date[6]);
+		var shi = Number(temp.expiration_date[5]);
+
+		i = i * 100 + shi * 10 + ge;
+		console.log(temp.expiration_date);
+		console.log(i);
+		return i; 
+	}
 
 	$scope.addIngredient = function() {
 		pantryService.save($scope.ingredient, function() {
