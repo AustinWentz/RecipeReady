@@ -237,6 +237,9 @@ h4{
         margin: 0px;
     }
 }
+.thumbnail h3{
+  font-family: mont;
+}
 .ing{
   display: none;
   position:absolute;
@@ -462,25 +465,6 @@ h4{
   line-height:30px;
   color:#777;
   background:#0CF;
-
-}
-.shopListTopButton button, html input[type=button], input[type=reset], input[type=submit]{
-   color:#ff9205;
-   font-size: 11px;
-
-    border-color: #ff9205;
-
-    margin-top: 3px;
-    margin-bottom: 3px;
-    margin-left:0%;
-    bottom: 0;
-    width: 30%;
-    background: none;
-    padding: 9px;
-    border-radius: 13px;
-
-    border-width: thin;
-    border-style: solid;
 
 }
 

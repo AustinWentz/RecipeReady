@@ -32,29 +32,28 @@
       <div class="col-md-3" ng-repeat = "item in ingredientList">
         
          <div class="thumbnail">
-          <img src="http://placehold.it/150x150" class="md-card-image" alt="user avatar"> 
-          <h3>{{item.name}}</h3>  
+          <input class="close" type="submit" value="x" ng-click = "removeIngredient(item)"/>
 
-          <table style="border:2px solid black; border-spacing: 2px;">
-            <tr "border:2px solid black; border-spacing: 2px;">
-                <th style="border:2px solid black; border-spacing: 5px;">Amount</th>
-                <th style="border:2px solid black; border-spacing: 5px;">Unit</th>
-                <th style="border:2px solid black; border-spacing: 5px;">Expir</th>
-                <th style="border:2px solid black; border-spacing: 5px;">Re</th>
+          <h3>{{item.name}}</h3>  
+          <div class = "ingredientContainer">
+          <table>
+            <tr>
+                <th>Amount</th>
+                <th>Unit</th>
+                <th>Expire</th>
             </tr>
-            <tr ng-repeat="i in item.instances  | orderBy:sort" style="border:2px solid black; border-spacing: 2px;">
-              <td style="border:2px solid black; border-spacing: 5px;">{{i.amount}}</td>
-              <td style="border:2px solid black; border-spacing: 5px;">{{i.unit}}</td>
-              <td style="border:2px solid black; border-spacing: 5px;">{{i.expiration_date}}</td>
-              <td style="border:2px solid black; border-spacing: 5px;">
-                  <input class="btn card-btn" type="submit" value="Delete" ng-click = "removeIngredient(item)"/>
+            <tr ng-repeat="i in item.instances  | orderBy:sort">
+              <td>{{i.amount}}</td>
+              <td>{{i.unit}}</td>
+              <td>{{i.expiration_date}}
               </td>
             </tr>
-          </table>       
+          </table>   
+          </div>    
 
 
-          <input class="btn card-btn" type="submit" value="View" ng-click = "viewIngredient(item)"/>
-          <input class="btn card-btn" type="submit" value="Delete" ng-click = "removeIngredient(item)"/>
+          <input class="btn card-btn btn-primary" type="submit" value="View" ng-click = "viewIngredient(item)"/>
+          <input class="btn card-btn btn-primary" type="submit" value="Delete" ng-click = "removeIngredient(item)"/>
         </div>
       </div>
   </div>
