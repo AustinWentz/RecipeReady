@@ -35,7 +35,7 @@
           <input class="close" type="submit" value="x" ng-click = "removeIngredient(item)"/>
 
           <h3>{{item.name}}</h3>  
-          <div class = "ingredientContainer">
+          <div class = "ingredientContainer" ng-show=expanded[$index]>
           <table>
             <tr>
                 <th>Amount</th>
@@ -47,11 +47,11 @@
               <td>{{i.amount}}</td>
               <td>{{i.unit}}</td>
               <td>{{i.expiration_date | date : 'MM/yy'}} </td>
-              <td><input  type="submit" value="x" ng-click = "removeIngredient(item)"/></td>
+              <td><input  type="submit" value="x" ng-click = "removeInstance(item, i)"/></td>
             </tr>
           </table>   
           </div>    
-          <input class="btn card-btn btn-primary" type="submit" value="View" ng-click = "viewIngredient(item)"/>
+          <input class="btn card-btn btn-primary" type="submit" value="View" ng-click = "viewIngredient($index)"/>
           <input class="btn card-btn btn-primary" type="submit" value="Delete" ng-click = "removeIngredient(item)"/>
         </div>
       </div>

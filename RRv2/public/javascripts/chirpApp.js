@@ -2,7 +2,6 @@ var app = angular.module('chirpApp', ['ngRoute', 'ngResource']).run(function(sho
 
 	$rootScope.authenticated = false;
 	$rootScope.searched = false;
-	$rootScope.expanded = new Array(100).fill(false);
 	$rootScope.current_user = '';
 
 	$rootScope.shoppingList = shoppingService.query();
@@ -113,6 +112,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	$scope.ingredientTags = new Array();
 	//array to add ingredients too
 	$scope.tempIngredient = [];
+	$scope.expanded = new Array(100).fill(false);
 
 	$scope.addIng = function() {
 
@@ -526,7 +526,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	};
 
 	$scope.expandRecipe = function(index) {
-		$rootScope.expanded[index] = !$rootScope.expanded[index];
+		$scope.expanded[index] = !$scope.expanded[index];
 	};
 
 	$scope.addToShoppingList = function(ingredient) {
@@ -663,7 +663,7 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 	$scope.ingredientList = pantryService.query(); //{selected: false, name: 'carrot'}, {selected: true, name:'apple'}];
 	$scope.ingredient = {name: '', amount:'1', unit:'unit', purchase:'0/0', expiration:'0/0'};
 	$scope.recipes = searchService.query();
-
+	$scope.expanded = new Array(100).fill(false);
 
 
 	$scope.sort = function(temp) {
@@ -692,10 +692,17 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 		});
 	};
 
-	$scope.viewIngredient = function(item) {
-		console.log(item);
+	$scope.viewIngredient = function(index) {
+		$scope.expanded[index] = !$scope.expanded[index];
 	};
 
+	$scope.removeInstance = function(item, i) {
+		console.log(i);
+		item.instances.splice(item.instances.indexOf(i), 1);
+		if (item.instances.length == 0) {
+			$scope.removeIngredient(item);
+		}
+	}
 
 });
 
