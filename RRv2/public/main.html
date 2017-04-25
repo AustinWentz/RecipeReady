@@ -20,7 +20,8 @@
   </form>
 </div>
   </div>
-  <input class="btn submit-btn" ng-click = "searchWithPantry()" type="submit" value="Find recipes based on your pantry contents" ng-show = "authenticated" />
+  <input class="searchWithPantry btn submit-btn" ng-click = "searchWithPantry()" type="submit" value="Find recipes based on your pantry contents" ng-show = "authenticated" />
+
 <div novalidate class="clearfix" id = "mainPage">
   <form novalidate ng-Submit="addIng()">
     <!--<h4 ng-show="authenticated">{{current_user}} has</h4>
@@ -118,7 +119,6 @@
               -->
               <div class = "recipeButtons">
                 <input ng-click="addAllToShoppingList(recipe)" class="btn card-btn" type="submit" value="Add to List"/>
-                <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save"/>
                 <input ng-click="expandRecipe($index)" class="btn card-btn" type="submit" value="View"/>
               </div>
           </div>

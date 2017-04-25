@@ -27,6 +27,11 @@ a {
 
 
 }
+.searchWithPantry{
+  position: absolute;
+  bottom:-3px;
+  right:0;
+}
 .index title{
   position: center;
 }
