@@ -404,7 +404,11 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 						if(ownedIng.name == foundIng.name) {
 							newResult.have.push(ownedIng);
 							formatIng.have = ownedIng.amount;
-							formatIng.surplus += ownedIng.amount;
+							if (ownedIng.amount > 0) {
+								formatIng.surplus = 0;
+							} else {
+								formatIng.surplus += ownedIng.amount;
+							}
 
 							var ratio = Math.abs(ownedIng.amount / foundIng.amount);
 							if(ratio > 1)
@@ -543,6 +547,17 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 			}
 		});
 	};
+
+	$scope.ingredientList = pantryService.query();
+
+	$scope.makeRecipe = function(recipe) {
+		for (i = 0; i < $scope.ingredientList.length; i++) {
+			pantryService.delete({id: $scope.ingredientList[i]._id}, function(resp){
+	  			$scope.ingredientList = pantryService.query();
+			});
+		}
+
+	}
 
 	$scope.sendFeedback = function(form) {
 		window.open('mailto:feedback.cs.purdue@gmail.com?subject=Feedback from ' + form.name + '&body=' + form.message);

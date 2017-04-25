@@ -32,6 +32,13 @@ a {
   bottom:-3px;
   right:0;
 }
+.autocomplete{
+  position: absolute;
+  width:1000px;
+  top:450px;
+  left:150px;
+}
+
 .index title{
   position: center;
 }

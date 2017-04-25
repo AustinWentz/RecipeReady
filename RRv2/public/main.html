@@ -33,9 +33,25 @@
     <div id="searchbar">
     <input required class="form-control" maxlength="200" rows="1" placeholder="Search" ng-model="newRecipe.name" ng-change="autocompleteQuery()" />
     <input class="btn submit-btn pull-right" ng-click = "addIng()" type="submit" value="+" />
+
+
+
     </div>
+
+
+
   </form>
 
+    <div class="autocomplete">
+        <h4>
+        <table ng-table="vm.tableParams" class="table" show-filter="true">
+        <tr ng-repeat="suggestion in suggestions">
+            <td ng-click="autocomplete(suggestion)">
+                {{suggestion}}</td>
+        </tr>
+        </table>
+        </h4>
+    </div>
 
   <ul class="tags">
   <table>
@@ -49,12 +65,12 @@
 </ul>
 
 
-  <table ng-table="vm.tableParams" class="table" show-filter="true">
+  <!--<table ng-table="vm.tableParams" class="table" show-filter="true">
     <tr ng-repeat="suggestion in suggestions">
         <td ng-click="autocomplete(suggestion)">
             {{suggestion}}</td>
     </tr>
-  </table>
+  </table>-->
   <button id="popup" class="feedback-button" ng-click="toggleVisibility()">Feedback</button>
 </div>
 </div>
@@ -118,6 +134,7 @@
 	            <input ng-click = "saveRecipe(recipe.label)" class="btn card-btn" type="submit" value="Save" />
               -->
               <div class = "recipeButtons">
+                <input ng-click="makeRecipe(recipe)" class="btn card-btn" type="submit" value="Make"/>
                 <input ng-click="addAllToShoppingList(recipe)" class="btn card-btn" type="submit" value="Add to List"/>
                 <input ng-click="expandRecipe($index)" class="btn card-btn" type="submit" value="View"/>
               </div>
