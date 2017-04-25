@@ -21,14 +21,14 @@
 </div>
   </div>
   <input class="btn submit-btn" ng-click = "searchWithPantry()" type="submit" value="Find recipes based on your pantry contents" />
-<div class="clearfix" id = "mainPage">
-  <form ng-Submit="search()">
+<div novalidate class="clearfix" id = "mainPage">
+  <form novalidate ng-Submit="addIng()">
     <!--<h4 ng-show="authenticated">{{current_user}} has</h4>
     <h4 ng-hide="authenticated">You have</h4>-->
 
     <h3>Find a recipe.</h3>
     <h4>Use ingredients you already have.</h4>
-    <input required class="form-control" maxlength="200" rows="1" placeholder="Search" ng-model="newRecipe.name" ng-change="autocompleteQuery()" />
+    <input required novalidate class="form-control" maxlength="200" rows="1" title = " " placeholder="Search" ng-model="newRecipe.name" ng-change="autocompleteQuery()" />
     <input class="btn submit-btn pull-right" ng-click = "addIng()" type="submit" value="+" />
   </form>
 
@@ -92,12 +92,12 @@
                           <tr ng-repeat = "ingredient in recipe.full track by $index">
                               <td>{{ingredient.name}}</td>
                               <td>{{ingredient.req}} {{ingredient.unit}}
-                          
+
                                  <input ng-click="addToShoppingList(ingredient)" class="btn card-btn" type="submit" value="+" />
 
                               </td>
 
-                                
+
                               <td ng-class="{true:'redSquare',false:'greenSquare'}[ingredient.isRed]">{{ingredient.surplus}} {{ingredient.unit}}</td>
                           </tr>
                       </table>
