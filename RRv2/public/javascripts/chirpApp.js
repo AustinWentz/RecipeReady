@@ -120,7 +120,6 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 		$scope.newRecipe.name = "";
 		$scope.ingredientTags = chunk($scope.tempIngredient,6);
    		$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
-
 	}
 	$scope.removeIng = function(itemName){
 		console.log(itemName);
@@ -165,7 +164,6 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
    	}
    }
 
-
    //array of ROWS that front end uses
 
    $scope.$watch('ingredientTags', function(val) {
@@ -194,6 +192,18 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	  	});
 	};
 
+	$scope.searchWithPantry = function() {
+
+		for( var j in tempAvail) {
+			console.log(tempAvail[j].name);
+
+			if(tempAvail[j].name != undefined)
+			$scope.tempIngredient.push(tempAvail[j].name);
+			$scope.ingredientTags = chunk($scope.tempIngredient,6);
+		}
+		$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
+	}
+
 	//For your sake, please, please don't read this code
 	$scope.search = function() {
 		var e = document.getElementById('beforeSearchContent');
@@ -214,6 +224,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 
 				var newAvail = new Object();
 				newAvail.name = tempAvail[i].name;
+				console.log("new:"+newAvail.name);
 				newAvail.amount = 0;
 				newAvail.unit = "";
 
@@ -280,8 +291,6 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 
 				//Format each ingredient in ingredientLines to objects
 				for( var i in ingList) {
-
-
 					//Prevents rogue numbers elsewhere in the string from
 					//interfering with the actual quantity of the ingredient
 					var amountIsOver = false;
