@@ -168,11 +168,6 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
    	}
    }
 
-   //array of ROWS that front end uses
-
-   $scope.$watch('ingredientTags', function(val) {
-   $scope.tempIngredient = [].concat.apply([], val);
-   }, true);
 
 
 	//Get list of ingredients to be filtered from the search
@@ -212,7 +207,6 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	$scope.search = function() {
 		var e = document.getElementById('beforeSearchContent');
 		e.style.display = 'none';
-
 
 		//Update the scope now that get diet has finally returned
 		if($scope.diet.length == 0) {

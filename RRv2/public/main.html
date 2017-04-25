@@ -20,14 +20,12 @@
   </form>
 </div>
   </div>
-  <input class="btn submit-btn" ng-click = "searchWithPantry()" type="submit" value="Find recipes based on your pantry contents" ng-show = "authenticated"/>
+  <input class="btn submit-btn" ng-click = "searchWithPantry()" type="submit" value="Find recipes based on your pantry contents" ng-show = "authenticated" />
 <div novalidate class="clearfix" id = "mainPage">
   <form novalidate ng-Submit="addIng()">
-  <div class="clearfix" id = "mainPage">
-  <form ng-Submit="search()">
-
     <!--<h4 ng-show="authenticated">{{current_user}} has</h4>
     <h4 ng-hide="authenticated">You have</h4>-->
+  <form ng-Submit="search()">
 
     <h3>Find a recipe.</h3>
     <h4>Use ingredients you already have.</h4>
