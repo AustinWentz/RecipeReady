@@ -41,11 +41,13 @@
                 <th>Amount</th>
                 <th>Unit</th>
                 <th>Expire</th>
+                <th></th>
             </tr>
             <tr ng-repeat="i in item.instances  | orderBy:sort">
               <td>{{i.amount}}</td>
               <td>{{i.unit}}</td>
               <td>{{i.expiration_date | date : 'MM/yy'}} </td>
+              <td><input  type="submit" value="x" ng-click = "removeIngredient(item)"/></td>
             </tr>
           </table>   
           </div>    
