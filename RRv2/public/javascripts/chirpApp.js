@@ -602,16 +602,11 @@ app.controller('shoppingController', function(shoppingService, shoppingManager, 
 		console.log("Reached addItemToList function");
 		//var num = parseInt($scope.listNum.number);
 		console.log("list: " + $scope.shopIngredient);
-		if($scope.shopIngredient.length > 0) {
 			shoppingService.update({id: item._id}, {name: $scope.shopIngredient[index]}, function(resp) {
 				$scope.masterList = shoppingManager.query();
 				$scope.shopIngredient = [];
 				console.log($scope.masterList);
 			});
-		}
-		else {
-			console.log("emptty!");
-		}
 	};
 	// Remove item from specific list in database
 	$scope.removeItemFromList = function(list, index) {
