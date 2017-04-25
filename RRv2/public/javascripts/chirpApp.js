@@ -669,18 +669,7 @@ app.controller('pantryController', function(pantryService, searchService, $scope
 	$scope.ingredient = {name: '', amount:'1', unit:'unit', purchase:'0/0', expiration:'0/0'};
 	$scope.recipes = searchService.query();
 
-	$scope.show_expiration = function(temp) {
-		//console.log(temp.expiration_date);
-		var i = parseInt(temp.expiration_date);
-		var ge = temp.expiration_date[6];
-		var shi = temp.expiration_date[5];
-		var text = ""
-		text += i;
-		text += "-";
-		text += shi;
-		text += ge;
-		return text;
-	};
+
 
 	$scope.sort = function(temp) {
 		var i = parseInt(temp.expiration_date);
