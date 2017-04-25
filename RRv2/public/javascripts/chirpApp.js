@@ -116,13 +116,26 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 	$scope.suggestions = [];
 	var e = document.getElementById('feedback-main');
 	e.style.display = 'none';
+	$scope.ingredientTags = new Array();
 	//array to add ingredients too
-	$scope.tempIngredient = new Array();
+	$scope.tempIngredient = [];
 
 	$scope.addIng = function() {
 		console.log($scope.newRecipe.name);
 		$scope.tempIngredient.push($scope.newRecipe.name);
 		$scope.newRecipe.name = "";
+		$scope.ingredientTags = chunk($scope.tempIngredient,6);
+   		$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
+
+	}
+	$scope.removeIng = function(itemName){
+		console.log(itemName);
+		var index = $scope.tempIngredient.indexOf(itemName);
+		if(index != -1) {
+			$scope.tempIngredient.splice(index, 1);
+		}
+		$scope.ingredientTags = chunk($scope.tempIngredient,6);
+   		$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
 	}
 
     $scope.toggleVisibility = function() {
@@ -160,8 +173,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 
 
    //array of ROWS that front end uses
-   $scope.ingredientTags = chunk($scope.tempIngredient,6);
-   	$scope.isNotEmpty = isArrayLoaded($scope.tempIngredient);
+
    $scope.$watch('ingredientTags', function(val) {
    $scope.tempIngredient = [].concat.apply([], val);
    }, true);
@@ -231,12 +243,12 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 		}
 
 		var searchString = "";
-		for(var i = 0; i < $scope.tempRecipe.length; i++) {
+		for(var i = 0; i < $scope.tempIngredient.length; i++) {
 			console.log("i: " + i);
-			searchString += $scope.tempRecipe[i];
+			searchString += $scope.tempIngredient[i] + " ";
 		}
 		console.log("search for: " + searchString);
-		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: $scope.newRecipe.name, from: 0, to: 100}, function(resp) {
+		recipeSearchService.get({app_id: 'bc10ee11', app_key: 'c11676313bdddb4e5c68da63eb01941d', q: searchString, from: 0, to: 100}, function(resp) {
 
 			//The array of formatted recipe objects to return to the search view
 			var results = new Array();
@@ -436,7 +448,7 @@ app.controller('mainController', function(searchService, recipeSearchService, pa
 					newResult.full.push(formatIng);
 				}
 
-				newResult.ratio = Math.trunc((newResult.ratio / newResult.full.length) * 100 ) / 100;
+				newResult.ratio = Math.trunc((newResult.ratio / newResult.full.length) * 100 );
 
 				if(newResult.ratio && !isRestricted)
 					console.log("newResult " + newResult.label + " " + newResult.ratio + " pahcentoh");
